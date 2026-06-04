@@ -50,8 +50,7 @@
   .greeting-urdu { font-family:'Noto Nastaliq Urdu',serif; font-size:13px; color:var(--text-muted); direction:rtl; }
   .avatar { width:44px; height:44px; border-radius:50%; background:linear-gradient(135deg,var(--green),var(--green-dark)); display:flex; align-items:center; justify-content:center; font-size:20px; cursor:pointer; }
   #map { height:220px; width:100%; z-index:1; }
-  .map-overlay { position:absolute; top:0; left:0; right:0; height:220px; pointer-events:none; z-index:2; }
-  .map-location-badge { position:absolute; bottom:10px; left:12px; background:rgba(0,200,83,0.95); border-radius:8px; padding:4px 10px; font-size:11px; color:#000; font-weight:600; pointer-events:none; }
+  .map-location-badge { position:absolute; bottom:10px; left:12px; background:rgba(0,200,83,0.95); border-radius:8px; padding:4px 10px; font-size:11px; color:#000; font-weight:600; pointer-events:none; z-index:2; }
   .bottom-sheet { flex:1; background:var(--dark); border-radius:24px 24px 0 0; margin-top:-20px; padding:20px; overflow-y:auto; box-shadow:0 -4px 20px rgba(0,0,0,0.3); position:relative; z-index:3; }
   .sheet-handle { width:40px; height:4px; background:rgba(255,255,255,0.15); border-radius:2px; margin:0 auto 20px; }
   .where-btn { background:var(--dark3); border:1.5px solid rgba(255,255,255,0.08); border-radius:var(--radius); padding:16px 18px; display:flex; align-items:center; gap:14px; cursor:pointer; margin-bottom:12px; }
@@ -92,12 +91,12 @@
   .dot { width:10px; height:10px; border-radius:50%; background:var(--green); animation:dotBounce 1.2s ease-in-out infinite; }
   .dot:nth-child(2) { animation-delay:0.2s; } .dot:nth-child(3) { animation-delay:0.4s; }
   #driver-found { background:var(--dark); overflow-y:auto; }
-  #driver-map { height:220px; width:100%; z-index:1; }
+  #driver-live-map { height:260px; width:100%; z-index:1; }
   .driver-info-sheet { background:var(--dark2); border-radius:24px 24px 0 0; margin-top:-20px; padding:20px; position:relative; z-index:3; }
   .driver-card { display:flex; align-items:center; gap:16px; padding:16px; background:var(--dark3); border-radius:var(--radius); margin-bottom:16px; }
   .driver-avatar { width:60px; height:60px; border-radius:50%; background:linear-gradient(135deg,#2a4a3a,#1a3a2a); display:flex; align-items:center; justify-content:center; font-size:30px; border:2px solid var(--green); }
-  .driver-name { font-size:17px; font-weight:700; }
-  .driver-vehicle { font-size:13px; color:var(--text-muted); }
+  .driver-name-txt { font-size:17px; font-weight:700; }
+  .driver-vehicle-txt { font-size:13px; color:var(--text-muted); }
   .rating { display:flex; align-items:center; gap:4px; font-size:13px; color:var(--accent); margin-top:2px; }
   .driver-actions { display:flex; gap:10px; margin-bottom:16px; }
   .action-btn { flex:1; padding:12px; border:none; border-radius:14px; font-size:22px; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px; }
@@ -106,6 +105,8 @@
   .action-label { font-size:12px; font-weight:600; }
   .eta-badge { background:linear-gradient(135deg,var(--green),var(--green-dark)); border-radius:12px; padding:14px 18px; display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; }
   .eta-value { font-size:28px; font-weight:800; }
+  .live-badge { background:rgba(0,200,83,0.15); border:1px solid var(--green); border-radius:20px; padding:4px 12px; font-size:11px; color:var(--green); display:flex; align-items:center; gap:5px; margin-bottom:12px; }
+  .live-dot { width:7px; height:7px; border-radius:50%; background:var(--green); animation:blink 1s infinite; }
   .bottom-nav { position:fixed; bottom:0; left:0; right:0; background:var(--dark2); border-top:1px solid rgba(255,255,255,0.06); display:flex; padding:10px 0 20px; z-index:100; }
   .nav-item { flex:1; display:flex; flex-direction:column; align-items:center; gap:4px; cursor:pointer; padding:6px 0; }
   .nav-icon { font-size:22px; }
@@ -122,11 +123,12 @@
   @keyframes popIn { from{opacity:0;transform:scale(0.7)} to{opacity:1;transform:scale(1)} }
   @keyframes pulse { 0%,100%{transform:scale(1);box-shadow:0 0 0 0 rgba(0,200,83,0.3)} 50%{transform:scale(1.05);box-shadow:0 0 0 20px rgba(0,200,83,0)} }
   @keyframes dotBounce { 0%,100%{transform:translateY(0);opacity:0.4} 50%{transform:translateY(-10px);opacity:1} }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
   @keyframes spin { to{transform:rotate(360deg)} }
   @keyframes fadeIn { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
   .fade-in { animation:fadeIn 0.4s ease both; }
-</style>
-</head>
+</d
+  </head>
 <body>
 <div class="loader-overlay" id="loader"><div class="loader"></div></div>
 <div class="toast" id="toast"><span id="toast-msg"></span><span class="t-urdu" id="toast-urdu"></span></div>
@@ -261,18 +263,19 @@
 </div>
 
 <div class="screen" id="driver-found">
-  <div id="driver-map"></div>
+  <div id="driver-live-map"></div>
   <div class="driver-info-sheet fade-in" style="overflow-y:auto;flex:1;padding-bottom:20px">
-    <div style="width:40px;height:4px;background:rgba(255,255,255,0.15);border-radius:2px;margin:0 auto 20px"></div>
+    <div style="width:40px;height:4px;background:rgba(255,255,255,0.15);border-radius:2px;margin:0 auto 16px"></div>
+    <div class="live-badge"><div class="live-dot"></div>Driver Location — Live 📍</div>
     <div class="eta-badge">
-      <div><div style="font-size:13px;opacity:0.8">Driver arriving / ڈرائیور آ رہا ہے</div></div>
+      <div><div style="font-size:13px;opacity:0.8">Driver arriving</div><div style="font-family:'Noto Nastaliq Urdu',serif;direction:rtl;font-size:11px;opacity:0.8">ڈرائیور آ رہا ہے</div></div>
       <div style="display:flex;align-items:baseline;gap:4px"><div class="eta-value" id="eta-num">4</div><div style="font-size:13px;opacity:0.8">min</div></div>
     </div>
     <div class="driver-card">
       <div class="driver-avatar">👨</div>
       <div style="flex:1">
-        <div class="driver-name" id="found-driver-name">Muhammad Asif</div>
-        <div class="driver-vehicle" id="found-driver-vehicle">🚗 Mehran — LEA 2847</div>
+        <div class="driver-name-txt" id="found-driver-name">Muhammad Asif</div>
+        <div class="driver-vehicle-txt" id="found-driver-vehicle">🚗 Mehran — LEA 2847</div>
         <div class="rating">⭐ 4.8 · 342 rides</div>
       </div>
     </div>
@@ -287,7 +290,8 @@
     </div>
   </div>
 </div>
-<script type="module">
+
+  <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
   import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
   import { getDatabase, ref, set, push, onValue, update } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
@@ -298,58 +302,74 @@
   const auth = getAuth(app);
   const db = getDatabase(app);
 
-  let currentUser=null, selectedVehicle={name:'Car',urdu:'کار',rate:80}, selectedPayment='cash', currentRideId=null, currentDestination={name:'DHQ Hospital',urdu:'ڈی ایچ کیو ہسپتال'};
+  let currentUser=null, selectedVehicle={name:'Car',urdu:'کار',rate:80}, selectedPayment='cash';
+  let currentRideId=null, currentDestination={name:'DHQ Hospital',urdu:'ڈی ایچ کیو ہسپتال'};
   let userLocation={lat:30.0576,lng:70.6358};
-  let mainMap=null, driverMap=null, userMarker=null, driverMarker=null;
+  let mainMap=null, userMarker=null, liveMap=null, driverLiveMarker=null, routeLine=null;
+  let acceptedDriverId=null;
+  const DGK=[30.0576,70.6358];
 
-  // DGK coordinates
-  const DGK = [30.0576, 70.6358];
-
-  function initMainMap() {
-    if (mainMap) return;
-    mainMap = L.map('map', { zoomControl:false, attributionControl:false }).setView(DGK, 14);
+  function initMainMap(lat,lng) {
+    if(mainMap){userMarker.setLatLng([lat,lng]);mainMap.setView([lat,lng],15);return;}
+    mainMap=L.map('map',{zoomControl:false,attributionControl:false}).setView([lat,lng],14);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(mainMap);
-    const greenIcon = L.divIcon({ html:'📍', className:'', iconSize:[30,30], iconAnchor:[15,30] });
-    userMarker = L.marker(DGK, {icon:greenIcon}).addTo(mainMap);
-    // Add nearby car markers
-    const carIcon = L.divIcon({ html:'🚗', className:'', iconSize:[24,24] });
-    L.marker([30.0596, 70.6378], {icon:carIcon}).addTo(mainMap);
-    L.marker([30.0556, 70.6338], {icon:carIcon}).addTo(mainMap);
-    L.marker([30.0606, 70.6318], {icon:carIcon}).addTo(mainMap);
+    const myIcon=L.divIcon({html:'📍',className:'',iconSize:[30,30],iconAnchor:[15,30]});
+    userMarker=L.marker([lat,lng],{icon:myIcon}).addTo(mainMap);
+    const carIcon=L.divIcon({html:'🚗',className:'',iconSize:[24,24]});
+    L.marker([lat+0.002,lng+0.002],{icon:carIcon}).addTo(mainMap);
+    L.marker([lat-0.001,lng+0.003],{icon:carIcon}).addTo(mainMap);
   }
 
-  function initDriverMap() {
-    if (driverMap) return;
-    driverMap = L.map('driver-map', { zoomControl:false, attributionControl:false }).setView(DGK, 14);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(driverMap);
-    const userIcon = L.divIcon({ html:'📍', className:'', iconSize:[30,30], iconAnchor:[15,30] });
-    const carIcon = L.divIcon({ html:'🚗', className:'', iconSize:[30,30] });
-    L.marker(DGK, {icon:userIcon}).addTo(driverMap).bindPopup('Your Location');
-    driverMarker = L.marker([30.0596, 70.6378], {icon:carIcon}).addTo(driverMap).bindPopup('Driver');
-    // Draw route line
-    L.polyline([DGK, [30.0596, 70.6378]], {color:'#00c853', weight:3, dashArray:'8,4'}).addTo(driverMap);
+  function initLiveMap(passengerLat,passengerLng,driverLat,driverLng) {
+    if(liveMap){return;}
+    liveMap=L.map('driver-live-map',{zoomControl:false,attributionControl:false}).setView([passengerLat,passengerLng],14);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(liveMap);
+    const passIcon=L.divIcon({html:'📍',className:'',iconSize:[30,30],iconAnchor:[15,30]});
+    L.marker([passengerLat,passengerLng],{icon:passIcon}).addTo(liveMap).bindPopup('Aap');
+    const carIcon=L.divIcon({html:'🚗',className:'',iconSize:[32,32],iconAnchor:[16,16]});
+    driverLiveMarker=L.marker([driverLat,driverLng],{icon:carIcon}).addTo(liveMap).bindPopup('Driver');
+    routeLine=L.polyline([[driverLat,driverLng],[passengerLat,passengerLng]],{color:'#00c853',weight:3,dashArray:'8,4'}).addTo(liveMap);
+    const bounds=L.latLngBounds([[passengerLat,passengerLng],[driverLat,driverLng]]);
+    liveMap.fitBounds(bounds,{padding:[30,30]});
   }
 
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-      currentUser = user;
-      document.getElementById('user-name').textContent = user.email.split('@')[0];
+  function trackDriverLiveLocation(driverId,passengerLat,passengerLng) {
+    onValue(ref(db,'drivers/'+driverId),snap=>{
+      const d=snap.val();
+      if(!d||!d.lat) return;
+      if(!liveMap){ initLiveMap(passengerLat,passengerLng,d.lat,d.lng); return; }
+      if(driverLiveMarker){ driverLiveMarker.setLatLng([d.lat,d.lng]); }
+      if(routeLine){ routeLine.setLatLngs([[d.lat,d.lng],[passengerLat,passengerLng]]); }
+      const dist=getDistance(passengerLat,passengerLng,d.lat,d.lng);
+      const eta=Math.max(1,Math.round(dist/0.5));
+      document.getElementById('eta-num').textContent=eta;
+    });
+  }
+
+  function getDistance(lat1,lng1,lat2,lng2){
+    const R=6371;
+    const dLat=(lat2-lat1)*Math.PI/180;
+    const dLng=(lat2-lng2)*Math.PI/180;
+    const a=Math.sin(dLat/2)*Math.sin(dLat/2)+Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLng/2)*Math.sin(dLng/2);
+    return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
+  }
+
+  onAuthStateChanged(auth,(user)=>{
+    if(user){
+      currentUser=user;
+      document.getElementById('user-name').textContent=user.email.split('@')[0];
       showScreen('home');
-      setTimeout(initMainMap, 100);
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(pos => {
-          userLocation = {lat:pos.coords.latitude, lng:pos.coords.longitude};
-          if (mainMap && userMarker) {
-            userMarker.setLatLng([userLocation.lat, userLocation.lng]);
-            mainMap.setView([userLocation.lat, userLocation.lng], 15);
-          }
-          document.getElementById('location-badge').textContent = '📍 DG Khan — آپ کی جگہ';
-        });
-      }
+      if(navigator.geolocation){
+        navigator.geolocation.getCurrentPosition(pos=>{
+          userLocation={lat:pos.coords.latitude,lng:pos.coords.longitude};
+          setTimeout(()=>initMainMap(userLocation.lat,userLocation.lng),200);
+          document.getElementById('location-badge').textContent='📍 DG Khan — آپ کی جگہ';
+        },()=>setTimeout(()=>initMainMap(DGK[0],DGK[1]),200));
+      } else { setTimeout(()=>initMainMap(DGK[0],DGK[1]),200); }
     }
   });
 
-  window.signupUser = async function() {
+  window.signupUser=async function(){
     const name=document.getElementById('signup-name').value.trim();
     const email=document.getElementById('signup-email').value.trim();
     const password=document.getElementById('signup-password').value;
@@ -357,67 +377,87 @@
     if(!name||!email||!password){showToast('Sab fields bharein!','تمام خانے بھریں',true);return;}
     if(password.length<6){showToast('Password 6+ characters!','پاس ورڈ چھوٹا ہے',true);return;}
     document.getElementById('loader').classList.add('show');
-    try {
-      const c = await createUserWithEmailAndPassword(auth,email,password);
+    try{
+      const c=await createUserWithEmailAndPassword(auth,email,password);
       await set(ref(db,'passengers/'+c.user.uid),{name,phone,email,createdAt:Date.now(),role:'passenger'});
       showToast('Account ban gaya!','اکاؤنٹ بن گیا ✅');
-    } catch(e) { showToast(e.code==='auth/email-already-in-use'?'Email pehle se hai!':'Kuch masla aaya','غلطی',true); }
+    }catch(e){showToast(e.code==='auth/email-already-in-use'?'Email pehle se hai!':'Kuch masla aaya','غلطی',true);}
     document.getElementById('loader').classList.remove('show');
   };
 
-  window.loginUser = async function() {
+  window.loginUser=async function(){
     const email=document.getElementById('login-email').value.trim();
     const password=document.getElementById('login-password').value;
     if(!email||!password){showToast('Email aur password daalein!','ای میل درج کریں',true);return;}
     document.getElementById('loader').classList.add('show');
-    try { await signInWithEmailAndPassword(auth,email,password); showToast('Login ho gaya!','لاگ ان کامیاب ✅'); }
-    catch(e) { showToast('Email ya password galat!','غلط معلومات',true); }
+    try{await signInWithEmailAndPassword(auth,email,password);showToast('Login ho gaya!','لاگ ان کامیاب ✅');}
+    catch(e){showToast('Email ya password galat!','غلط معلومات',true);}
     document.getElementById('loader').classList.remove('show');
   };
 
-  window.bookRide = function(dest,destUrdu) {
+  window.bookRide=function(dest,destUrdu){
     currentDestination={name:dest,urdu:destUrdu};
     document.getElementById('dropoff-text').textContent=dest;
     showScreen('booking');
   };
 
-  window.confirmBooking = async function() {
+  window.confirmBooking=async function(){
     if(!currentUser){showToast('Pehle login karein!','پہلے لاگ ان کریں',true);return;}
     document.getElementById('loader').classList.add('show');
-    try {
+    try{
       const r=push(ref(db,'rides'));
       currentRideId=r.key;
       await set(r,{passengerId:currentUser.uid,passengerEmail:currentUser.email,pickup:'Circular Road, DGK',pickupLat:userLocation.lat,pickupLng:userLocation.lng,dropoff:currentDestination.name,vehicle:selectedVehicle.name,fare:document.getElementById('total-fare').textContent,payment:selectedPayment,status:'searching',createdAt:Date.now()});
       document.getElementById('ride-fare-display').textContent=document.getElementById('total-fare').textContent;
       document.getElementById('loader').classList.remove('show');
       showScreen('searching');
-      setTimeout(()=>{ showScreen('driver-found'); setTimeout(initDriverMap,100); },4000);
-    } catch(e) { document.getElementById('loader').classList.remove('show'); showToast('Error: '+e.message,'غلطی',true); }
+      listenForDriverAccept();
+    }catch(e){document.getElementById('loader').classList.remove('show');showToast('Error: '+e.message,'غلطی',true);}
   };
 
-  window.cancelRide = async function() {
-    if(currentRideId){ await update(ref(db,'rides/'+currentRideId),{status:'cancelled'}); currentRideId=null; }
+  function listenForDriverAccept(){
+    if(!currentRideId) return;
+    onValue(ref(db,'rides/'+currentRideId),snap=>{
+      const ride=snap.val();
+      if(!ride) return;
+      if(ride.status==='accepted'&&ride.driverId){
+        acceptedDriverId=ride.driverId;
+        document.getElementById('found-driver-name').textContent=ride.driverName||'Muhammad Asif';
+        document.getElementById('found-driver-vehicle').textContent='🚗 '+(ride.driverVehicle||'Mehran');
+        showScreen('driver-found');
+        showToast('Driver mil gaya!','ڈرائیور مل گیا 🚗');
+        setTimeout(()=>{
+          initLiveMap(userLocation.lat,userLocation.lng,ride.driverLat||DGK[0],ride.driverLng||DGK[1]);
+          trackDriverLiveLocation(ride.driverId,userLocation.lat,userLocation.lng);
+        },300);
+      }
+      if(ride.status==='completed'){showToast('Sawari mukammal!','سواری مکمل 🎉');setTimeout(()=>showScreen('home'),2000);}
+    });
+  }
+
+  window.cancelRide=async function(){
+    if(currentRideId){await update(ref(db,'rides/'+currentRideId),{status:'cancelled'});currentRideId=null;}
     showToast('Ride cancelled','سواری منسوخ');
     showScreen('home');
   };
 
-  window.showProfile = function() { showToast('Profile: '+(currentUser?currentUser.email:''),'پروفائل'); };
+  window.showProfile=function(){showToast('Profile: '+(currentUser?currentUser.email:''),'پروفائل');};
 
-  window.selectVehicle = function(el,name,urdu,rate) {
+  window.selectVehicle=function(el,name,urdu,rate){
     el.closest('.vehicle-scroll').querySelectorAll('.vehicle-card').forEach(c=>c.classList.remove('selected'));
-    el.classList.add('selected'); selectedVehicle={name,urdu,rate};
+    el.classList.add('selected');selectedVehicle={name,urdu,rate};
     document.getElementById('total-fare').textContent='Rs '+Math.round(50+(3.2*rate));
     if(document.getElementById('selected-vehicle-display')) document.getElementById('selected-vehicle-display').textContent=el.querySelector('.vehicle-emoji').textContent+' '+name;
   };
 
-  window.selectPayment = function(m) {
+  window.selectPayment=function(m){
     selectedPayment=m;
-    ['cash','jazz','easy'].forEach(x=>{ const e=document.getElementById('pay-'+x); if(e) e.style.border='1.5px solid rgba(255,255,255,0.08)'; });
+    ['cash','jazz','easy'].forEach(x=>{const e=document.getElementById('pay-'+x);if(e)e.style.border='1.5px solid rgba(255,255,255,0.08)';});
     const map={cash:'pay-cash',jazzcash:'pay-jazz',easypaisa:'pay-easy'};
-    const e=document.getElementById(map[m]); if(e) e.style.border='2px solid var(--green)';
+    const e=document.getElementById(map[m]);if(e)e.style.border='2px solid var(--green)';
   };
 
-  window.switchTab = function(tab) {
+  window.switchTab=function(tab){
     document.querySelectorAll('.auth-tab').forEach((t,i)=>t.classList.toggle('active',(i===0&&tab==='login')||(i===1&&tab==='signup')));
     document.getElementById('login-form').style.display=tab==='login'?'block':'none';
     document.getElementById('signup-form').style.display=tab==='signup'?'block':'none';
@@ -425,8 +465,8 @@
 </script>
 
 <script>
-  function showScreen(id) { document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active')); document.getElementById(id).classList.add('active'); }
-  function showToast(msg,urdu,isError) { const t=document.getElementById('toast'); document.getElementById('toast-msg').textContent=msg; document.getElementById('toast-urdu').textContent=urdu||''; t.className='toast'+(isError?' error':''); t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),3000); }
+  function showScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');}
+  function showToast(msg,urdu,isError){const t=document.getElementById('toast');document.getElementById('toast-msg').textContent=msg;document.getElementById('toast-urdu').textContent=urdu||'';t.className='toast'+(isError?' error':'');t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000);}
 </script>
 </body>
 </html>
