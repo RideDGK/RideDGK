@@ -44,14 +44,16 @@
   .input-wrap .icon { position:absolute; left:16px; top:50%; transform:translateY(-50%); font-size:20px; }
   .btn-main { width:100%; padding:16px; background:linear-gradient(135deg,var(--green),var(--green-dark)); color:#fff; border:none; border-radius:50px; font-size:16px; font-weight:600; cursor:pointer; box-shadow:var(--shadow); transition:transform 0.2s; display:flex; align-items:center; justify-content:center; gap:10px; }
   .btn-main .urdu { font-family:'Noto Nastaliq Urdu',serif; font-size:14px; direction:rtl; }
-  #home { background:var(--dark); }
+  #home,#booking,#searching,#driver-found { background:var(--dark); }
   .topbar { background:var(--dark2); padding:50px 20px 16px; display:flex; align-items:center; justify-content:space-between; }
   .greeting-name { font-size:19px; font-weight:700; }
   .greeting-urdu { font-family:'Noto Nastaliq Urdu',serif; font-size:13px; color:var(--text-muted); direction:rtl; }
   .avatar { width:44px; height:44px; border-radius:50%; background:linear-gradient(135deg,var(--green),var(--green-dark)); display:flex; align-items:center; justify-content:center; font-size:20px; cursor:pointer; }
-  #map { height:220px; width:100%; z-index:1; }
-  .map-location-badge { position:absolute; bottom:10px; left:12px; background:rgba(0,200,83,0.95); border-radius:8px; padding:4px 10px; font-size:11px; color:#000; font-weight:600; pointer-events:none; z-index:2; }
-  .bottom-sheet { flex:1; background:var(--dark); border-radius:24px 24px 0 0; margin-top:-20px; padding:20px; overflow-y:auto; box-shadow:0 -4px 20px rgba(0,0,0,0.3); position:relative; z-index:3; }
+  #map,#driver-live-map { width:100%; z-index:1; }
+  #map { height:210px; }
+  #driver-live-map { height:250px; }
+  .map-badge { position:absolute; bottom:10px; left:12px; background:rgba(0,200,83,0.95); border-radius:8px; padding:4px 10px; font-size:11px; color:#000; font-weight:600; z-index:2; pointer-events:none; }
+  .bottom-sheet { flex:1; background:var(--dark); border-radius:24px 24px 0 0; margin-top:-20px; padding:20px; overflow-y:auto; position:relative; z-index:3; }
   .sheet-handle { width:40px; height:4px; background:rgba(255,255,255,0.15); border-radius:2px; margin:0 auto 20px; }
   .where-btn { background:var(--dark3); border:1.5px solid rgba(255,255,255,0.08); border-radius:var(--radius); padding:16px 18px; display:flex; align-items:center; gap:14px; cursor:pointer; margin-bottom:12px; }
   .where-main { font-size:15px; font-weight:500; }
@@ -69,7 +71,6 @@
   .recent-icon { width:40px; height:40px; border-radius:12px; background:var(--dark3); display:flex; align-items:center; justify-content:center; font-size:18px; }
   .recent-name { font-size:14px; font-weight:500; }
   .recent-urdu { font-family:'Noto Nastaliq Urdu',serif; font-size:12px; color:var(--text-muted); direction:rtl; }
-  #booking { background:var(--dark); }
   .booking-header { background:var(--dark2); padding:50px 20px 20px; display:flex; align-items:center; gap:16px; }
   .back-btn { width:40px; height:40px; border-radius:12px; background:var(--dark3); border:none; color:var(--text); font-size:20px; cursor:pointer; display:flex; align-items:center; justify-content:center; }
   .route-card { background:var(--dark3); border-radius:var(--radius); padding:18px; margin:16px; border:1px solid rgba(255,255,255,0.06); }
@@ -82,31 +83,28 @@
   .fare-row { display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; }
   .fare-label { font-size:13px; color:var(--text-muted); }
   .fare-value { font-size:15px; font-weight:600; }
-  .fare-total { border-top:1px solid rgba(255,255,255,0.08); padding-top:12px; margin-top:4px; }
+  .fare-total { border-top:1px solid rgba(255,255,255,0.08); padding-top:12px; }
   .fare-total .fare-value { color:var(--green); font-size:22px; font-weight:800; }
-  .booking-footer { position:fixed; bottom:0; left:0; right:0; background:var(--dark); padding:16px; border-top:1px solid rgba(255,255,255,0.06); }
-  #searching { background:var(--dark); align-items:center; justify-content:center; text-align:center; padding:40px; }
+  .booking-footer { position:fixed; bottom:0; left:0; right:0; background:var(--dark); padding:16px; border-top:1px solid rgba(255,255,255,0.06); z-index:10; }
+  #searching { align-items:center; justify-content:center; text-align:center; padding:40px; }
   .search-anim { width:120px; height:120px; border-radius:50%; background:rgba(0,200,83,0.1); border:2px solid var(--green); display:flex; align-items:center; justify-content:center; font-size:50px; margin:0 auto 30px; animation:pulse 1.5s ease-in-out infinite; }
-  .search-dots { display:flex; gap:8px; justify-content:center; margin-bottom:40px; }
+  .search-dots { display:flex; gap:8px; justify-content:center; margin-bottom:30px; }
   .dot { width:10px; height:10px; border-radius:50%; background:var(--green); animation:dotBounce 1.2s ease-in-out infinite; }
-  .dot:nth-child(2) { animation-delay:0.2s; } .dot:nth-child(3) { animation-delay:0.4s; }
-  #driver-found { background:var(--dark); overflow-y:auto; }
-  #driver-live-map { height:260px; width:100%; z-index:1; }
+  .dot:nth-child(2){animation-delay:0.2s} .dot:nth-child(3){animation-delay:0.4s}
+  #driver-found { overflow-y:auto; }
   .driver-info-sheet { background:var(--dark2); border-radius:24px 24px 0 0; margin-top:-20px; padding:20px; position:relative; z-index:3; }
-  .driver-card { display:flex; align-items:center; gap:16px; padding:16px; background:var(--dark3); border-radius:var(--radius); margin-bottom:16px; }
-  .driver-avatar { width:60px; height:60px; border-radius:50%; background:linear-gradient(135deg,#2a4a3a,#1a3a2a); display:flex; align-items:center; justify-content:center; font-size:30px; border:2px solid var(--green); }
-  .driver-name-txt { font-size:17px; font-weight:700; }
-  .driver-vehicle-txt { font-size:13px; color:var(--text-muted); }
-  .rating { display:flex; align-items:center; gap:4px; font-size:13px; color:var(--accent); margin-top:2px; }
-  .driver-actions { display:flex; gap:10px; margin-bottom:16px; }
-  .action-btn { flex:1; padding:12px; border:none; border-radius:14px; font-size:22px; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px; }
-  .action-btn.call { background:rgba(0,200,83,0.15); border:1.5px solid var(--green); }
-  .action-btn.cancel { background:rgba(255,82,82,0.1); border:1.5px solid var(--danger); }
-  .action-label { font-size:12px; font-weight:600; }
+  .live-badge { background:rgba(0,200,83,0.15); border:1px solid var(--green); border-radius:20px; padding:5px 14px; font-size:11px; color:var(--green); display:inline-flex; align-items:center; gap:5px; margin-bottom:14px; }
+  .live-dot { width:7px; height:7px; border-radius:50%; background:var(--green); animation:blink 1s infinite; }
   .eta-badge { background:linear-gradient(135deg,var(--green),var(--green-dark)); border-radius:12px; padding:14px 18px; display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; }
   .eta-value { font-size:28px; font-weight:800; }
-  .live-badge { background:rgba(0,200,83,0.15); border:1px solid var(--green); border-radius:20px; padding:4px 12px; font-size:11px; color:var(--green); display:flex; align-items:center; gap:5px; margin-bottom:12px; }
-  .live-dot { width:7px; height:7px; border-radius:50%; background:var(--green); animation:blink 1s infinite; }
+  .driver-card { display:flex; align-items:center; gap:16px; padding:16px; background:var(--dark3); border-radius:var(--radius); margin-bottom:16px; }
+  .driver-avatar { width:60px; height:60px; border-radius:50%; background:linear-gradient(135deg,#2a4a3a,#1a3a2a); display:flex; align-items:center; justify-content:center; font-size:30px; border:2px solid var(--green); }
+  .rating { display:flex; align-items:center; gap:4px; font-size:13px; color:var(--accent); margin-top:2px; }
+  .driver-actions { display:flex; gap:10px; margin-bottom:16px; }
+  .action-btn { flex:1; padding:12px; border:none; border-radius:14px; font-size:20px; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:6px; }
+  .action-btn.call { background:rgba(0,200,83,0.15); border:1.5px solid var(--green); }
+  .action-btn.chat { background:rgba(255,214,0,0.1); border:1.5px solid var(--accent); }
+  .action-btn.cancel { background:rgba(255,82,82,0.1); border:1.5px solid var(--danger); }
   .bottom-nav { position:fixed; bottom:0; left:0; right:0; background:var(--dark2); border-top:1px solid rgba(255,255,255,0.06); display:flex; padding:10px 0 20px; z-index:100; }
   .nav-item { flex:1; display:flex; flex-direction:column; align-items:center; gap:4px; cursor:pointer; padding:6px 0; }
   .nav-icon { font-size:22px; }
@@ -115,7 +113,7 @@
   .loader-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.7); display:none; align-items:center; justify-content:center; z-index:999; }
   .loader-overlay.show { display:flex; }
   .loader { width:50px; height:50px; border:3px solid rgba(0,200,83,0.2); border-top-color:var(--green); border-radius:50%; animation:spin 0.8s linear infinite; }
-  .toast { position:fixed; top:60px; left:50%; transform:translateX(-50%) translateY(-100px); background:var(--card); border:1px solid var(--green); border-radius:12px; padding:12px 20px; font-size:13px; z-index:1000; transition:transform 0.3s cubic-bezier(0.175,0.885,0.32,1.275); max-width:90vw; text-align:center; }
+  .toast { position:fixed; top:60px; left:50%; transform:translateX(-50%) translateY(-100px); background:var(--card); border:1px solid var(--green); border-radius:12px; padding:12px 20px; font-size:13px; z-index:1000; transition:transform 0.3s cubic-bezier(0.175,0.885,0.32,1.275); max-width:90vw; text-align:center; box-shadow:0 4px 20px rgba(0,0,0,0.4); }
   .toast.show { transform:translateX(-50%) translateY(0); }
   .toast.error { border-color:var(--danger); }
   .t-urdu { font-family:'Noto Nastaliq Urdu',serif; direction:rtl; font-size:12px; color:var(--text-muted); display:block; }
@@ -127,8 +125,8 @@
   @keyframes spin { to{transform:rotate(360deg)} }
   @keyframes fadeIn { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
   .fade-in { animation:fadeIn 0.4s ease both; }
-</d
-  </head>
+</style>
+</head>
 <body>
 <div class="loader-overlay" id="loader"><div class="loader"></div></div>
 <div class="toast" id="toast"><span id="toast-msg"></span><span class="t-urdu" id="toast-urdu"></span></div>
@@ -186,7 +184,7 @@
   </div>
   <div style="position:relative">
     <div id="map"></div>
-    <div class="map-location-badge" id="location-badge">📍 DG Khan</div>
+    <div class="map-badge" id="location-badge">📍 DG Khan</div>
   </div>
   <div class="bottom-sheet">
     <div class="sheet-handle"></div>
@@ -243,7 +241,7 @@
     <div style="padding:0 16px">
       <div style="font-size:15px;font-weight:700;margin-bottom:12px">Payment — ادائیگی</div>
       <div style="display:flex;gap:10px">
-        <div id="pay-cash" style="flex:1;background:var(--dark3);border:2px solid var(--green);border-radius:14px;padding:12px;text-align:center;cursor:pointer" onclick="selectPayment('cash')"><div style="font-size:20px">💵</div><div style="font-size:12px;margin-top:4px">Cash / نقد</div></div>
+        <div id="pay-cash" style="flex:1;background:var(--dark3);border:2px solid var(--green);border-radius:14px;padding:12px;text-align:center;cursor:pointer" onclick="selectPayment('cash')"><div style="font-size:20px">💵</div><div style="font-size:12px;margin-top:4px">Cash</div></div>
         <div id="pay-jazz" style="flex:1;background:var(--dark3);border:1.5px solid rgba(255,255,255,0.08);border-radius:14px;padding:12px;text-align:center;cursor:pointer" onclick="selectPayment('jazzcash')"><div style="font-size:20px">📱</div><div style="font-size:12px;margin-top:4px">JazzCash</div></div>
         <div id="pay-easy" style="flex:1;background:var(--dark3);border:1.5px solid rgba(255,255,255,0.08);border-radius:14px;padding:12px;text-align:center;cursor:pointer" onclick="selectPayment('easypaisa')"><div style="font-size:20px">🟢</div><div style="font-size:12px;margin-top:4px">EasyPaisa</div></div>
       </div>
@@ -259,30 +257,32 @@
   <div style="font-size:22px;font-weight:700;margin-bottom:8px">Finding Driver...</div>
   <div style="font-family:'Noto Nastaliq Urdu',serif;font-size:16px;color:var(--text-muted);direction:rtl;margin-bottom:30px">ڈرائیور تلاش ہو رہا ہے</div>
   <div class="search-dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
-  <div style="color:var(--danger);font-size:14px;cursor:pointer" onclick="cancelRide()">Cancel — سواری منسوخ کریں</div>
+  <div style="color:var(--danger);font-size:14px;cursor:pointer;margin-top:20px" onclick="cancelRide()">Cancel — سواری منسوخ</div>
 </div>
 
 <div class="screen" id="driver-found">
-  <div id="driver-live-map"></div>
+  <div style="position:relative">
+    <div id="driver-live-map"></div>
+  </div>
   <div class="driver-info-sheet fade-in" style="overflow-y:auto;flex:1;padding-bottom:20px">
     <div style="width:40px;height:4px;background:rgba(255,255,255,0.15);border-radius:2px;margin:0 auto 16px"></div>
-    <div class="live-badge"><div class="live-dot"></div>Driver Location — Live 📍</div>
+    <div class="live-badge"><div class="live-dot"></div>Driver Location Live 📍</div>
     <div class="eta-badge">
-      <div><div style="font-size:13px;opacity:0.8">Driver arriving</div><div style="font-family:'Noto Nastaliq Urdu',serif;direction:rtl;font-size:11px;opacity:0.8">ڈرائیور آ رہا ہے</div></div>
+      <div><div style="font-size:13px;opacity:0.8">Driver arriving / ڈرائیور آ رہا ہے</div></div>
       <div style="display:flex;align-items:baseline;gap:4px"><div class="eta-value" id="eta-num">4</div><div style="font-size:13px;opacity:0.8">min</div></div>
     </div>
     <div class="driver-card">
       <div class="driver-avatar">👨</div>
       <div style="flex:1">
-        <div class="driver-name-txt" id="found-driver-name">Muhammad Asif</div>
-        <div class="driver-vehicle-txt" id="found-driver-vehicle">🚗 Mehran — LEA 2847</div>
+        <div style="font-size:17px;font-weight:700" id="found-driver-name">Muhammad Asif</div>
+        <div style="font-size:13px;color:var(--text-muted)" id="found-driver-vehicle">🚗 Mehran — LEA 2847</div>
         <div class="rating">⭐ 4.8 · 342 rides</div>
       </div>
     </div>
     <div class="driver-actions">
-      <button class="action-btn call" onclick="showToast('Calling...','کال ہو رہی ہے')">📞<div class="action-label">Call</div></button>
-      <button class="action-btn" style="background:rgba(255,214,0,0.1);border:1.5px solid var(--accent)" onclick="showToast('Chat coming soon!','جلد آ رہا ہے')">💬<div class="action-label">Chat</div></button>
-      <button class="action-btn cancel" onclick="cancelRide()">✕<div class="action-label">Cancel</div></button>
+      <button class="action-btn call" onclick="showToast('Calling...','کال ہو رہی ہے')">📞<div style="font-size:11px;font-weight:600">Call</div></button>
+      <button class="action-btn chat" onclick="showToast('Chat coming soon!','جلد آ رہا ہے')">💬<div style="font-size:11px;font-weight:600">Chat</div></button>
+      <button class="action-btn cancel" onclick="cancelRide()">✕<div style="font-size:11px;font-weight:600">Cancel</div></button>
     </div>
     <div style="background:var(--dark3);border-radius:var(--radius);padding:16px;display:flex;justify-content:space-between;align-items:center">
       <div><div style="font-size:13px;color:var(--text-muted)">Total Fare / کل کرایہ</div><div style="font-size:22px;font-weight:800;color:var(--green)" id="ride-fare-display">Rs 306</div></div>
@@ -290,8 +290,7 @@
     </div>
   </div>
 </div>
-
-  <script type="module">
+<script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
   import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
   import { getDatabase, ref, set, push, onValue, update } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
@@ -302,70 +301,74 @@
   const auth = getAuth(app);
   const db = getDatabase(app);
 
-  let currentUser=null, selectedVehicle={name:'Car',urdu:'کار',rate:80}, selectedPayment='cash';
-  let currentRideId=null, currentDestination={name:'DHQ Hospital',urdu:'ڈی ایچ کیو ہسپتال'};
-  let userLocation={lat:30.0576,lng:70.6358};
-  let mainMap=null, userMarker=null, liveMap=null, driverLiveMarker=null, routeLine=null;
-  let acceptedDriverId=null;
-  const DGK=[30.0576,70.6358];
+  let currentUser=null, selectedVehicle={name:'Car',rate:80}, selectedPayment='cash';
+  let currentRideId=null, currentDestination={name:'DHQ Hospital'};
+  let userLat=30.0576, userLng=70.6358;
+  let mainMap=null, userMarker=null, liveMap=null, driverMarker=null, routeLine=null;
 
+  // MAIN MAP
   function initMainMap(lat,lng) {
-    if(mainMap){userMarker.setLatLng([lat,lng]);mainMap.setView([lat,lng],15);return;}
-    mainMap=L.map('map',{zoomControl:false,attributionControl:false}).setView([lat,lng],14);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(mainMap);
-    const myIcon=L.divIcon({html:'📍',className:'',iconSize:[30,30],iconAnchor:[15,30]});
-    userMarker=L.marker([lat,lng],{icon:myIcon}).addTo(mainMap);
-    const carIcon=L.divIcon({html:'🚗',className:'',iconSize:[24,24]});
-    L.marker([lat+0.002,lng+0.002],{icon:carIcon}).addTo(mainMap);
-    L.marker([lat-0.001,lng+0.003],{icon:carIcon}).addTo(mainMap);
+    if(mainMap) return;
+    setTimeout(()=>{
+      try {
+        mainMap = L.map('map',{zoomControl:false,attributionControl:false}).setView([lat,lng],14);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(mainMap);
+        const myIcon=L.divIcon({html:'📍',className:'',iconSize:[28,28],iconAnchor:[14,28]});
+        userMarker=L.marker([lat,lng],{icon:myIcon}).addTo(mainMap);
+        const carIcon=L.divIcon({html:'🚗',className:'',iconSize:[24,24]});
+        L.marker([lat+0.003,lng+0.002],{icon:carIcon}).addTo(mainMap);
+        L.marker([lat-0.002,lng+0.004],{icon:carIcon}).addTo(mainMap);
+        L.marker([lat+0.001,lng-0.003],{icon:carIcon}).addTo(mainMap);
+      } catch(e) { console.log('map error',e); }
+    }, 500);
   }
 
-  function initLiveMap(passengerLat,passengerLng,driverLat,driverLng) {
-    if(liveMap){return;}
-    liveMap=L.map('driver-live-map',{zoomControl:false,attributionControl:false}).setView([passengerLat,passengerLng],14);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(liveMap);
-    const passIcon=L.divIcon({html:'📍',className:'',iconSize:[30,30],iconAnchor:[15,30]});
-    L.marker([passengerLat,passengerLng],{icon:passIcon}).addTo(liveMap).bindPopup('Aap');
-    const carIcon=L.divIcon({html:'🚗',className:'',iconSize:[32,32],iconAnchor:[16,16]});
-    driverLiveMarker=L.marker([driverLat,driverLng],{icon:carIcon}).addTo(liveMap).bindPopup('Driver');
-    routeLine=L.polyline([[driverLat,driverLng],[passengerLat,passengerLng]],{color:'#00c853',weight:3,dashArray:'8,4'}).addTo(liveMap);
-    const bounds=L.latLngBounds([[passengerLat,passengerLng],[driverLat,driverLng]]);
-    liveMap.fitBounds(bounds,{padding:[30,30]});
+  // LIVE MAP — driver location
+  function initLiveMap(pLat,pLng,dLat,dLng) {
+    if(liveMap) return;
+    setTimeout(()=>{
+      try {
+        liveMap=L.map('driver-live-map',{zoomControl:false,attributionControl:false}).setView([pLat,pLng],14);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(liveMap);
+        const passIcon=L.divIcon({html:'📍',className:'',iconSize:[28,28],iconAnchor:[14,28]});
+        L.marker([pLat,pLng],{icon:passIcon}).addTo(liveMap).bindPopup('Aap');
+        const carIcon=L.divIcon({html:'🚗',className:'',iconSize:[32,32],iconAnchor:[16,16]});
+        driverMarker=L.marker([dLat,dLng],{icon:carIcon}).addTo(liveMap).bindPopup('Driver');
+        routeLine=L.polyline([[dLat,dLng],[pLat,pLng]],{color:'#00c853',weight:3,dashArray:'6,4'}).addTo(liveMap);
+        liveMap.fitBounds([[pLat,pLng],[dLat,dLng]],{padding:[40,40]});
+      } catch(e) { console.log('live map error',e); }
+    }, 500);
   }
 
-  function trackDriverLiveLocation(driverId,passengerLat,passengerLng) {
-    onValue(ref(db,'drivers/'+driverId),snap=>{
+  // TRACK DRIVER LIVE
+  function trackDriver(driverId) {
+    onValue(ref(db,'drivers/'+driverId), snap=>{
       const d=snap.val();
-      if(!d||!d.lat) return;
-      if(!liveMap){ initLiveMap(passengerLat,passengerLng,d.lat,d.lng); return; }
-      if(driverLiveMarker){ driverLiveMarker.setLatLng([d.lat,d.lng]); }
-      if(routeLine){ routeLine.setLatLngs([[d.lat,d.lng],[passengerLat,passengerLng]]); }
-      const dist=getDistance(passengerLat,passengerLng,d.lat,d.lng);
-      const eta=Math.max(1,Math.round(dist/0.5));
-      document.getElementById('eta-num').textContent=eta;
+      if(!d||!d.lat||!d.lng) return;
+      if(!liveMap){ initLiveMap(userLat,userLng,d.lat,d.lng); }
+      if(driverMarker){ driverMarker.setLatLng([d.lat,d.lng]); }
+      if(routeLine){ routeLine.setLatLngs([[d.lat,d.lng],[userLat,userLng]]); }
+      if(liveMap){ liveMap.panTo([d.lat,d.lng]); }
+      // ETA calculation
+      const dist=Math.sqrt(Math.pow(d.lat-userLat,2)+Math.pow(d.lng-userLng,2))*111;
+      const eta=Math.max(1,Math.round(dist*2));
+      const etaEl=document.getElementById('eta-num');
+      if(etaEl) etaEl.textContent=eta;
     });
   }
 
-  function getDistance(lat1,lng1,lat2,lng2){
-    const R=6371;
-    const dLat=(lat2-lat1)*Math.PI/180;
-    const dLng=(lat2-lng2)*Math.PI/180;
-    const a=Math.sin(dLat/2)*Math.sin(dLat/2)+Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLng/2)*Math.sin(dLng/2);
-    return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
-  }
-
-  onAuthStateChanged(auth,(user)=>{
+  // AUTH
+  onAuthStateChanged(auth, user=>{
     if(user){
       currentUser=user;
       document.getElementById('user-name').textContent=user.email.split('@')[0];
       showScreen('home');
       if(navigator.geolocation){
-        navigator.geolocation.getCurrentPosition(pos=>{
-          userLocation={lat:pos.coords.latitude,lng:pos.coords.longitude};
-          setTimeout(()=>initMainMap(userLocation.lat,userLocation.lng),200);
-          document.getElementById('location-badge').textContent='📍 DG Khan — آپ کی جگہ';
-        },()=>setTimeout(()=>initMainMap(DGK[0],DGK[1]),200));
-      } else { setTimeout(()=>initMainMap(DGK[0],DGK[1]),200); }
+        navigator.geolocation.getCurrentPosition(
+          pos=>{ userLat=pos.coords.latitude; userLng=pos.coords.longitude; initMainMap(userLat,userLng); document.getElementById('location-badge').textContent='📍 Location mila — DGK'; },
+          ()=>initMainMap(userLat,userLng)
+        );
+      } else { initMainMap(userLat,userLng); }
     }
   });
 
@@ -375,13 +378,16 @@
     const password=document.getElementById('signup-password').value;
     const phone=document.getElementById('signup-phone').value.trim();
     if(!name||!email||!password){showToast('Sab fields bharein!','تمام خانے بھریں',true);return;}
-    if(password.length<6){showToast('Password 6+ characters!','پاس ورڈ چھوٹا ہے',true);return;}
+    if(password.length<6){showToast('Password 6 se zyada hona chahiye!','پاس ورڈ چھوٹا ہے',true);return;}
     document.getElementById('loader').classList.add('show');
     try{
       const c=await createUserWithEmailAndPassword(auth,email,password);
       await set(ref(db,'passengers/'+c.user.uid),{name,phone,email,createdAt:Date.now(),role:'passenger'});
       showToast('Account ban gaya!','اکاؤنٹ بن گیا ✅');
-    }catch(e){showToast(e.code==='auth/email-already-in-use'?'Email pehle se hai!':'Kuch masla aaya','غلطی',true);}
+    }catch(e){
+      const msgs={'auth/email-already-in-use':'Email pehle se registered hai!','auth/weak-password':'Password zyada mazboot karo!'};
+      showToast(msgs[e.code]||'Kuch masla aaya, dobara try karo','غلطی ہوئی',true);
+    }
     document.getElementById('loader').classList.remove('show');
   };
 
@@ -390,8 +396,8 @@
     const password=document.getElementById('login-password').value;
     if(!email||!password){showToast('Email aur password daalein!','ای میل درج کریں',true);return;}
     document.getElementById('loader').classList.add('show');
-    try{await signInWithEmailAndPassword(auth,email,password);showToast('Login ho gaya!','لاگ ان کامیاب ✅');}
-    catch(e){showToast('Email ya password galat!','غلط معلومات',true);}
+    try{ await signInWithEmailAndPassword(auth,email,password); showToast('Login kamyab!','لاگ ان کامیاب ✅'); }
+    catch(e){ showToast('Email ya password galat hai!','غلط معلومات',true); }
     document.getElementById('loader').classList.remove('show');
   };
 
@@ -407,54 +413,55 @@
     try{
       const r=push(ref(db,'rides'));
       currentRideId=r.key;
-      await set(r,{passengerId:currentUser.uid,passengerEmail:currentUser.email,pickup:'Circular Road, DGK',pickupLat:userLocation.lat,pickupLng:userLocation.lng,dropoff:currentDestination.name,vehicle:selectedVehicle.name,fare:document.getElementById('total-fare').textContent,payment:selectedPayment,status:'searching',createdAt:Date.now()});
+      await set(r,{
+        passengerId:currentUser.uid, passengerEmail:currentUser.email,
+        pickup:'Circular Road, DGK', pickupLat:userLat, pickupLng:userLng,
+        dropoff:currentDestination.name, vehicle:selectedVehicle.name,
+        fare:document.getElementById('total-fare').textContent,
+        payment:selectedPayment, status:'searching', createdAt:Date.now()
+      });
       document.getElementById('ride-fare-display').textContent=document.getElementById('total-fare').textContent;
       document.getElementById('loader').classList.remove('show');
       showScreen('searching');
-      listenForDriverAccept();
-    }catch(e){document.getElementById('loader').classList.remove('show');showToast('Error: '+e.message,'غلطی',true);}
+      // Listen for driver accept
+      onValue(ref(db,'rides/'+currentRideId), snap=>{
+        const ride=snap.val();
+        if(!ride) return;
+        if(ride.status==='accepted'&&ride.driverId){
+          document.getElementById('found-driver-name').textContent=ride.driverName||'Muhammad Asif';
+          document.getElementById('found-driver-vehicle').textContent='🚗 '+(ride.driverVehicle||'Mehran');
+          showScreen('driver-found');
+          showToast('Driver mil gaya! Aa raha hai','ڈرائیور مل گیا 🚗');
+          initLiveMap(userLat,userLng,ride.driverLat||userLat+0.005,ride.driverLng||userLng+0.005);
+          trackDriver(ride.driverId);
+        }
+        if(ride.status==='completed'){ showToast('Sawari mukammal!','سواری مکمل 🎉'); setTimeout(()=>showScreen('home'),2000); }
+      });
+    }catch(e){ document.getElementById('loader').classList.remove('show'); showToast('Error aaya!','غلطی',true); }
   };
 
-  function listenForDriverAccept(){
-    if(!currentRideId) return;
-    onValue(ref(db,'rides/'+currentRideId),snap=>{
-      const ride=snap.val();
-      if(!ride) return;
-      if(ride.status==='accepted'&&ride.driverId){
-        acceptedDriverId=ride.driverId;
-        document.getElementById('found-driver-name').textContent=ride.driverName||'Muhammad Asif';
-        document.getElementById('found-driver-vehicle').textContent='🚗 '+(ride.driverVehicle||'Mehran');
-        showScreen('driver-found');
-        showToast('Driver mil gaya!','ڈرائیور مل گیا 🚗');
-        setTimeout(()=>{
-          initLiveMap(userLocation.lat,userLocation.lng,ride.driverLat||DGK[0],ride.driverLng||DGK[1]);
-          trackDriverLiveLocation(ride.driverId,userLocation.lat,userLocation.lng);
-        },300);
-      }
-      if(ride.status==='completed'){showToast('Sawari mukammal!','سواری مکمل 🎉');setTimeout(()=>showScreen('home'),2000);}
-    });
-  }
-
   window.cancelRide=async function(){
-    if(currentRideId){await update(ref(db,'rides/'+currentRideId),{status:'cancelled'});currentRideId=null;}
-    showToast('Ride cancelled','سواری منسوخ');
+    if(currentRideId){ await update(ref(db,'rides/'+currentRideId),{status:'cancelled'}); currentRideId=null; }
+    liveMap=null; driverMarker=null; routeLine=null;
+    showToast('Ride cancel ho gayi','سواری منسوخ');
     showScreen('home');
   };
 
-  window.showProfile=function(){showToast('Profile: '+(currentUser?currentUser.email:''),'پروفائل');};
+  window.showProfile=function(){ showToast('Profile: '+(currentUser?currentUser.email:'Guest'),'پروفائل'); };
 
   window.selectVehicle=function(el,name,urdu,rate){
     el.closest('.vehicle-scroll').querySelectorAll('.vehicle-card').forEach(c=>c.classList.remove('selected'));
-    el.classList.add('selected');selectedVehicle={name,urdu,rate};
+    el.classList.add('selected'); selectedVehicle={name,urdu,rate};
     document.getElementById('total-fare').textContent='Rs '+Math.round(50+(3.2*rate));
-    if(document.getElementById('selected-vehicle-display')) document.getElementById('selected-vehicle-display').textContent=el.querySelector('.vehicle-emoji').textContent+' '+name;
+    const vd=document.getElementById('selected-vehicle-display');
+    if(vd) vd.textContent=el.querySelector('.vehicle-emoji').textContent+' '+name;
   };
 
   window.selectPayment=function(m){
     selectedPayment=m;
     ['cash','jazz','easy'].forEach(x=>{const e=document.getElementById('pay-'+x);if(e)e.style.border='1.5px solid rgba(255,255,255,0.08)';});
     const map={cash:'pay-cash',jazzcash:'pay-jazz',easypaisa:'pay-easy'};
-    const e=document.getElementById(map[m]);if(e)e.style.border='2px solid var(--green)';
+    const e=document.getElementById(map[m]); if(e) e.style.border='2px solid var(--green)';
   };
 
   window.switchTab=function(tab){
@@ -465,8 +472,10 @@
 </script>
 
 <script>
-  function showScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');}
-  function showToast(msg,urdu,isError){const t=document.getElementById('toast');document.getElementById('toast-msg').textContent=msg;document.getElementById('toast-urdu').textContent=urdu||'';t.className='toast'+(isError?' error':'');t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000);}
+  function showScreen(id){ document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active')); document.getElementById(id).classList.add('active'); }
+  function showToast(msg,urdu,isError){ const t=document.getElementById('toast'); document.getElementById('toast-msg').textContent=msg; document.getElementById('toast-urdu').textContent=urdu||''; t.className='toast'+(isError?' error':''); t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),3000); }
 </script>
 </body>
 </html>
+
+  
