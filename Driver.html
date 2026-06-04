@@ -58,14 +58,16 @@
   .toggle-slider:before { content:''; position:absolute; height:24px; width:24px; left:4px; bottom:4px; background:#888; border-radius:50%; transition:0.3s; }
   input:checked + .toggle-slider { background:rgba(0,200,83,0.2); border-color:var(--green); }
   input:checked + .toggle-slider:before { transform:translateX(30px); background:var(--green); box-shadow:0 0 8px var(--green); }
-  #driver-map { height:200px; width:100%; z-index:1; }
+  .location-bar { background:var(--dark3); padding:10px 20px; display:flex; align-items:center; gap:8px; font-size:12px; border-bottom:1px solid rgba(255,255,255,0.05); }
+  .location-dot { width:8px; height:8px; border-radius:50%; background:var(--green); animation:blink 1.5s infinite; flex-shrink:0; }
+  #driver-map { height:180px; width:100%; z-index:1; }
   .content-scroll { flex:1; overflow-y:auto; padding:16px; padding-bottom:100px; }
   .stats-row { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:20px; }
   .stat-card { background:var(--card); border-radius:16px; padding:14px 10px; text-align:center; }
   .stat-val { font-size:20px; font-weight:800; color:var(--green); }
   .stat-label { font-size:10px; color:var(--text-muted); margin-top:2px; }
   .stat-urdu { font-family:'Noto Nastaliq Urdu',serif; font-size:10px; direction:rtl; color:var(--text-muted); }
-  .ride-request { background:var(--card); border-radius:var(--radius); padding:18px; margin-bottom:16px; border:1.5px solid rgba(0,200,83,0.3); position:relative; overflow:hidden; display:none; }
+  .ride-request { background:var(--card); border-radius:var(--radius); padding:18px; margin-bottom:16px; border:1.5px solid rgba(0,200,83,0.3); position:relative; overflow:hidden; display:none; animation:slideUp 0.4s ease; }
   .ride-request::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; background:linear-gradient(90deg,var(--green),var(--green-dark)); }
   .request-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; }
   .request-badge { background:rgba(0,200,83,0.15); border:1px solid var(--green); border-radius:20px; padding:4px 12px; font-size:11px; color:var(--green); font-weight:600; display:flex; align-items:center; gap:4px; }
@@ -106,6 +108,7 @@
   @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
   @keyframes spin { to{transform:rotate(360deg)} }
   @keyframes fadeIn { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+  @keyframes slideUp { from{opacity:0;transform:translateY(30px)} to{opacity:1;transform:translateY(0)} }
   .fade-in { animation:fadeIn 0.4s ease both; }
 </style>
 </head>
@@ -179,6 +182,10 @@
       </label>
     </div>
   </div>
+  <div class="location-bar">
+    <div class="location-dot"></div>
+    <span id="location-text">📍 Location detect ho rahi hai...</span>
+  </div>
   <div id="driver-map"></div>
   <div class="content-scroll">
     <div class="stats-row fade-in">
@@ -186,6 +193,7 @@
       <div class="stat-card"><div class="stat-val" style="color:var(--accent)" id="today-earnings">Rs 0</div><div class="stat-label">Earned</div><div class="stat-urdu">کمائی</div></div>
       <div class="stat-card"><div class="stat-val">4.9 ⭐</div><div class="stat-label">Rating</div><div class="stat-urdu">ریٹنگ</div></div>
     </div>
+
     <div class="ride-request fade-in" id="ride-request-card">
       <div class="request-header">
         <div class="request-badge"><div class="dot-live"></div>New Request — نئی سواری</div>
@@ -203,11 +211,13 @@
         <button class="btn-reject" onclick="rejectRide()">✕ Reject</button>
       </div>
     </div>
+
     <div class="waiting-msg" id="waiting-msg">
       <div style="font-size:40px;margin-bottom:12px">😴</div>
       <div style="font-size:15px;font-weight:600">Go Online to receive rides</div>
       <div style="font-family:'Noto Nastaliq Urdu',serif;direction:rtl;font-size:14px;margin-top:4px">آن لائن ہوں اور سواریاں پائیں</div>
     </div>
+
     <div class="earnings-card fade-in">
       <div style="font-size:13px;color:var(--text-muted)">Today's Earnings — آج کی کمائی</div>
       <div class="earn-amount" id="earn-total">Rs 0</div>
@@ -237,19 +247,52 @@
   const db = getDatabase(app);
 
   let currentDriver=null, currentRideId=null, driverData={}, totalRides=0, totalEarnings=0;
-  let driverMap=null, driverMarker=null;
+  let driverMap=null, driverMarker=null, locationWatcher=null;
   const DGK = [30.0576, 70.6358];
 
   function initMap(lat, lng) {
-    if (driverMap) { driverMap.setView([lat,lng], 15); if(driverMarker) driverMarker.setLatLng([lat,lng]); return; }
-    driverMap = L.map('driver-map', {zoomControl:false, attributionControl:false}).setView([lat,lng], 14);
+    if (driverMap) {
+      driverMarker.setLatLng([lat, lng]);
+      driverMap.setView([lat, lng], 15);
+      return;
+    }
+    driverMap = L.map('driver-map', {zoomControl:false, attributionControl:false}).setView([lat,lng], 15);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(driverMap);
-    const driverIcon = L.divIcon({html:'🚗', className:'', iconSize:[30,30], iconAnchor:[15,15]});
-    driverMarker = L.marker([lat,lng], {icon:driverIcon}).addTo(driverMap).bindPopup('Aap yahan hain');
-    // Show passenger markers nearby
-    const passIcon = L.divIcon({html:'📍', className:'', iconSize:[24,24]});
-    L.marker([lat+0.002, lng+0.002], {icon:passIcon}).addTo(driverMap);
-    L.marker([lat-0.001, lng+0.003], {icon:passIcon}).addTo(driverMap);
+    const carIcon = L.divIcon({html:'🚗', className:'', iconSize:[32,32], iconAnchor:[16,16]});
+    driverMarker = L.marker([lat,lng], {icon:carIcon}).addTo(driverMap).bindPopup('Aap yahan hain');
+  }
+
+  // Live location update every 3 seconds
+  function startLiveLocation() {
+    if (!navigator.geolocation) return;
+    locationWatcher = navigator.geolocation.watchPosition(
+      (pos) => {
+        const lat = pos.coords.latitude;
+        const lng = pos.coords.longitude;
+        // Update map
+        if (driverMap && driverMarker) {
+          driverMarker.setLatLng([lat, lng]);
+          driverMap.setView([lat, lng], 15);
+        }
+        // Update Firebase — passenger will see this move!
+        if (currentDriver) {
+          update(ref(db, 'drivers/' + currentDriver.uid), {
+            lat, lng,
+            lastUpdated: Date.now(),
+            isOnline: true
+          });
+        }
+        document.getElementById('location-text').textContent = '📍 Live location on — ' + lat.toFixed(4) + ', ' + lng.toFixed(4);
+      },
+      (err) => { document.getElementById('location-text').textContent = '📍 DG Khan — location permission den'; },
+      { enableHighAccuracy: true, maximumAge: 3000, timeout: 10000 }
+    );
+  }
+
+  function stopLiveLocation() {
+    if (locationWatcher) { navigator.geolocation.clearWatch(locationWatcher); locationWatcher = null; }
+    if (currentDriver) update(ref(db,'drivers/'+currentDriver.uid), {isOnline:false});
+    document.getElementById('location-text').textContent = '📍 Offline — location share nahi ho rahi';
   }
 
   onAuthStateChanged(auth, (user) => {
@@ -258,10 +301,10 @@
       document.getElementById('driver-name').textContent = user.email.split('@')[0];
       showScreen('home');
       if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(pos => {
-          initMap(pos.coords.latitude, pos.coords.longitude);
-          if (currentDriver) update(ref(db,'drivers/'+currentDriver.uid), {lat:pos.coords.latitude, lng:pos.coords.longitude});
-        }, () => { setTimeout(()=>initMap(DGK[0], DGK[1]), 200); });
+        navigator.geolocation.getCurrentPosition(
+          pos => { setTimeout(()=>initMap(pos.coords.latitude, pos.coords.longitude), 200); },
+          () => { setTimeout(()=>initMap(DGK[0], DGK[1]), 200); }
+        );
       } else { setTimeout(()=>initMap(DGK[0], DGK[1]), 200); }
     }
   });
@@ -277,7 +320,7 @@
     document.getElementById('loader').classList.add('show');
     try {
       const c = await createUserWithEmailAndPassword(auth,email,password);
-      await set(ref(db,'drivers/'+c.user.uid),{name,phone,vehicle,email,createdAt:Date.now(),role:'driver',isOnline:false,rating:4.9});
+      await set(ref(db,'drivers/'+c.user.uid),{name,phone,vehicle,email,createdAt:Date.now(),role:'driver',isOnline:false,rating:4.9,lat:DGK[0],lng:DGK[1]});
       driverData={name,vehicle};
       showToast('Account ban gaya!','اکاؤنٹ بن گیا ✅');
     } catch(e) { showToast(e.code==='auth/email-already-in-use'?'Email pehle se hai!':'Kuch masla aaya','غلطی',true); }
@@ -299,8 +342,8 @@
       document.getElementById('status-text').textContent='🟢 Online';
       document.getElementById('status-urdu').textContent='آن لائن — سواریاں آ رہی ہیں';
       document.getElementById('online-status').textContent='On';
-      showToast('Aap Online hain!','آپ آن لائن ہو گئے');
-      if(currentDriver) update(ref(db,'drivers/'+currentDriver.uid),{isOnline:true});
+      showToast('Aap Online hain! Location share ho rahi hai','آپ آن لائن ہو گئے 📍');
+      startLiveLocation();
       listenForRides();
     } else {
       document.getElementById('status-text').textContent='🔴 Offline';
@@ -309,7 +352,7 @@
       document.getElementById('ride-request-card').style.display='none';
       document.getElementById('waiting-msg').style.display='block';
       showToast('Aap Offline hain','آپ آف لائن ہو گئے');
-      if(currentDriver) update(ref(db,'drivers/'+currentDriver.uid),{isOnline:false});
+      stopLiveLocation();
     }
   };
 
@@ -328,10 +371,10 @@
           document.getElementById('ride-request-card').style.display='block';
           document.getElementById('waiting-msg').style.display='none';
           showToast('Nayi sawari aayi!','نئی سواری آئی ہے 🚗');
-          // Show passenger on map
           if(driverMap && ride.pickupLat) {
             const passIcon=L.divIcon({html:'📍',className:'',iconSize:[30,30]});
             L.marker([ride.pickupLat,ride.pickupLng],{icon:passIcon}).addTo(driverMap).bindPopup('Passenger: '+ride.dropoff);
+            L.polyline([[ride.pickupLat,ride.pickupLng],[driverMarker.getLatLng().lat,driverMarker.getLatLng().lng]],{color:'#00c853',weight:3,dashArray:'8,4'}).addTo(driverMap);
           }
         }
       });
@@ -341,15 +384,16 @@
   window.acceptRide = async function() {
     if(!currentRideId) return;
     const driverName=currentDriver.email.split('@')[0];
-    await update(ref(db,'rides/'+currentRideId),{status:'accepted',driverName,driverVehicle:driverData.vehicle||'Mehran'});
+    const pos = driverMarker ? driverMarker.getLatLng() : {lat:DGK[0],lng:DGK[1]};
+    await update(ref(db,'rides/'+currentRideId),{status:'accepted',driverName,driverVehicle:driverData.vehicle||'Mehran',driverLat:pos.lat,driverLng:pos.lng,driverId:currentDriver.uid});
     document.getElementById('ride-request-card').style.display='none';
     totalRides++; totalEarnings+=245;
     document.getElementById('today-rides').textContent=totalRides;
     document.getElementById('today-earnings').textContent='Rs '+totalEarnings;
     document.getElementById('earn-rides').textContent=totalRides;
     document.getElementById('earn-total').textContent='Rs '+totalEarnings;
-    showToast('Sawari qabool!','سواری قبول ✅');
-    setTimeout(()=>{ update(ref(db,'rides/'+currentRideId),{status:'completed'}); currentRideId=null; document.getElementById('waiting-msg').style.display='block'; showToast('Sawari mukammal!','سواری مکمل 🎉'); },30000);
+    showToast('Sawari qabool! Passenger tak jao','سواری قبول ✅');
+    setTimeout(()=>{ update(ref(db,'rides/'+currentRideId),{status:'completed'}); currentRideId=null; document.getElementById('waiting-msg').style.display='block'; showToast('Sawari mukammal!','سواری مکمل 🎉'); },60000);
   };
 
   window.rejectRide = async function() {
