@@ -44,14 +44,13 @@
   .input-wrap .icon { position:absolute; left:16px; top:50%; transform:translateY(-50%); font-size:20px; }
   .btn-main { width:100%; padding:16px; background:linear-gradient(135deg,var(--green),var(--green-dark)); color:#fff; border:none; border-radius:50px; font-size:16px; font-weight:600; cursor:pointer; box-shadow:var(--shadow); transition:transform 0.2s; display:flex; align-items:center; justify-content:center; gap:10px; }
   .btn-main .urdu { font-family:'Noto Nastaliq Urdu',serif; font-size:14px; direction:rtl; }
-  #home,#booking,#searching,#driver-found { background:var(--dark); }
+  #home,#booking,#searching,#driver-found,#chat-screen,#rating-screen,#history-screen { background:var(--dark); }
   .topbar { background:var(--dark2); padding:50px 20px 16px; display:flex; align-items:center; justify-content:space-between; }
   .greeting-name { font-size:19px; font-weight:700; }
   .greeting-urdu { font-family:'Noto Nastaliq Urdu',serif; font-size:13px; color:var(--text-muted); direction:rtl; }
   .avatar { width:44px; height:44px; border-radius:50%; background:linear-gradient(135deg,var(--green),var(--green-dark)); display:flex; align-items:center; justify-content:center; font-size:20px; cursor:pointer; }
   #map,#driver-live-map { width:100%; z-index:1; }
-  #map { height:210px; }
-  #driver-live-map { height:250px; }
+  #map { height:210px; } #driver-live-map { height:220px; }
   .map-badge { position:absolute; bottom:10px; left:12px; background:rgba(0,200,83,0.95); border-radius:8px; padding:4px 10px; font-size:11px; color:#000; font-weight:600; z-index:2; pointer-events:none; }
   .bottom-sheet { flex:1; background:var(--dark); border-radius:24px 24px 0 0; margin-top:-20px; padding:20px; overflow-y:auto; position:relative; z-index:3; }
   .sheet-handle { width:40px; height:4px; background:rgba(255,255,255,0.15); border-radius:2px; margin:0 auto 20px; }
@@ -101,15 +100,40 @@
   .driver-avatar { width:60px; height:60px; border-radius:50%; background:linear-gradient(135deg,#2a4a3a,#1a3a2a); display:flex; align-items:center; justify-content:center; font-size:30px; border:2px solid var(--green); }
   .rating { display:flex; align-items:center; gap:4px; font-size:13px; color:var(--accent); margin-top:2px; }
   .driver-actions { display:flex; gap:10px; margin-bottom:16px; }
-  .action-btn { flex:1; padding:12px; border:none; border-radius:14px; font-size:20px; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:6px; }
+  .action-btn { flex:1; padding:12px; border:none; border-radius:14px; font-size:20px; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:6px; flex-direction:column; }
   .action-btn.call { background:rgba(0,200,83,0.15); border:1.5px solid var(--green); }
   .action-btn.chat { background:rgba(255,214,0,0.1); border:1.5px solid var(--accent); }
   .action-btn.cancel { background:rgba(255,82,82,0.1); border:1.5px solid var(--danger); }
+  /* CHAT */
+  .chat-header { background:var(--dark2); padding:50px 20px 16px; display:flex; align-items:center; gap:14px; }
+  .chat-messages { flex:1; overflow-y:auto; padding:16px; display:flex; flex-direction:column; gap:10px; padding-bottom:80px; }
+  .msg { max-width:75%; padding:10px 14px; border-radius:16px; font-size:14px; line-height:1.4; }
+  .msg.sent { background:var(--green-dark); color:#fff; border-radius:16px 16px 4px 16px; align-self:flex-end; }
+  .msg.received { background:var(--card); border-radius:16px 16px 16px 4px; align-self:flex-start; }
+  .msg-time { font-size:10px; opacity:0.6; margin-top:4px; }
+  .chat-input-wrap { position:fixed; bottom:0; left:0; right:0; background:var(--dark2); padding:12px 16px; display:flex; gap:10px; align-items:center; border-top:1px solid rgba(255,255,255,0.06); z-index:10; }
+  .chat-input { flex:1; background:var(--dark3); border:1.5px solid rgba(255,255,255,0.08); border-radius:24px; padding:12px 18px; color:var(--text); font-size:14px; outline:none; font-family:'Poppins',sans-serif; }
+  .chat-send { width:44px; height:44px; border-radius:50%; background:var(--green); border:none; color:#fff; font-size:20px; cursor:pointer; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  /* RATING */
+  .rating-screen-inner { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:30px; text-align:center; }
+  .rating-avatar { width:80px; height:80px; border-radius:50%; background:linear-gradient(135deg,#2a4a3a,#1a3a2a); display:flex; align-items:center; justify-content:center; font-size:40px; margin:0 auto 16px; border:3px solid var(--green); }
+  .stars-wrap { display:flex; gap:12px; justify-content:center; margin:20px 0; }
+  .star-btn { font-size:40px; cursor:pointer; transition:transform 0.2s; opacity:0.3; }
+  .star-btn.active { opacity:1; transform:scale(1.1); }
+  .feedback-input { width:100%; padding:14px; background:var(--dark3); border:1.5px solid rgba(255,255,255,0.08); border-radius:var(--radius); color:var(--text); font-size:14px; font-family:'Poppins',sans-serif; outline:none; margin-bottom:16px; resize:none; }
+  /* HISTORY */
+  .history-header { background:var(--dark2); padding:50px 20px 20px; }
+  .history-item { display:flex; align-items:center; gap:14px; padding:14px 20px; border-bottom:1px solid rgba(255,255,255,0.05); }
+  .history-icon { width:44px; height:44px; border-radius:14px; background:var(--dark3); display:flex; align-items:center; justify-content:center; font-size:20px; flex-shrink:0; }
+  .history-route { font-size:13px; font-weight:500; }
+  .history-time { font-size:11px; color:var(--text-muted); margin-top:2px; }
+  .history-fare { font-size:15px; font-weight:700; color:var(--green); }
   .bottom-nav { position:fixed; bottom:0; left:0; right:0; background:var(--dark2); border-top:1px solid rgba(255,255,255,0.06); display:flex; padding:10px 0 20px; z-index:100; }
   .nav-item { flex:1; display:flex; flex-direction:column; align-items:center; gap:4px; cursor:pointer; padding:6px 0; }
   .nav-icon { font-size:22px; }
   .nav-label { font-size:11px; color:var(--text-muted); font-family:'Noto Nastaliq Urdu',serif; direction:rtl; }
   .nav-item.active .nav-label { color:var(--green); }
+  .notif-badge { position:absolute; top:-2px; right:-2px; width:8px; height:8px; border-radius:50%; background:var(--danger); }
   .loader-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.7); display:none; align-items:center; justify-content:center; z-index:999; }
   .loader-overlay.show { display:flex; }
   .loader { width:50px; height:50px; border:3px solid rgba(0,200,83,0.2); border-top-color:var(--green); border-radius:50%; animation:spin 0.8s linear infinite; }
@@ -180,7 +204,7 @@
       <div class="greeting-name">Assalam o Alaikum, <span id="user-name">User</span>! 👋</div>
       <div class="greeting-urdu">کہاں جانا ہے آج؟</div>
     </div>
-    <div class="avatar" onclick="showProfile()">👤</div>
+    <div class="avatar" onclick="showScreen('profile-screen')">👤</div>
   </div>
   <div style="position:relative">
     <div id="map"></div>
@@ -208,10 +232,10 @@
     <div style="height:80px"></div>
   </div>
   <div class="bottom-nav">
-    <div class="nav-item active"><div class="nav-icon">🏠</div><div class="nav-label">ہوم</div></div>
-    <div class="nav-item" onclick="showToast('Coming soon!','جلد آ رہا ہے')"><div class="nav-icon">🕐</div><div class="nav-label">سرگرمی</div></div>
-    <div class="nav-item" onclick="showToast('Coming soon!','جلد آ رہا ہے')"><div class="nav-icon">👛</div><div class="nav-label">والٹ</div></div>
-    <div class="nav-item" onclick="showProfile()"><div class="nav-icon">👤</div><div class="nav-label">پروفائل</div></div>
+    <div class="nav-item active" onclick="showScreen('home')"><div class="nav-icon">🏠</div><div class="nav-label">ہوم</div></div>
+    <div class="nav-item" onclick="showScreen('history-screen')"><div class="nav-icon">🕐</div><div class="nav-label">سرگرمی</div></div>
+    <div class="nav-item" onclick="showToast('Wallet coming soon!','جلد آ رہا ہے')"><div class="nav-icon">👛</div><div class="nav-label">والٹ</div></div>
+    <div class="nav-item" onclick="showScreen('profile-screen')"><div class="nav-icon">👤</div><div class="nav-label">پروفائل</div></div>
   </div>
 </div>
 
@@ -261,9 +285,7 @@
 </div>
 
 <div class="screen" id="driver-found">
-  <div style="position:relative">
-    <div id="driver-live-map"></div>
-  </div>
+  <div style="position:relative"><div id="driver-live-map"></div></div>
   <div class="driver-info-sheet fade-in" style="overflow-y:auto;flex:1;padding-bottom:20px">
     <div style="width:40px;height:4px;background:rgba(255,255,255,0.15);border-radius:2px;margin:0 auto 16px"></div>
     <div class="live-badge"><div class="live-dot"></div>Driver Location Live 📍</div>
@@ -276,12 +298,12 @@
       <div style="flex:1">
         <div style="font-size:17px;font-weight:700" id="found-driver-name">Muhammad Asif</div>
         <div style="font-size:13px;color:var(--text-muted)" id="found-driver-vehicle">🚗 Mehran — LEA 2847</div>
-        <div class="rating">⭐ 4.8 · 342 rides</div>
+        <div class="rating" id="driver-rating-display">⭐ 4.8 · 342 rides</div>
       </div>
     </div>
     <div class="driver-actions">
       <button class="action-btn call" onclick="showToast('Calling...','کال ہو رہی ہے')">📞<div style="font-size:11px;font-weight:600">Call</div></button>
-      <button class="action-btn chat" onclick="showToast('Chat coming soon!','جلد آ رہا ہے')">💬<div style="font-size:11px;font-weight:600">Chat</div></button>
+      <button class="action-btn chat" onclick="openChat()">💬<div style="font-size:11px;font-weight:600">Chat</div></button>
       <button class="action-btn cancel" onclick="cancelRide()">✕<div style="font-size:11px;font-weight:600">Cancel</div></button>
     </div>
     <div style="background:var(--dark3);border-radius:var(--radius);padding:16px;display:flex;justify-content:space-between;align-items:center">
@@ -290,10 +312,104 @@
     </div>
   </div>
 </div>
+
+<!-- CHAT SCREEN -->
+<div class="screen" id="chat-screen">
+  <div class="chat-header">
+    <button class="back-btn" onclick="showScreen('driver-found')">←</button>
+    <div class="driver-avatar" style="width:40px;height:40px;font-size:20px">👨</div>
+    <div style="flex:1">
+      <div style="font-size:15px;font-weight:600" id="chat-driver-name">Muhammad Asif</div>
+      <div style="font-size:11px;color:var(--green)">● Online — آن لائن</div>
+    </div>
+  </div>
+  <div class="chat-messages" id="chat-messages">
+    <div class="msg received">Assalam o Alaikum! Main aa raha hoon 🚗<div class="msg-time">Abhi</div></div>
+  </div>
+  <div class="chat-input-wrap">
+    <input class="chat-input" id="chat-input" placeholder="Message likhen... / پیغام لکھیں" onkeypress="if(event.key==='Enter')sendMessage()">
+    <button class="chat-send" onclick="sendMessage()">➤</button>
+  </div>
+</div>
+
+<!-- RATING SCREEN -->
+<div class="screen" id="rating-screen">
+  <div class="rating-screen-inner">
+    <div style="font-size:50px;margin-bottom:10px">🎉</div>
+    <div style="font-size:22px;font-weight:700;margin-bottom:4px">Ride Complete!</div>
+    <div style="font-family:'Noto Nastaliq Urdu',serif;font-size:16px;color:var(--text-muted);direction:rtl;margin-bottom:20px">سواری مکمل ہوگئی</div>
+    <div class="rating-avatar">👨</div>
+    <div style="font-size:16px;font-weight:600" id="rating-driver-name">Muhammad Asif</div>
+    <div style="font-size:13px;color:var(--text-muted);margin-top:4px">Driver ko rate karein / ڈرائیور کو ریٹ کریں</div>
+    <div class="stars-wrap" id="stars-wrap">
+      <div class="star-btn" onclick="setRating(1)">⭐</div>
+      <div class="star-btn" onclick="setRating(2)">⭐</div>
+      <div class="star-btn" onclick="setRating(3)">⭐</div>
+      <div class="star-btn" onclick="setRating(4)">⭐</div>
+      <div class="star-btn" onclick="setRating(5)">⭐</div>
+    </div>
+    <textarea class="feedback-input" id="feedback-input" placeholder="Koi feedback? / کوئی رائے؟" rows="3"></textarea>
+    <button class="btn-main" onclick="submitRating()">Submit Rating — <span class="urdu">ریٹنگ دیں</span></button>
+    <div style="margin-top:12px;font-size:13px;color:var(--text-muted);cursor:pointer" onclick="showScreen('home')">Skip — چھوڑیں</div>
+  </div>
+</div>
+
+<!-- HISTORY SCREEN -->
+<div class="screen" id="history-screen">
+  <div class="history-header">
+    <div style="display:flex;align-items:center;gap:14px">
+      <button class="back-btn" onclick="showScreen('home')">←</button>
+      <div>
+        <div style="font-size:20px;font-weight:700">My Rides</div>
+        <div style="font-family:'Noto Nastaliq Urdu',serif;font-size:13px;color:var(--text-muted);direction:rtl">میری سواریاں</div>
+      </div>
+    </div>
+  </div>
+  <div style="overflow-y:auto;flex:1;padding-bottom:20px" id="history-list">
+    <div style="text-align:center;padding:40px;color:var(--text-muted)">
+      <div style="font-size:40px;margin-bottom:12px">🚗</div>
+      <div>Abhi koi sawari nahi — ابھی کوئی سواری نہیں</div>
+    </div>
+  </div>
+  <div class="bottom-nav">
+    <div class="nav-item" onclick="showScreen('home')"><div class="nav-icon">🏠</div><div class="nav-label">ہوم</div></div>
+    <div class="nav-item active"><div class="nav-icon">🕐</div><div class="nav-label">سرگرمی</div></div>
+    <div class="nav-item" onclick="showToast('Coming soon!','جلد آ رہا ہے')"><div class="nav-icon">👛</div><div class="nav-label">والٹ</div></div>
+    <div class="nav-item" onclick="showScreen('profile-screen')"><div class="nav-icon">👤</div><div class="nav-label">پروفائل</div></div>
+  </div>
+</div>
+
+<!-- PROFILE SCREEN -->
+<div class="screen" id="profile-screen">
+  <div style="background:linear-gradient(145deg,#0a2a1a,var(--dark2));padding:60px 20px 30px;text-align:center">
+    <button class="back-btn" style="position:absolute;top:50px;left:20px" onclick="showScreen('home')">←</button>
+    <div style="width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,var(--green),var(--green-dark));display:flex;align-items:center;justify-content:center;font-size:40px;margin:0 auto 12px;border:3px solid rgba(255,255,255,0.1)">👤</div>
+    <div style="font-size:20px;font-weight:700" id="profile-name">User</div>
+    <div style="font-size:13px;color:var(--text-muted)" id="profile-email">email</div>
+    <div style="display:flex;justify-content:space-around;margin-top:20px">
+      <div style="text-align:center"><div style="font-size:22px;font-weight:800;color:var(--green)" id="profile-rides">0</div><div style="font-size:11px;color:var(--text-muted)">Rides / سواریاں</div></div>
+      <div style="text-align:center"><div style="font-size:22px;font-weight:800;color:var(--accent)" id="profile-rating">5.0 ⭐</div><div style="font-size:11px;color:var(--text-muted)">Rating / ریٹنگ</div></div>
+    </div>
+  </div>
+  <div style="padding:20px;overflow-y:auto;flex:1;padding-bottom:20px">
+    <div style="background:var(--card);border-radius:14px;padding:16px;margin-bottom:10px;display:flex;align-items:center;gap:14px;cursor:pointer" onclick="showScreen('history-screen')">
+      <div style="font-size:24px">🕐</div><div><div style="font-size:14px;font-weight:500">Ride History</div><div style="font-family:'Noto Nastaliq Urdu',serif;font-size:12px;color:var(--text-muted);direction:rtl">سواریوں کی تاریخ</div></div>
+    </div>
+    <div style="background:var(--card);border-radius:14px;padding:16px;margin-bottom:10px;display:flex;align-items:center;gap:14px;cursor:pointer" onclick="showToast('Settings coming soon!','جلد آ رہا ہے')">
+      <div style="font-size:24px">⚙️</div><div><div style="font-size:14px;font-weight:500">Settings</div><div style="font-family:'Noto Nastaliq Urdu',serif;font-size:12px;color:var(--text-muted);direction:rtl">ترتیبات</div></div>
+    </div>
+    <div style="background:var(--card);border-radius:14px;padding:16px;margin-bottom:10px;display:flex;align-items:center;gap:14px;cursor:pointer" onclick="showToast('Help coming soon!','جلد آ رہا ہے')">
+      <div style="font-size:24px">🆘</div><div><div style="font-size:14px;font-weight:500">Help & Support</div><div style="font-family:'Noto Nastaliq Urdu',serif;font-size:12px;color:var(--text-muted);direction:rtl">مدد اور سپورٹ</div></div>
+    </div>
+    <div style="background:rgba(255,82,82,0.1);border:1px solid var(--danger);border-radius:14px;padding:16px;display:flex;align-items:center;gap:14px;cursor:pointer" onclick="logoutUser()">
+      <div style="font-size:24px">🚪</div><div><div style="font-size:14px;font-weight:500;color:var(--danger)">Logout</div><div style="font-family:'Noto Nastaliq Urdu',serif;font-size:12px;color:var(--text-muted);direction:rtl">لاگ آؤٹ</div></div>
+    </div>
+  </div>
+</div>
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-  import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-  import { getDatabase, ref, set, push, onValue, update } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+  import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+  import { getDatabase, ref, set, push, onValue, update, get } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
   const firebaseConfig = { apiKey:"AIzaSyD6NgezMei1zau__3--G89I8doSAtiJdO8", authDomain:"ridedgk-70041.firebaseapp.com", projectId:"ridedgk-70041", storageBucket:"ridedgk-70041.firebasestorage.app", messagingSenderId:"1030497478997", appId:"1:1030497478997:web:b6344c5e10ef70396ca7dc", databaseURL:"https://ridedgk-70041-default-rtdb.asia-southeast1.firebasedatabase.app" };
 
@@ -305,70 +421,65 @@
   let currentRideId=null, currentDestination={name:'DHQ Hospital'};
   let userLat=30.0576, userLng=70.6358;
   let mainMap=null, userMarker=null, liveMap=null, driverMarker=null, routeLine=null;
+  let currentDriverId=null, selectedRating=0, rideHistory=[];
 
-  // MAIN MAP
   function initMainMap(lat,lng) {
     if(mainMap) return;
     setTimeout(()=>{
       try {
-        mainMap = L.map('map',{zoomControl:false,attributionControl:false}).setView([lat,lng],14);
+        mainMap=L.map('map',{zoomControl:false,attributionControl:false}).setView([lat,lng],14);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(mainMap);
         const myIcon=L.divIcon({html:'📍',className:'',iconSize:[28,28],iconAnchor:[14,28]});
         userMarker=L.marker([lat,lng],{icon:myIcon}).addTo(mainMap);
-        const carIcon=L.divIcon({html:'🚗',className:'',iconSize:[24,24]});
-        L.marker([lat+0.003,lng+0.002],{icon:carIcon}).addTo(mainMap);
-        L.marker([lat-0.002,lng+0.004],{icon:carIcon}).addTo(mainMap);
-        L.marker([lat+0.001,lng-0.003],{icon:carIcon}).addTo(mainMap);
-      } catch(e) { console.log('map error',e); }
-    }, 500);
+        [[-0.003,0.002],[0.002,-0.001],[0.001,0.004]].forEach(d=>{
+          L.marker([lat+d[0],lng+d[1]],{icon:L.divIcon({html:'🚗',className:'',iconSize:[24,24]})}).addTo(mainMap);
+        });
+      } catch(e){}
+    },500);
   }
 
-  // LIVE MAP — driver location
   function initLiveMap(pLat,pLng,dLat,dLng) {
     if(liveMap) return;
     setTimeout(()=>{
       try {
         liveMap=L.map('driver-live-map',{zoomControl:false,attributionControl:false}).setView([pLat,pLng],14);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(liveMap);
-        const passIcon=L.divIcon({html:'📍',className:'',iconSize:[28,28],iconAnchor:[14,28]});
-        L.marker([pLat,pLng],{icon:passIcon}).addTo(liveMap).bindPopup('Aap');
-        const carIcon=L.divIcon({html:'🚗',className:'',iconSize:[32,32],iconAnchor:[16,16]});
-        driverMarker=L.marker([dLat,dLng],{icon:carIcon}).addTo(liveMap).bindPopup('Driver');
+        L.marker([pLat,pLng],{icon:L.divIcon({html:'📍',className:'',iconSize:[28,28],iconAnchor:[14,28]})}).addTo(liveMap).bindPopup('Aap');
+        driverMarker=L.marker([dLat,dLng],{icon:L.divIcon({html:'🚗',className:'',iconSize:[32,32],iconAnchor:[16,16]})}).addTo(liveMap).bindPopup('Driver');
         routeLine=L.polyline([[dLat,dLng],[pLat,pLng]],{color:'#00c853',weight:3,dashArray:'6,4'}).addTo(liveMap);
         liveMap.fitBounds([[pLat,pLng],[dLat,dLng]],{padding:[40,40]});
-      } catch(e) { console.log('live map error',e); }
-    }, 500);
+      } catch(e){}
+    },500);
   }
 
-  // TRACK DRIVER LIVE
   function trackDriver(driverId) {
-    onValue(ref(db,'drivers/'+driverId), snap=>{
+    onValue(ref(db,'drivers/'+driverId),snap=>{
       const d=snap.val();
       if(!d||!d.lat||!d.lng) return;
-      if(!liveMap){ initLiveMap(userLat,userLng,d.lat,d.lng); }
-      if(driverMarker){ driverMarker.setLatLng([d.lat,d.lng]); }
-      if(routeLine){ routeLine.setLatLngs([[d.lat,d.lng],[userLat,userLng]]); }
-      if(liveMap){ liveMap.panTo([d.lat,d.lng]); }
-      // ETA calculation
+      if(!liveMap){initLiveMap(userLat,userLng,d.lat,d.lng);}
+      if(driverMarker) driverMarker.setLatLng([d.lat,d.lng]);
+      if(routeLine) routeLine.setLatLngs([[d.lat,d.lng],[userLat,userLng]]);
       const dist=Math.sqrt(Math.pow(d.lat-userLat,2)+Math.pow(d.lng-userLng,2))*111;
-      const eta=Math.max(1,Math.round(dist*2));
       const etaEl=document.getElementById('eta-num');
-      if(etaEl) etaEl.textContent=eta;
+      if(etaEl) etaEl.textContent=Math.max(1,Math.round(dist*2));
     });
   }
 
-  // AUTH
-  onAuthStateChanged(auth, user=>{
+  onAuthStateChanged(auth,user=>{
     if(user){
       currentUser=user;
-      document.getElementById('user-name').textContent=user.email.split('@')[0];
+      const name=user.email.split('@')[0];
+      document.getElementById('user-name').textContent=name;
+      document.getElementById('profile-name').textContent=name;
+      document.getElementById('profile-email').textContent=user.email;
       showScreen('home');
       if(navigator.geolocation){
         navigator.geolocation.getCurrentPosition(
-          pos=>{ userLat=pos.coords.latitude; userLng=pos.coords.longitude; initMainMap(userLat,userLng); document.getElementById('location-badge').textContent='📍 Location mila — DGK'; },
+          pos=>{userLat=pos.coords.latitude;userLng=pos.coords.longitude;initMainMap(userLat,userLng);document.getElementById('location-badge').textContent='📍 DGK — آپ کی جگہ';},
           ()=>initMainMap(userLat,userLng)
         );
       } else { initMainMap(userLat,userLng); }
+      loadHistory();
     }
   });
 
@@ -378,27 +489,31 @@
     const password=document.getElementById('signup-password').value;
     const phone=document.getElementById('signup-phone').value.trim();
     if(!name||!email||!password){showToast('Sab fields bharein!','تمام خانے بھریں',true);return;}
-    if(password.length<6){showToast('Password 6 se zyada hona chahiye!','پاس ورڈ چھوٹا ہے',true);return;}
+    if(password.length<6){showToast('Password 6+ chars!','پاس ورڈ چھوٹا',true);return;}
     document.getElementById('loader').classList.add('show');
     try{
       const c=await createUserWithEmailAndPassword(auth,email,password);
-      await set(ref(db,'passengers/'+c.user.uid),{name,phone,email,createdAt:Date.now(),role:'passenger'});
+      await set(ref(db,'passengers/'+c.user.uid),{name,phone,email,createdAt:Date.now(),role:'passenger',totalRides:0,rating:5.0});
       showToast('Account ban gaya!','اکاؤنٹ بن گیا ✅');
-    }catch(e){
-      const msgs={'auth/email-already-in-use':'Email pehle se registered hai!','auth/weak-password':'Password zyada mazboot karo!'};
-      showToast(msgs[e.code]||'Kuch masla aaya, dobara try karo','غلطی ہوئی',true);
-    }
+    }catch(e){showToast(e.code==='auth/email-already-in-use'?'Email pehle se hai!':'Error aaya','غلطی',true);}
     document.getElementById('loader').classList.remove('show');
   };
 
   window.loginUser=async function(){
     const email=document.getElementById('login-email').value.trim();
     const password=document.getElementById('login-password').value;
-    if(!email||!password){showToast('Email aur password daalein!','ای میل درج کریں',true);return;}
+    if(!email||!password){showToast('Email aur password daalein!','درج کریں',true);return;}
     document.getElementById('loader').classList.add('show');
-    try{ await signInWithEmailAndPassword(auth,email,password); showToast('Login kamyab!','لاگ ان کامیاب ✅'); }
-    catch(e){ showToast('Email ya password galat hai!','غلط معلومات',true); }
+    try{await signInWithEmailAndPassword(auth,email,password);showToast('Login kamyab!','لاگ ان کامیاب ✅');}
+    catch(e){showToast('Email ya password galat!','غلط معلومات',true);}
     document.getElementById('loader').classList.remove('show');
+  };
+
+  window.logoutUser=async function(){
+    await signOut(auth);
+    mainMap=null;liveMap=null;
+    showScreen('auth');
+    showToast('Logout ho gaye','لاگ آؤٹ کامیاب');
   };
 
   window.bookRide=function(dest,destUrdu){
@@ -413,55 +528,119 @@
     try{
       const r=push(ref(db,'rides'));
       currentRideId=r.key;
-      await set(r,{
-        passengerId:currentUser.uid, passengerEmail:currentUser.email,
-        pickup:'Circular Road, DGK', pickupLat:userLat, pickupLng:userLng,
-        dropoff:currentDestination.name, vehicle:selectedVehicle.name,
-        fare:document.getElementById('total-fare').textContent,
-        payment:selectedPayment, status:'searching', createdAt:Date.now()
-      });
-      document.getElementById('ride-fare-display').textContent=document.getElementById('total-fare').textContent;
+      const fare=document.getElementById('total-fare').textContent;
+      await set(r,{passengerId:currentUser.uid,passengerEmail:currentUser.email,pickup:'Circular Road, DGK',pickupLat:userLat,pickupLng:userLng,dropoff:currentDestination.name,vehicle:selectedVehicle.name,fare,payment:selectedPayment,status:'searching',createdAt:Date.now()});
+      document.getElementById('ride-fare-display').textContent=fare;
       document.getElementById('loader').classList.remove('show');
       showScreen('searching');
-      // Listen for driver accept
-      onValue(ref(db,'rides/'+currentRideId), snap=>{
+      onValue(ref(db,'rides/'+currentRideId),snap=>{
         const ride=snap.val();
         if(!ride) return;
         if(ride.status==='accepted'&&ride.driverId){
+          currentDriverId=ride.driverId;
           document.getElementById('found-driver-name').textContent=ride.driverName||'Muhammad Asif';
           document.getElementById('found-driver-vehicle').textContent='🚗 '+(ride.driverVehicle||'Mehran');
+          document.getElementById('chat-driver-name').textContent=ride.driverName||'Muhammad Asif';
+          document.getElementById('rating-driver-name').textContent=ride.driverName||'Muhammad Asif';
           showScreen('driver-found');
-          showToast('Driver mil gaya! Aa raha hai','ڈرائیور مل گیا 🚗');
+          showToast('Driver mil gaya!','ڈرائیور مل گیا 🚗');
           initLiveMap(userLat,userLng,ride.driverLat||userLat+0.005,ride.driverLng||userLng+0.005);
           trackDriver(ride.driverId);
+          listenForChat(currentRideId);
         }
-        if(ride.status==='completed'){ showToast('Sawari mukammal!','سواری مکمل 🎉'); setTimeout(()=>showScreen('home'),2000); }
+        if(ride.status==='completed'){
+          saveToHistory(ride);
+          liveMap=null; driverMarker=null; routeLine=null;
+          showScreen('rating-screen');
+        }
       });
-    }catch(e){ document.getElementById('loader').classList.remove('show'); showToast('Error aaya!','غلطی',true); }
+    }catch(e){document.getElementById('loader').classList.remove('show');showToast('Error!','غلطی',true);}
   };
 
   window.cancelRide=async function(){
-    if(currentRideId){ await update(ref(db,'rides/'+currentRideId),{status:'cancelled'}); currentRideId=null; }
-    liveMap=null; driverMarker=null; routeLine=null;
-    showToast('Ride cancel ho gayi','سواری منسوخ');
+    if(currentRideId){await update(ref(db,'rides/'+currentRideId),{status:'cancelled'});currentRideId=null;}
+    liveMap=null;driverMarker=null;routeLine=null;
+    showToast('Ride cancel','سواری منسوخ');
     showScreen('home');
   };
 
-  window.showProfile=function(){ showToast('Profile: '+(currentUser?currentUser.email:'Guest'),'پروفائل'); };
+  // CHAT
+  window.openChat=function(){ showScreen('chat-screen'); }
+
+  window.sendMessage=async function(){
+    const input=document.getElementById('chat-input');
+    const msg=input.value.trim();
+    if(!msg||!currentRideId) return;
+    await push(ref(db,'chats/'+currentRideId),{text:msg,sender:'passenger',senderName:currentUser.email.split('@')[0],time:Date.now()});
+    input.value='';
+  };
+
+  function listenForChat(rideId){
+    onValue(ref(db,'chats/'+rideId),snap=>{
+      const msgs=snap.val();
+      if(!msgs) return;
+      const container=document.getElementById('chat-messages');
+      container.innerHTML='';
+      Object.values(msgs).forEach(m=>{
+        const div=document.createElement('div');
+        div.className='msg '+(m.sender==='passenger'?'sent':'received');
+        div.innerHTML=m.text+'<div class="msg-time">'+(m.senderName||'')+'</div>';
+        container.appendChild(div);
+      });
+      container.scrollTop=container.scrollHeight;
+    });
+  }
+
+  // RATING
+  window.setRating=function(n){
+    selectedRating=n;
+    document.querySelectorAll('.star-btn').forEach((s,i)=>s.classList.toggle('active',i<n));
+  };
+
+  window.submitRating=async function(){
+    if(!selectedRating){showToast('Star select karein!','ستارہ منتخب کریں',true);return;}
+    if(currentRideId&&currentDriverId){
+      await push(ref(db,'ratings/'+currentDriverId),{rating:selectedRating,feedback:document.getElementById('feedback-input').value,passengerId:currentUser.uid,rideId:currentRideId,time:Date.now()});
+      await update(ref(db,'rides/'+currentRideId),{passengerRating:selectedRating});
+    }
+    showToast('Rating di gayi! Shukriya','ریٹنگ کامیاب ✅');
+    currentRideId=null; selectedRating=0;
+    document.querySelectorAll('.star-btn').forEach(s=>s.classList.remove('active'));
+    showScreen('home');
+  };
+
+  // HISTORY
+  function saveToHistory(ride){
+    rideHistory.unshift({pickup:ride.pickup,dropoff:ride.dropoff,fare:ride.fare,vehicle:ride.vehicle,time:new Date().toLocaleString('ur')});
+    localStorage.setItem('rideHistory',JSON.stringify(rideHistory));
+    updateHistoryUI();
+  }
+
+  function loadHistory(){
+    const saved=localStorage.getItem('rideHistory');
+    if(saved) rideHistory=JSON.parse(saved);
+    updateHistoryUI();
+    document.getElementById('profile-rides').textContent=rideHistory.length;
+  }
+
+  function updateHistoryUI(){
+    const list=document.getElementById('history-list');
+    if(rideHistory.length===0){list.innerHTML='<div style="text-align:center;padding:40px;color:var(--text-muted)"><div style="font-size:40px;margin-bottom:12px">🚗</div><div>Abhi koi sawari nahi</div></div>';return;}
+    list.innerHTML=rideHistory.map(r=>`<div class="history-item"><div class="history-icon">🚗</div><div style="flex:1"><div class="history-route">${r.pickup||'DGK'} → ${r.dropoff||'DHQ'}</div><div class="history-time">${r.vehicle||'Car'} · ${r.time||'Abhi'}</div></div><div class="history-fare">${r.fare||'Rs 306'}</div></div>`).join('');
+  }
 
   window.selectVehicle=function(el,name,urdu,rate){
     el.closest('.vehicle-scroll').querySelectorAll('.vehicle-card').forEach(c=>c.classList.remove('selected'));
-    el.classList.add('selected'); selectedVehicle={name,urdu,rate};
+    el.classList.add('selected');selectedVehicle={name,urdu,rate};
     document.getElementById('total-fare').textContent='Rs '+Math.round(50+(3.2*rate));
-    const vd=document.getElementById('selected-vehicle-display');
-    if(vd) vd.textContent=el.querySelector('.vehicle-emoji').textContent+' '+name;
+    const vd=document.getElementById('selected-vehicle-display');if(vd) vd.textContent=el.querySelector('.vehicle-emoji').textContent+' '+name;
   };
 
   window.selectPayment=function(m){
     selectedPayment=m;
     ['cash','jazz','easy'].forEach(x=>{const e=document.getElementById('pay-'+x);if(e)e.style.border='1.5px solid rgba(255,255,255,0.08)';});
     const map={cash:'pay-cash',jazzcash:'pay-jazz',easypaisa:'pay-easy'};
-    const e=document.getElementById(map[m]); if(e) e.style.border='2px solid var(--green)';
+    const e=document.getElementById(map[m]);if(e)e.style.border='2px solid var(--green)';
   };
 
   window.switchTab=function(tab){
@@ -472,10 +651,8 @@
 </script>
 
 <script>
-  function showScreen(id){ document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active')); document.getElementById(id).classList.add('active'); }
-  function showToast(msg,urdu,isError){ const t=document.getElementById('toast'); document.getElementById('toast-msg').textContent=msg; document.getElementById('toast-urdu').textContent=urdu||''; t.className='toast'+(isError?' error':''); t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),3000); }
+  function showScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');}
+  function showToast(msg,urdu,isError){const t=document.getElementById('toast');document.getElementById('toast-msg').textContent=msg;document.getElementById('toast-urdu').textContent=urdu||'';t.className='toast'+(isError?' error':'');t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000);}
 </script>
 </body>
 </html>
-
-  
