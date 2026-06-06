@@ -653,6 +653,46 @@
 <script>
   function showScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');}
   function showToast(msg,urdu,isError){const t=document.getElementById('toast');document.getElementById('toast-msg').textContent=msg;document.getElementById('toast-urdu').textContent=urdu||'';t.className='toast'+(isError?' error':'');t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000);}
+
 </script>
+  <script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getMessaging, getToken, onMessage } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-messaging.js";
+
+  const firebaseConfig = { apiKey:"AIzaSyD6NgezMei1zau__3--G89I8doSAtiJdO8", authDomain:"ridedgk-70041.firebaseapp.com", projectId:"ridedgk-70041", storageBucket:"ridedgk-70041.firebasestorage.app", messagingSenderId:"1030497478997", appId:"1:1030497478997:web:b6344c5e10ef70396ca7dc", databaseURL:"https://ridedgk-70041-default-rtdb.asia-southeast1.firebasedatabase.app" };
+
+  const app = initializeApp(firebaseConfig);
+  const messaging = getMessaging(app);
+
+  async function initNotifications() {
+    try {
+      const reg = await navigator.serviceWorker.register('/RideDGK/firebase-messaging-sw.js');
+      const token = await getToken(messaging, {
+        vapidKey: 'BBkTuByPS8dKwH8V3fX7iViDEk6PdG2R6q35MLRf5S9f9QXSL9tIO9GaUqa2SqJCAx-omPmkNU6b5HERTClNxM8',
+        serviceWorkerRegistration: reg
+      });
+      if (token) {
+        console.log('FCM Token:', token);
+        window._fcmToken = token;
+      }
+    } catch(e) { console.log('Notification error:', e); }
+  }
+
+  onMessage(messaging, (payload) => {
+    const title = payload.notification?.title || 'RideDGK';
+    const body = payload.notification?.body || '';
+    if(window.showToast) showToast(title, body);
+    if(Notification.permission === 'granted') {
+      new Notification(title, { body, icon: '/icon.png' });
+    }
+  });
+
+  if('serviceWorker' in navigator && 'Notification' in window) {
+    Notification.requestPermission().then(perm => {
+      if(perm === 'granted') initNotifications();
+    });
+  }
+</script>
+
 </body>
 </html>
