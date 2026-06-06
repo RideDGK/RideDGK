@@ -44,7 +44,7 @@
   .input-wrap .icon { position:absolute; left:16px; top:50%; transform:translateY(-50%); font-size:20px; }
   .btn-main { width:100%; padding:16px; background:linear-gradient(135deg,var(--green),var(--green-dark)); color:#fff; border:none; border-radius:50px; font-size:16px; font-weight:600; cursor:pointer; box-shadow:var(--shadow); transition:transform 0.2s; display:flex; align-items:center; justify-content:center; gap:10px; }
   .btn-main .urdu { font-family:'Noto Nastaliq Urdu',serif; font-size:14px; direction:rtl; }
-  #home,#booking,#searching,#driver-found,#chat-screen,#rating-screen,#history-screen { background:var(--dark); }
+  #home,#booking,#searching,#driver-found,#chat-screen,#rating-screen,#history-screen,#search-screen { background:var(--dark); }
   .topbar { background:var(--dark2); padding:50px 20px 16px; display:flex; align-items:center; justify-content:space-between; }
   .greeting-name { font-size:19px; font-weight:700; }
   .greeting-urdu { font-family:'Noto Nastaliq Urdu',serif; font-size:13px; color:var(--text-muted); direction:rtl; }
@@ -54,7 +54,8 @@
   .map-badge { position:absolute; bottom:10px; left:12px; background:rgba(0,200,83,0.95); border-radius:8px; padding:4px 10px; font-size:11px; color:#000; font-weight:600; z-index:2; pointer-events:none; }
   .bottom-sheet { flex:1; background:var(--dark); border-radius:24px 24px 0 0; margin-top:-20px; padding:20px; overflow-y:auto; position:relative; z-index:3; }
   .sheet-handle { width:40px; height:4px; background:rgba(255,255,255,0.15); border-radius:2px; margin:0 auto 20px; }
-  .where-btn { background:var(--dark3); border:1.5px solid rgba(255,255,255,0.08); border-radius:var(--radius); padding:16px 18px; display:flex; align-items:center; gap:14px; cursor:pointer; margin-bottom:12px; }
+  .where-btn { background:var(--dark3); border:1.5px solid rgba(255,255,255,0.08); border-radius:var(--radius); padding:16px 18px; display:flex; align-items:center; gap:14px; cursor:pointer; margin-bottom:12px; transition:border-color 0.2s; }
+  .where-btn:active { border-color:var(--green); }
   .where-main { font-size:15px; font-weight:500; }
   .where-urdu { font-family:'Noto Nastaliq Urdu',serif; font-size:12px; color:var(--text-muted); direction:rtl; }
   .section-title { font-size:15px; font-weight:700; margin:20px 0 14px; }
@@ -70,9 +71,23 @@
   .recent-icon { width:40px; height:40px; border-radius:12px; background:var(--dark3); display:flex; align-items:center; justify-content:center; font-size:18px; }
   .recent-name { font-size:14px; font-weight:500; }
   .recent-urdu { font-family:'Noto Nastaliq Urdu',serif; font-size:12px; color:var(--text-muted); direction:rtl; }
+  /* SEARCH SCREEN */
+  .search-header { background:var(--dark2); padding:50px 20px 16px; }
+  .search-input-wrap { position:relative; margin-top:12px; }
+  .search-input { width:100%; padding:14px 20px 14px 48px; background:var(--dark3); border:1.5px solid rgba(255,255,255,0.08); border-radius:var(--radius); color:var(--text); font-size:15px; font-family:'Poppins',sans-serif; outline:none; }
+  .search-input:focus { border-color:var(--green); }
+  .search-icon { position:absolute; left:16px; top:50%; transform:translateY(-50%); font-size:18px; }
+  .search-results { flex:1; overflow-y:auto; padding:12px; }
+  .search-item { display:flex; align-items:center; gap:14px; padding:14px 12px; border-radius:14px; cursor:pointer; transition:background 0.2s; margin-bottom:6px; }
+  .search-item:active { background:var(--dark3); }
+  .search-item-icon { width:40px; height:40px; border-radius:12px; background:var(--dark3); display:flex; align-items:center; justify-content:center; font-size:18px; flex-shrink:0; }
+  .search-item-name { font-size:14px; font-weight:500; }
+  .search-item-addr { font-size:12px; color:var(--text-muted); margin-top:2px; }
+  .search-loading { text-align:center; padding:30px; color:var(--text-muted); }
+  .search-loading .spin { display:inline-block; animation:spin 0.8s linear infinite; font-size:24px; }
   .booking-header { background:var(--dark2); padding:50px 20px 20px; display:flex; align-items:center; gap:16px; }
   .back-btn { width:40px; height:40px; border-radius:12px; background:var(--dark3); border:none; color:var(--text); font-size:20px; cursor:pointer; display:flex; align-items:center; justify-content:center; }
-  .route-card { background:var(--dark3); border-radius:var(--radius); padding:18px; margin:16px; border:1px solid rgba(255,255,255,0.06); }
+  .route-card { background:var(--dark3); border-radius:var(--radius); padding:18px; margin:16px; border:1px solid rgba(255,255,255,0.06); cursor:pointer; }
   .route-point { display:flex; align-items:center; gap:14px; padding:8px 0; }
   .route-dot { width:14px; height:14px; border-radius:50%; flex-shrink:0; }
   .route-dot.start { background:var(--green); box-shadow:0 0 8px var(--green); }
@@ -104,7 +119,6 @@
   .action-btn.call { background:rgba(0,200,83,0.15); border:1.5px solid var(--green); }
   .action-btn.chat { background:rgba(255,214,0,0.1); border:1.5px solid var(--accent); }
   .action-btn.cancel { background:rgba(255,82,82,0.1); border:1.5px solid var(--danger); }
-  /* CHAT */
   .chat-header { background:var(--dark2); padding:50px 20px 16px; display:flex; align-items:center; gap:14px; }
   .chat-messages { flex:1; overflow-y:auto; padding:16px; display:flex; flex-direction:column; gap:10px; padding-bottom:80px; }
   .msg { max-width:75%; padding:10px 14px; border-radius:16px; font-size:14px; line-height:1.4; }
@@ -114,26 +128,18 @@
   .chat-input-wrap { position:fixed; bottom:0; left:0; right:0; background:var(--dark2); padding:12px 16px; display:flex; gap:10px; align-items:center; border-top:1px solid rgba(255,255,255,0.06); z-index:10; }
   .chat-input { flex:1; background:var(--dark3); border:1.5px solid rgba(255,255,255,0.08); border-radius:24px; padding:12px 18px; color:var(--text); font-size:14px; outline:none; font-family:'Poppins',sans-serif; }
   .chat-send { width:44px; height:44px; border-radius:50%; background:var(--green); border:none; color:#fff; font-size:20px; cursor:pointer; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
-  /* RATING */
   .rating-screen-inner { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:30px; text-align:center; }
   .rating-avatar { width:80px; height:80px; border-radius:50%; background:linear-gradient(135deg,#2a4a3a,#1a3a2a); display:flex; align-items:center; justify-content:center; font-size:40px; margin:0 auto 16px; border:3px solid var(--green); }
   .stars-wrap { display:flex; gap:12px; justify-content:center; margin:20px 0; }
   .star-btn { font-size:40px; cursor:pointer; transition:transform 0.2s; opacity:0.3; }
   .star-btn.active { opacity:1; transform:scale(1.1); }
   .feedback-input { width:100%; padding:14px; background:var(--dark3); border:1.5px solid rgba(255,255,255,0.08); border-radius:var(--radius); color:var(--text); font-size:14px; font-family:'Poppins',sans-serif; outline:none; margin-bottom:16px; resize:none; }
-  /* HISTORY */
   .history-header { background:var(--dark2); padding:50px 20px 20px; }
-  .history-item { display:flex; align-items:center; gap:14px; padding:14px 20px; border-bottom:1px solid rgba(255,255,255,0.05); }
-  .history-icon { width:44px; height:44px; border-radius:14px; background:var(--dark3); display:flex; align-items:center; justify-content:center; font-size:20px; flex-shrink:0; }
-  .history-route { font-size:13px; font-weight:500; }
-  .history-time { font-size:11px; color:var(--text-muted); margin-top:2px; }
-  .history-fare { font-size:15px; font-weight:700; color:var(--green); }
   .bottom-nav { position:fixed; bottom:0; left:0; right:0; background:var(--dark2); border-top:1px solid rgba(255,255,255,0.06); display:flex; padding:10px 0 20px; z-index:100; }
   .nav-item { flex:1; display:flex; flex-direction:column; align-items:center; gap:4px; cursor:pointer; padding:6px 0; }
   .nav-icon { font-size:22px; }
   .nav-label { font-size:11px; color:var(--text-muted); font-family:'Noto Nastaliq Urdu',serif; direction:rtl; }
   .nav-item.active .nav-label { color:var(--green); }
-  .notif-badge { position:absolute; top:-2px; right:-2px; width:8px; height:8px; border-radius:50%; background:var(--danger); }
   .loader-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.7); display:none; align-items:center; justify-content:center; z-index:999; }
   .loader-overlay.show { display:flex; }
   .loader { width:50px; height:50px; border:3px solid rgba(0,200,83,0.2); border-top-color:var(--green); border-radius:50%; animation:spin 0.8s linear infinite; }
@@ -212,9 +218,12 @@
   </div>
   <div class="bottom-sheet">
     <div class="sheet-handle"></div>
-    <div class="where-btn" onclick="showScreen('booking')">
+    <div class="where-btn" onclick="showScreen('search-screen');setTimeout(()=>document.getElementById('search-input').focus(),300)">
       <div style="font-size:22px">🔍</div>
-      <div style="flex:1"><div class="where-main">Where do you want to go?</div><div class="where-urdu">کہاں جانا ہے؟</div></div>
+      <div style="flex:1">
+        <div class="where-main" id="destination-display">Where do you want to go?</div>
+        <div class="where-urdu">کہاں جانا ہے؟ — tap to search</div>
+      </div>
       <div style="color:var(--text-muted)">›</div>
     </div>
     <div class="section-title">Choose Vehicle — گاڑی چنیں</div>
@@ -225,10 +234,11 @@
       <div class="vehicle-card" onclick="selectVehicle(this,'Chingchi','چنگچی',30)"><div class="vehicle-emoji">🚐</div><div class="vehicle-name">Chingchi</div><div class="vehicle-urdu">چنگچی</div><div class="vehicle-price">Rs 30/km</div></div>
     </div>
     <div style="font-size:13px;font-weight:600;margin:20px 0 12px;color:var(--text-muted)">Popular in DG Khan</div>
-    <div class="recent-item" onclick="bookRide('DHQ Hospital','ڈی ایچ کیو ہسپتال')"><div class="recent-icon">🏥</div><div><div class="recent-name">DHQ Hospital</div><div class="recent-urdu">ڈی ایچ کیو ہسپتال</div></div></div>
-    <div class="recent-item" onclick="bookRide('Govt. College DGK','گورنمنٹ کالج')"><div class="recent-icon">🎓</div><div><div class="recent-name">Govt. College DGK</div><div class="recent-urdu">گورنمنٹ کالج</div></div></div>
-    <div class="recent-item" onclick="bookRide('City Bazaar','سٹی بازار')"><div class="recent-icon">🛒</div><div><div class="recent-name">City Bazaar</div><div class="recent-urdu">سٹی بازار</div></div></div>
-    <div class="recent-item" onclick="bookRide('Bus Stand DGK','بس اسٹینڈ')"><div class="recent-icon">🚌</div><div><div class="recent-name">Bus Stand DGK</div><div class="recent-urdu">بس اسٹینڈ</div></div></div>
+    <div class="recent-item" onclick="setDestination('DHQ Hospital','ڈی ایچ کیو ہسپتال',30.0576,70.6358)"><div class="recent-icon">🏥</div><div><div class="recent-name">DHQ Hospital</div><div class="recent-urdu">ڈی ایچ کیو ہسپتال</div></div></div>
+    <div class="recent-item" onclick="setDestination('Govt. College DGK','گورنمنٹ کالج',30.0590,70.6340)"><div class="recent-icon">🎓</div><div><div class="recent-name">Govt. College DGK</div><div class="recent-urdu">گورنمنٹ کالج</div></div></div>
+    <div class="recent-item" onclick="setDestination('City Bazaar DGK','سٹی بازار',30.0560,70.6370)"><div class="recent-icon">🛒</div><div><div class="recent-name">City Bazaar</div><div class="recent-urdu">سٹی بازار</div></div></div>
+    <div class="recent-item" onclick="setDestination('Bus Stand DGK','بس اسٹینڈ',30.0550,70.6390)"><div class="recent-icon">🚌</div><div><div class="recent-name">Bus Stand DGK</div><div class="recent-urdu">بس اسٹینڈ</div></div></div>
+    <div class="recent-item" onclick="setDestination('Railway Station DGK','ریلوے اسٹیشن',30.0530,70.6420)"><div class="recent-icon">🚂</div><div><div class="recent-name">Railway Station</div><div class="recent-urdu">ریلوے اسٹیشن</div></div></div>
     <div style="height:80px"></div>
   </div>
   <div class="bottom-nav">
@@ -239,16 +249,44 @@
   </div>
 </div>
 
+<!-- SEARCH SCREEN -->
+<div class="screen" id="search-screen">
+  <div class="search-header">
+    <div style="display:flex;align-items:center;gap:12px">
+      <button class="back-btn" onclick="showScreen('home')">←</button>
+      <div>
+        <div style="font-size:17px;font-weight:700">Search Location</div>
+        <div style="font-family:'Noto Nastaliq Urdu',serif;font-size:12px;color:var(--text-muted);direction:rtl">جگہ تلاش کریں</div>
+      </div>
+    </div>
+    <div class="search-input-wrap">
+      <span class="search-icon">🔍</span>
+      <input class="search-input" id="search-input" type="text" placeholder="Type location... DGK mein kahan?" oninput="searchLocation(this.value)">
+    </div>
+  </div>
+  <div class="search-results" id="search-results">
+    <div style="padding:16px 4px;font-size:13px;font-weight:600;color:var(--text-muted)">Popular Places — مشہور مقامات</div>
+    <div class="search-item" onclick="setDestination('DHQ Hospital DGK','ڈی ایچ کیو ہسپتال',30.0576,70.6358)"><div class="search-item-icon">🏥</div><div><div class="search-item-name">DHQ Hospital</div><div class="search-item-addr">Dera Ghazi Khan</div></div></div>
+    <div class="search-item" onclick="setDestination('Govt. College DGK','گورنمنٹ کالج',30.0590,70.6340)"><div class="search-item-icon">🎓</div><div><div class="search-item-name">Govt. College DGK</div><div class="search-item-addr">Dera Ghazi Khan</div></div></div>
+    <div class="search-item" onclick="setDestination('City Bazaar DGK','سٹی بازار',30.0560,70.6370)"><div class="search-item-icon">🛒</div><div><div class="search-item-name">City Bazaar</div><div class="search-item-addr">Dera Ghazi Khan</div></div></div>
+    <div class="search-item" onclick="setDestination('Bus Stand DGK','بس اسٹینڈ',30.0550,70.6390)"><div class="search-item-icon">🚌</div><div><div class="search-item-name">Bus Stand</div><div class="search-item-addr">Dera Ghazi Khan</div></div></div>
+    <div class="search-item" onclick="setDestination('Railway Station DGK','ریلوے اسٹیشن',30.0530,70.6420)"><div class="search-item-icon">🚂</div><div><div class="search-item-name">Railway Station</div><div class="search-item-addr">Dera Ghazi Khan</div></div></div>
+    <div class="search-item" onclick="setDestination('Jampur Road DGK','جامپور روڈ',30.0610,70.6300)"><div class="search-item-icon">🛣️</div><div><div class="search-item-name">Jampur Road</div><div class="search-item-addr">Dera Ghazi Khan</div></div></div>
+    <div class="search-item" onclick="setDestination('Model Town DGK','ماڈل ٹاؤن',30.0540,70.6410)"><div class="search-item-icon">🏘️</div><div><div class="search-item-name">Model Town</div><div class="search-item-addr">Dera Ghazi Khan</div></div></div>
+    <div class="search-item" onclick="setDestination('Chowk Azam DGK','چوک اعظم',30.0600,70.6350)"><div class="search-item-icon">🏢</div><div><div class="search-item-name">Chowk Azam</div><div class="search-item-addr">Dera Ghazi Khan</div></div></div>
+  </div>
+</div>
+
 <div class="screen" id="booking">
   <div class="booking-header">
     <button class="back-btn" onclick="showScreen('home')">←</button>
     <div><div style="font-size:18px;font-weight:700">Book a Ride</div><div style="font-family:'Noto Nastaliq Urdu',serif;font-size:13px;color:var(--text-muted);direction:rtl">سواری بک کریں</div></div>
   </div>
   <div style="overflow-y:auto;flex:1;padding-bottom:100px">
-    <div class="route-card fade-in">
+    <div class="route-card fade-in" onclick="showScreen('search-screen')">
       <div class="route-point"><div class="route-dot start"></div><div><div style="font-size:14px" id="pickup-text">Your Location, DGK</div><div style="font-family:'Noto Nastaliq Urdu',serif;font-size:11px;color:var(--text-muted);direction:rtl">آپ کی موجودہ جگہ</div></div></div>
       <div class="route-line" style="margin-left:6px"></div>
-      <div class="route-point"><div class="route-dot end"></div><div><div style="font-size:14px" id="dropoff-text">DHQ Hospital</div><div style="font-family:'Noto Nastaliq Urdu',serif;font-size:11px;color:var(--text-muted);direction:rtl">منزل</div></div></div>
+      <div class="route-point"><div class="route-dot end"></div><div><div style="font-size:14px" id="dropoff-text">DHQ Hospital</div><div style="font-family:'Noto Nastaliq Urdu',serif;font-size:11px;color:var(--text-muted);direction:rtl">منزل — tap to change</div></div></div>
     </div>
     <div class="vehicle-scroll" style="padding:0 16px 8px">
       <div class="vehicle-card selected" onclick="selectVehicle(this,'Car','کار',80)"><div class="vehicle-emoji">🚗</div><div class="vehicle-name">Car</div><div class="vehicle-urdu">کار</div><div class="vehicle-price">Rs 80/km</div></div>
@@ -257,7 +295,7 @@
       <div class="vehicle-card" onclick="selectVehicle(this,'Chingchi','چنگچی',30)"><div class="vehicle-emoji">🚐</div><div class="vehicle-name">Chingchi</div><div class="vehicle-urdu">چنگچی</div><div class="vehicle-price">Rs 30/km</div></div>
     </div>
     <div class="fare-card fade-in">
-      <div class="fare-row"><div class="fare-label">Distance / فاصلہ</div><div class="fare-value">3.2 km</div></div>
+      <div class="fare-row"><div class="fare-label">Distance / فاصلہ</div><div class="fare-value" id="distance-display">Calculating...</div></div>
       <div class="fare-row"><div class="fare-label">Base Fare / بنیادی کرایہ</div><div class="fare-value">Rs 50</div></div>
       <div class="fare-row"><div class="fare-label">Vehicle / گاڑی</div><div class="fare-value" id="selected-vehicle-display">🚗 Car</div></div>
       <div class="fare-row fare-total"><div class="fare-label" style="font-size:15px;font-weight:600;color:var(--text)">Total / کل کرایہ</div><div class="fare-value" id="total-fare">Rs 306</div></div>
@@ -298,7 +336,7 @@
       <div style="flex:1">
         <div style="font-size:17px;font-weight:700" id="found-driver-name">Muhammad Asif</div>
         <div style="font-size:13px;color:var(--text-muted)" id="found-driver-vehicle">🚗 Mehran — LEA 2847</div>
-        <div class="rating" id="driver-rating-display">⭐ 4.8 · 342 rides</div>
+        <div class="rating">⭐ 4.8 · 342 rides</div>
       </div>
     </div>
     <div class="driver-actions">
@@ -313,34 +351,27 @@
   </div>
 </div>
 
-<!-- CHAT SCREEN -->
 <div class="screen" id="chat-screen">
   <div class="chat-header">
     <button class="back-btn" onclick="showScreen('driver-found')">←</button>
     <div class="driver-avatar" style="width:40px;height:40px;font-size:20px">👨</div>
-    <div style="flex:1">
-      <div style="font-size:15px;font-weight:600" id="chat-driver-name">Muhammad Asif</div>
-      <div style="font-size:11px;color:var(--green)">● Online — آن لائن</div>
-    </div>
+    <div style="flex:1"><div style="font-size:15px;font-weight:600" id="chat-driver-name">Driver</div><div style="font-size:11px;color:var(--green)">● Online</div></div>
   </div>
-  <div class="chat-messages" id="chat-messages">
-    <div class="msg received">Assalam o Alaikum! Main aa raha hoon 🚗<div class="msg-time">Abhi</div></div>
-  </div>
+  <div class="chat-messages" id="chat-messages"><div class="msg received">Assalam o Alaikum! Main aa raha hoon 🚗<div class="msg-time">Abhi</div></div></div>
   <div class="chat-input-wrap">
-    <input class="chat-input" id="chat-input" placeholder="Message likhen... / پیغام لکھیں" onkeypress="if(event.key==='Enter')sendMessage()">
+    <input class="chat-input" id="chat-input" placeholder="Message likhen..." onkeypress="if(event.key==='Enter')sendMessage()">
     <button class="chat-send" onclick="sendMessage()">➤</button>
   </div>
 </div>
 
-<!-- RATING SCREEN -->
 <div class="screen" id="rating-screen">
   <div class="rating-screen-inner">
     <div style="font-size:50px;margin-bottom:10px">🎉</div>
     <div style="font-size:22px;font-weight:700;margin-bottom:4px">Ride Complete!</div>
     <div style="font-family:'Noto Nastaliq Urdu',serif;font-size:16px;color:var(--text-muted);direction:rtl;margin-bottom:20px">سواری مکمل ہوگئی</div>
     <div class="rating-avatar">👨</div>
-    <div style="font-size:16px;font-weight:600" id="rating-driver-name">Muhammad Asif</div>
-    <div style="font-size:13px;color:var(--text-muted);margin-top:4px">Driver ko rate karein / ڈرائیور کو ریٹ کریں</div>
+    <div style="font-size:16px;font-weight:600" id="rating-driver-name">Driver</div>
+    <div style="font-size:13px;color:var(--text-muted);margin-top:4px">Rate your driver</div>
     <div class="stars-wrap" id="stars-wrap">
       <div class="star-btn" onclick="setRating(1)">⭐</div>
       <div class="star-btn" onclick="setRating(2)">⭐</div>
@@ -348,29 +379,20 @@
       <div class="star-btn" onclick="setRating(4)">⭐</div>
       <div class="star-btn" onclick="setRating(5)">⭐</div>
     </div>
-    <textarea class="feedback-input" id="feedback-input" placeholder="Koi feedback? / کوئی رائے؟" rows="3"></textarea>
-    <button class="btn-main" onclick="submitRating()">Submit Rating — <span class="urdu">ریٹنگ دیں</span></button>
+    <textarea class="feedback-input" id="feedback-input" placeholder="Koi feedback?" rows="3"></textarea>
+    <button class="btn-main" onclick="submitRating()">Submit — <span class="urdu">جمع کرائیں</span></button>
     <div style="margin-top:12px;font-size:13px;color:var(--text-muted);cursor:pointer" onclick="showScreen('home')">Skip — چھوڑیں</div>
   </div>
 </div>
 
-<!-- HISTORY SCREEN -->
 <div class="screen" id="history-screen">
   <div class="history-header">
     <div style="display:flex;align-items:center;gap:14px">
       <button class="back-btn" onclick="showScreen('home')">←</button>
-      <div>
-        <div style="font-size:20px;font-weight:700">My Rides</div>
-        <div style="font-family:'Noto Nastaliq Urdu',serif;font-size:13px;color:var(--text-muted);direction:rtl">میری سواریاں</div>
-      </div>
+      <div><div style="font-size:20px;font-weight:700">My Rides</div><div style="font-family:'Noto Nastaliq Urdu',serif;font-size:13px;color:var(--text-muted);direction:rtl">میری سواریاں</div></div>
     </div>
   </div>
-  <div style="overflow-y:auto;flex:1;padding-bottom:20px" id="history-list">
-    <div style="text-align:center;padding:40px;color:var(--text-muted)">
-      <div style="font-size:40px;margin-bottom:12px">🚗</div>
-      <div>Abhi koi sawari nahi — ابھی کوئی سواری نہیں</div>
-    </div>
-  </div>
+  <div style="overflow-y:auto;flex:1;padding-bottom:20px" id="history-list"></div>
   <div class="bottom-nav">
     <div class="nav-item" onclick="showScreen('home')"><div class="nav-icon">🏠</div><div class="nav-label">ہوم</div></div>
     <div class="nav-item active"><div class="nav-icon">🕐</div><div class="nav-label">سرگرمی</div></div>
@@ -379,37 +401,27 @@
   </div>
 </div>
 
-<!-- PROFILE SCREEN -->
 <div class="screen" id="profile-screen">
   <div style="background:linear-gradient(145deg,#0a2a1a,var(--dark2));padding:60px 20px 30px;text-align:center">
     <button class="back-btn" style="position:absolute;top:50px;left:20px" onclick="showScreen('home')">←</button>
-    <div style="width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,var(--green),var(--green-dark));display:flex;align-items:center;justify-content:center;font-size:40px;margin:0 auto 12px;border:3px solid rgba(255,255,255,0.1)">👤</div>
+    <div style="width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,var(--green),var(--green-dark));display:flex;align-items:center;justify-content:center;font-size:40px;margin:0 auto 12px">👤</div>
     <div style="font-size:20px;font-weight:700" id="profile-name">User</div>
     <div style="font-size:13px;color:var(--text-muted)" id="profile-email">email</div>
     <div style="display:flex;justify-content:space-around;margin-top:20px">
-      <div style="text-align:center"><div style="font-size:22px;font-weight:800;color:var(--green)" id="profile-rides">0</div><div style="font-size:11px;color:var(--text-muted)">Rides / سواریاں</div></div>
-      <div style="text-align:center"><div style="font-size:22px;font-weight:800;color:var(--accent)" id="profile-rating">5.0 ⭐</div><div style="font-size:11px;color:var(--text-muted)">Rating / ریٹنگ</div></div>
+      <div style="text-align:center"><div style="font-size:22px;font-weight:800;color:var(--green)" id="profile-rides">0</div><div style="font-size:11px;color:var(--text-muted)">Rides</div></div>
+      <div style="text-align:center"><div style="font-size:22px;font-weight:800;color:var(--accent)">5.0 ⭐</div><div style="font-size:11px;color:var(--text-muted)">Rating</div></div>
     </div>
   </div>
-  <div style="padding:20px;overflow-y:auto;flex:1;padding-bottom:20px">
-    <div style="background:var(--card);border-radius:14px;padding:16px;margin-bottom:10px;display:flex;align-items:center;gap:14px;cursor:pointer" onclick="showScreen('history-screen')">
-      <div style="font-size:24px">🕐</div><div><div style="font-size:14px;font-weight:500">Ride History</div><div style="font-family:'Noto Nastaliq Urdu',serif;font-size:12px;color:var(--text-muted);direction:rtl">سواریوں کی تاریخ</div></div>
-    </div>
-    <div style="background:var(--card);border-radius:14px;padding:16px;margin-bottom:10px;display:flex;align-items:center;gap:14px;cursor:pointer" onclick="showToast('Settings coming soon!','جلد آ رہا ہے')">
-      <div style="font-size:24px">⚙️</div><div><div style="font-size:14px;font-weight:500">Settings</div><div style="font-family:'Noto Nastaliq Urdu',serif;font-size:12px;color:var(--text-muted);direction:rtl">ترتیبات</div></div>
-    </div>
-    <div style="background:var(--card);border-radius:14px;padding:16px;margin-bottom:10px;display:flex;align-items:center;gap:14px;cursor:pointer" onclick="showToast('Help coming soon!','جلد آ رہا ہے')">
-      <div style="font-size:24px">🆘</div><div><div style="font-size:14px;font-weight:500">Help & Support</div><div style="font-family:'Noto Nastaliq Urdu',serif;font-size:12px;color:var(--text-muted);direction:rtl">مدد اور سپورٹ</div></div>
-    </div>
-    <div style="background:rgba(255,82,82,0.1);border:1px solid var(--danger);border-radius:14px;padding:16px;display:flex;align-items:center;gap:14px;cursor:pointer" onclick="logoutUser()">
-      <div style="font-size:24px">🚪</div><div><div style="font-size:14px;font-weight:500;color:var(--danger)">Logout</div><div style="font-family:'Noto Nastaliq Urdu',serif;font-size:12px;color:var(--text-muted);direction:rtl">لاگ آؤٹ</div></div>
-    </div>
+  <div style="padding:20px;overflow-y:auto;flex:1">
+    <div style="background:var(--card);border-radius:14px;padding:16px;margin-bottom:10px;display:flex;align-items:center;gap:14px;cursor:pointer" onclick="showScreen('history-screen')"><div style="font-size:24px">🕐</div><div><div style="font-size:14px;font-weight:500">Ride History</div><div style="font-family:'Noto Nastaliq Urdu',serif;font-size:12px;color:var(--text-muted);direction:rtl">سواریوں کی تاریخ</div></div></div>
+    <div style="background:var(--card);border-radius:14px;padding:16px;margin-bottom:10px;display:flex;align-items:center;gap:14px;cursor:pointer" onclick="showToast('Settings coming soon!','جلد آ رہا ہے')"><div style="font-size:24px">⚙️</div><div><div style="font-size:14px;font-weight:500">Settings</div><div style="font-family:'Noto Nastaliq Urdu',serif;font-size:12px;color:var(--text-muted);direction:rtl">ترتیبات</div></div></div>
+    <div style="background:rgba(255,82,82,0.1);border:1px solid var(--danger);border-radius:14px;padding:16px;display:flex;align-items:center;gap:14px;cursor:pointer" onclick="logoutUser()"><div style="font-size:24px">🚪</div><div><div style="font-size:14px;font-weight:500;color:var(--danger)">Logout</div><div style="font-family:'Noto Nastaliq Urdu',serif;font-size:12px;color:var(--text-muted);direction:rtl">لاگ آؤٹ</div></div></div>
   </div>
 </div>
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
   import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-  import { getDatabase, ref, set, push, onValue, update, get } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+  import { getDatabase, ref, set, push, onValue, update } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
   const firebaseConfig = { apiKey:"AIzaSyD6NgezMei1zau__3--G89I8doSAtiJdO8", authDomain:"ridedgk-70041.firebaseapp.com", projectId:"ridedgk-70041", storageBucket:"ridedgk-70041.firebasestorage.app", messagingSenderId:"1030497478997", appId:"1:1030497478997:web:b6344c5e10ef70396ca7dc", databaseURL:"https://ridedgk-70041-default-rtdb.asia-southeast1.firebasedatabase.app" };
 
@@ -418,10 +430,85 @@
   const db = getDatabase(app);
 
   let currentUser=null, selectedVehicle={name:'Car',rate:80}, selectedPayment='cash';
-  let currentRideId=null, currentDestination={name:'DHQ Hospital'};
+  let currentRideId=null, currentDestination={name:'DHQ Hospital',lat:30.0576,lng:70.6358};
   let userLat=30.0576, userLng=70.6358;
   let mainMap=null, userMarker=null, liveMap=null, driverMarker=null, routeLine=null;
   let currentDriverId=null, selectedRating=0, rideHistory=[];
+  let searchTimeout=null;
+
+  // SEARCH LOCATION using OpenStreetMap Nominatim
+  window.searchLocation = function(query) {
+    const resultsDiv = document.getElementById('search-results');
+    if(query.length < 3) {
+      showDefaultSearchResults();
+      return;
+    }
+    clearTimeout(searchTimeout);
+    searchTimeout = setTimeout(async () => {
+      resultsDiv.innerHTML = '<div class="search-loading"><div class="spin">🔍</div><div style="margin-top:10px">Searching... تلاش ہو رہی ہے</div></div>';
+      try {
+        const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query+' Dera Ghazi Khan')}&limit=8&countrycodes=pk&accept-language=en`);
+        const data = await res.json();
+        if(data.length === 0) {
+          // Try without DGK
+          const res2 = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=8&countrycodes=pk&accept-language=en`);
+          const data2 = await res2.json();
+          renderSearchResults(data2, query);
+        } else {
+          renderSearchResults(data, query);
+        }
+      } catch(e) {
+        resultsDiv.innerHTML = '<div class="search-loading">Internet connection check karein<br><span style="font-family:Noto Nastaliq Urdu,serif;direction:rtl">انٹرنیٹ چیک کریں</span></div>';
+      }
+    }, 600);
+  };
+
+  function renderSearchResults(data, query) {
+    const resultsDiv = document.getElementById('search-results');
+    if(data.length === 0) {
+      resultsDiv.innerHTML = `<div class="search-loading">No results for "${query}"<br><div style="margin-top:8px;font-size:12px">Try: DHQ Hospital, Jampur Road, Model Town</div></div>`;
+      return;
+    }
+    const icons = {'hospital':'🏥','school':'🎓','college':'🎓','university':'🎓','mosque':'🕌','masjid':'🕌','market':'🛒','bazaar':'🛒','bus':'🚌','railway':'🚂','station':'🚂','road':'🛣️','chowk':'🏢','park':'🌳','bank':'🏦'};
+    resultsDiv.innerHTML = data.map(item => {
+      const name = item.display_name.split(',')[0];
+      const addr = item.display_name.split(',').slice(1,3).join(',').trim();
+      const lowerName = name.toLowerCase();
+      let icon = '📍';
+      Object.entries(icons).forEach(([key,val]) => { if(lowerName.includes(key)) icon = val; });
+      return `<div class="search-item" onclick="setDestination('${name.replace(/'/g,"\\'")}','${name.replace(/'/g,"\\'")}',${item.lat},${item.lon})">
+        <div class="search-item-icon">${icon}</div>
+        <div><div class="search-item-name">${name}</div><div class="search-item-addr">${addr||'Dera Ghazi Khan'}</div></div>
+      </div>`;
+    }).join('');
+  }
+
+  function showDefaultSearchResults() {
+    document.getElementById('search-results').innerHTML = `
+      <div style="padding:16px 4px;font-size:13px;font-weight:600;color:var(--text-muted)">Popular Places — مشہور مقامات</div>
+      <div class="search-item" onclick="setDestination('DHQ Hospital','ڈی ایچ کیو ہسپتال',30.0576,70.6358)"><div class="search-item-icon">🏥</div><div><div class="search-item-name">DHQ Hospital</div><div class="search-item-addr">Dera Ghazi Khan</div></div></div>
+      <div class="search-item" onclick="setDestination('Govt. College DGK','گورنمنٹ کالج',30.0590,70.6340)"><div class="search-item-icon">🎓</div><div><div class="search-item-name">Govt. College DGK</div><div class="search-item-addr">Dera Ghazi Khan</div></div></div>
+      <div class="search-item" onclick="setDestination('City Bazaar','سٹی بازار',30.0560,70.6370)"><div class="search-item-icon">🛒</div><div><div class="search-item-name">City Bazaar</div><div class="search-item-addr">Dera Ghazi Khan</div></div></div>
+      <div class="search-item" onclick="setDestination('Bus Stand DGK','بس اسٹینڈ',30.0550,70.6390)"><div class="search-item-icon">🚌</div><div><div class="search-item-name">Bus Stand</div><div class="search-item-addr">Dera Ghazi Khan</div></div></div>
+      <div class="search-item" onclick="setDestination('Railway Station','ریلوے اسٹیشن',30.0530,70.6420)"><div class="search-item-icon">🚂</div><div><div class="search-item-name">Railway Station</div><div class="search-item-addr">Dera Ghazi Khan</div></div></div>
+      <div class="search-item" onclick="setDestination('Jampur Road','جامپور روڈ',30.0610,70.6300)"><div class="search-item-icon">🛣️</div><div><div class="search-item-name">Jampur Road</div><div class="search-item-addr">Dera Ghazi Khan</div></div></div>
+      <div class="search-item" onclick="setDestination('Model Town DGK','ماڈل ٹاؤن',30.0540,70.6410)"><div class="search-item-icon">🏘️</div><div><div class="search-item-name">Model Town</div><div class="search-item-addr">Dera Ghazi Khan</div></div></div>
+      <div class="search-item" onclick="setDestination('Chowk Azam','چوک اعظم',30.0600,70.6350)"><div class="search-item-icon">🏢</div><div><div class="search-item-name">Chowk Azam</div><div class="search-item-addr">Dera Ghazi Khan</div></div></div>
+    `;
+  }
+
+  window.setDestination = function(name, urdu, lat, lng) {
+    currentDestination = {name, urdu, lat:parseFloat(lat), lng:parseFloat(lng)};
+    document.getElementById('dropoff-text').textContent = name;
+    document.getElementById('destination-display').textContent = name;
+    // Calculate distance and fare
+    const dist = Math.sqrt(Math.pow(parseFloat(lat)-userLat,2)+Math.pow(parseFloat(lng)-userLng,2))*111;
+    const distKm = Math.max(0.5, dist).toFixed(1);
+    document.getElementById('distance-display').textContent = distKm + ' km';
+    const fare = Math.round(50 + (distKm * selectedVehicle.rate));
+    document.getElementById('total-fare').textContent = 'Rs ' + fare;
+    showScreen('booking');
+  };
 
   function initMainMap(lat,lng) {
     if(mainMap) return;
@@ -429,8 +516,7 @@
       try {
         mainMap=L.map('map',{zoomControl:false,attributionControl:false}).setView([lat,lng],14);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(mainMap);
-        const myIcon=L.divIcon({html:'📍',className:'',iconSize:[28,28],iconAnchor:[14,28]});
-        userMarker=L.marker([lat,lng],{icon:myIcon}).addTo(mainMap);
+        userMarker=L.marker([lat,lng],{icon:L.divIcon({html:'📍',className:'',iconSize:[28,28],iconAnchor:[14,28]})}).addTo(mainMap);
         [[-0.003,0.002],[0.002,-0.001],[0.001,0.004]].forEach(d=>{
           L.marker([lat+d[0],lng+d[1]],{icon:L.divIcon({html:'🚗',className:'',iconSize:[24,24]})}).addTo(mainMap);
         });
@@ -444,8 +530,8 @@
       try {
         liveMap=L.map('driver-live-map',{zoomControl:false,attributionControl:false}).setView([pLat,pLng],14);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(liveMap);
-        L.marker([pLat,pLng],{icon:L.divIcon({html:'📍',className:'',iconSize:[28,28],iconAnchor:[14,28]})}).addTo(liveMap).bindPopup('Aap');
-        driverMarker=L.marker([dLat,dLng],{icon:L.divIcon({html:'🚗',className:'',iconSize:[32,32],iconAnchor:[16,16]})}).addTo(liveMap).bindPopup('Driver');
+        L.marker([pLat,pLng],{icon:L.divIcon({html:'📍',className:'',iconSize:[28,28],iconAnchor:[14,28]})}).addTo(liveMap);
+        driverMarker=L.marker([dLat,dLng],{icon:L.divIcon({html:'🚗',className:'',iconSize:[32,32],iconAnchor:[16,16]})}).addTo(liveMap);
         routeLine=L.polyline([[dLat,dLng],[pLat,pLng]],{color:'#00c853',weight:3,dashArray:'6,4'}).addTo(liveMap);
         liveMap.fitBounds([[pLat,pLng],[dLat,dLng]],{padding:[40,40]});
       } catch(e){}
@@ -456,7 +542,7 @@
     onValue(ref(db,'drivers/'+driverId),snap=>{
       const d=snap.val();
       if(!d||!d.lat||!d.lng) return;
-      if(!liveMap){initLiveMap(userLat,userLng,d.lat,d.lng);}
+      if(!liveMap) initLiveMap(userLat,userLng,d.lat,d.lng);
       if(driverMarker) driverMarker.setLatLng([d.lat,d.lng]);
       if(routeLine) routeLine.setLatLngs([[d.lat,d.lng],[userLat,userLng]]);
       const dist=Math.sqrt(Math.pow(d.lat-userLat,2)+Math.pow(d.lng-userLng,2))*111;
@@ -493,7 +579,7 @@
     document.getElementById('loader').classList.add('show');
     try{
       const c=await createUserWithEmailAndPassword(auth,email,password);
-      await set(ref(db,'passengers/'+c.user.uid),{name,phone,email,createdAt:Date.now(),role:'passenger',totalRides:0,rating:5.0});
+      await set(ref(db,'passengers/'+c.user.uid),{name,phone,email,createdAt:Date.now(),role:'passenger'});
       showToast('Account ban gaya!','اکاؤنٹ بن گیا ✅');
     }catch(e){showToast(e.code==='auth/email-already-in-use'?'Email pehle se hai!':'Error aaya','غلطی',true);}
     document.getElementById('loader').classList.remove('show');
@@ -510,26 +596,19 @@
   };
 
   window.logoutUser=async function(){
-    await signOut(auth);
-    mainMap=null;liveMap=null;
-    showScreen('auth');
-    showToast('Logout ho gaye','لاگ آؤٹ کامیاب');
-  };
-
-  window.bookRide=function(dest,destUrdu){
-    currentDestination={name:dest,urdu:destUrdu};
-    document.getElementById('dropoff-text').textContent=dest;
-    showScreen('booking');
+    await signOut(auth); mainMap=null; liveMap=null;
+    showScreen('auth'); showToast('Logout ho gaye','لاگ آؤٹ');
   };
 
   window.confirmBooking=async function(){
     if(!currentUser){showToast('Pehle login karein!','پہلے لاگ ان کریں',true);return;}
+    if(!currentDestination.name||currentDestination.name==='DHQ Hospital'&&!document.getElementById('dropoff-text').textContent){showToast('Destination select karein!','منزل منتخب کریں',true);return;}
     document.getElementById('loader').classList.add('show');
     try{
       const r=push(ref(db,'rides'));
       currentRideId=r.key;
       const fare=document.getElementById('total-fare').textContent;
-      await set(r,{passengerId:currentUser.uid,passengerEmail:currentUser.email,pickup:'Circular Road, DGK',pickupLat:userLat,pickupLng:userLng,dropoff:currentDestination.name,vehicle:selectedVehicle.name,fare,payment:selectedPayment,status:'searching',createdAt:Date.now()});
+      await set(r,{passengerId:currentUser.uid,passengerEmail:currentUser.email,pickup:'Your Location, DGK',pickupLat:userLat,pickupLng:userLng,dropoff:currentDestination.name,dropoffLat:currentDestination.lat,dropoffLng:currentDestination.lng,vehicle:selectedVehicle.name,fare,payment:selectedPayment,status:'searching',createdAt:Date.now()});
       document.getElementById('ride-fare-display').textContent=fare;
       document.getElementById('loader').classList.remove('show');
       showScreen('searching');
@@ -540,19 +619,15 @@
           currentDriverId=ride.driverId;
           document.getElementById('found-driver-name').textContent=ride.driverName||'Muhammad Asif';
           document.getElementById('found-driver-vehicle').textContent='🚗 '+(ride.driverVehicle||'Mehran');
-          document.getElementById('chat-driver-name').textContent=ride.driverName||'Muhammad Asif';
-          document.getElementById('rating-driver-name').textContent=ride.driverName||'Muhammad Asif';
+          document.getElementById('chat-driver-name').textContent=ride.driverName||'Driver';
+          document.getElementById('rating-driver-name').textContent=ride.driverName||'Driver';
           showScreen('driver-found');
           showToast('Driver mil gaya!','ڈرائیور مل گیا 🚗');
           initLiveMap(userLat,userLng,ride.driverLat||userLat+0.005,ride.driverLng||userLng+0.005);
           trackDriver(ride.driverId);
           listenForChat(currentRideId);
         }
-        if(ride.status==='completed'){
-          saveToHistory(ride);
-          liveMap=null; driverMarker=null; routeLine=null;
-          showScreen('rating-screen');
-        }
+        if(ride.status==='completed'){saveToHistory(ride);liveMap=null;showScreen('rating-screen');}
       });
     }catch(e){document.getElementById('loader').classList.remove('show');showToast('Error!','غلطی',true);}
   };
@@ -560,12 +635,10 @@
   window.cancelRide=async function(){
     if(currentRideId){await update(ref(db,'rides/'+currentRideId),{status:'cancelled'});currentRideId=null;}
     liveMap=null;driverMarker=null;routeLine=null;
-    showToast('Ride cancel','سواری منسوخ');
-    showScreen('home');
+    showToast('Ride cancel','سواری منسوخ');showScreen('home');
   };
 
-  // CHAT
-  window.openChat=function(){ showScreen('chat-screen'); }
+  window.openChat=function(){showScreen('chat-screen');}
 
   window.sendMessage=async function(){
     const input=document.getElementById('chat-input');
@@ -577,41 +650,37 @@
 
   function listenForChat(rideId){
     onValue(ref(db,'chats/'+rideId),snap=>{
-      const msgs=snap.val();
-      if(!msgs) return;
+      const msgs=snap.val(); if(!msgs) return;
       const container=document.getElementById('chat-messages');
       container.innerHTML='';
       Object.values(msgs).forEach(m=>{
         const div=document.createElement('div');
         div.className='msg '+(m.sender==='passenger'?'sent':'received');
-        div.innerHTML=m.text+'<div class="msg-time">'+(m.senderName||'')+'</div>';
+        div.innerHTML=m.text+'<div class="msg-time">'+m.senderName+'</div>';
         container.appendChild(div);
       });
       container.scrollTop=container.scrollHeight;
     });
   }
 
-  // RATING
   window.setRating=function(n){
     selectedRating=n;
     document.querySelectorAll('.star-btn').forEach((s,i)=>s.classList.toggle('active',i<n));
   };
 
   window.submitRating=async function(){
-    if(!selectedRating){showToast('Star select karein!','ستارہ منتخب کریں',true);return;}
+    if(!selectedRating){showToast('Star select karein!','ستارہ چنیں',true);return;}
     if(currentRideId&&currentDriverId){
-      await push(ref(db,'ratings/'+currentDriverId),{rating:selectedRating,feedback:document.getElementById('feedback-input').value,passengerId:currentUser.uid,rideId:currentRideId,time:Date.now()});
-      await update(ref(db,'rides/'+currentRideId),{passengerRating:selectedRating});
+      await push(ref(db,'ratings/'+currentDriverId),{rating:selectedRating,feedback:document.getElementById('feedback-input').value,passengerId:currentUser.uid,time:Date.now()});
     }
-    showToast('Rating di gayi! Shukriya','ریٹنگ کامیاب ✅');
-    currentRideId=null; selectedRating=0;
+    showToast('Rating di! Shukriya 🙏','ریٹنگ کامیاب');
+    currentRideId=null;selectedRating=0;
     document.querySelectorAll('.star-btn').forEach(s=>s.classList.remove('active'));
     showScreen('home');
   };
 
-  // HISTORY
   function saveToHistory(ride){
-    rideHistory.unshift({pickup:ride.pickup,dropoff:ride.dropoff,fare:ride.fare,vehicle:ride.vehicle,time:new Date().toLocaleString('ur')});
+    rideHistory.unshift({pickup:ride.pickup,dropoff:ride.dropoff,fare:ride.fare,vehicle:ride.vehicle,time:new Date().toLocaleString()});
     localStorage.setItem('rideHistory',JSON.stringify(rideHistory));
     updateHistoryUI();
   }
@@ -625,14 +694,16 @@
 
   function updateHistoryUI(){
     const list=document.getElementById('history-list');
+    if(!list) return;
     if(rideHistory.length===0){list.innerHTML='<div style="text-align:center;padding:40px;color:var(--text-muted)"><div style="font-size:40px;margin-bottom:12px">🚗</div><div>Abhi koi sawari nahi</div></div>';return;}
-    list.innerHTML=rideHistory.map(r=>`<div class="history-item"><div class="history-icon">🚗</div><div style="flex:1"><div class="history-route">${r.pickup||'DGK'} → ${r.dropoff||'DHQ'}</div><div class="history-time">${r.vehicle||'Car'} · ${r.time||'Abhi'}</div></div><div class="history-fare">${r.fare||'Rs 306'}</div></div>`).join('');
+    list.innerHTML=rideHistory.map(r=>`<div style="display:flex;align-items:center;gap:14px;padding:14px 20px;border-bottom:1px solid rgba(255,255,255,0.05)"><div style="width:44px;height:44px;border-radius:14px;background:var(--dark3);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0">🚗</div><div style="flex:1"><div style="font-size:13px;font-weight:500">${r.dropoff||'DHQ'}</div><div style="font-size:11px;color:var(--text-muted)">${r.vehicle||'Car'} · ${r.time||'Abhi'}</div></div><div style="font-size:15px;font-weight:700;color:var(--green)">${r.fare||'Rs 306'}</div></div>`).join('');
   }
 
   window.selectVehicle=function(el,name,urdu,rate){
     el.closest('.vehicle-scroll').querySelectorAll('.vehicle-card').forEach(c=>c.classList.remove('selected'));
     el.classList.add('selected');selectedVehicle={name,urdu,rate};
-    document.getElementById('total-fare').textContent='Rs '+Math.round(50+(3.2*rate));
+    const dist=parseFloat(document.getElementById('distance-display')?.textContent)||3.2;
+    document.getElementById('total-fare').textContent='Rs '+Math.round(50+(dist*rate));
     const vd=document.getElementById('selected-vehicle-display');if(vd) vd.textContent=el.querySelector('.vehicle-emoji').textContent+' '+name;
   };
 
@@ -653,46 +724,8 @@
 <script>
   function showScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');}
   function showToast(msg,urdu,isError){const t=document.getElementById('toast');document.getElementById('toast-msg').textContent=msg;document.getElementById('toast-urdu').textContent=urdu||'';t.className='toast'+(isError?' error':'');t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000);}
-
 </script>
-  <script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-  import { getMessaging, getToken, onMessage } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-messaging.js";
-
-  const firebaseConfig = { apiKey:"AIzaSyD6NgezMei1zau__3--G89I8doSAtiJdO8", authDomain:"ridedgk-70041.firebaseapp.com", projectId:"ridedgk-70041", storageBucket:"ridedgk-70041.firebasestorage.app", messagingSenderId:"1030497478997", appId:"1:1030497478997:web:b6344c5e10ef70396ca7dc", databaseURL:"https://ridedgk-70041-default-rtdb.asia-southeast1.firebasedatabase.app" };
-
-  const app = initializeApp(firebaseConfig);
-  const messaging = getMessaging(app);
-
-  async function initNotifications() {
-    try {
-      const reg = await navigator.serviceWorker.register('/RideDGK/firebase-messaging-sw.js');
-      const token = await getToken(messaging, {
-        vapidKey: 'BBkTuByPS8dKwH8V3fX7iViDEk6PdG2R6q35MLRf5S9f9QXSL9tIO9GaUqa2SqJCAx-omPmkNU6b5HERTClNxM8',
-        serviceWorkerRegistration: reg
-      });
-      if (token) {
-        console.log('FCM Token:', token);
-        window._fcmToken = token;
-      }
-    } catch(e) { console.log('Notification error:', e); }
-  }
-
-  onMessage(messaging, (payload) => {
-    const title = payload.notification?.title || 'RideDGK';
-    const body = payload.notification?.body || '';
-    if(window.showToast) showToast(title, body);
-    if(Notification.permission === 'granted') {
-      new Notification(title, { body, icon: '/icon.png' });
-    }
-  });
-
-  if('serviceWorker' in navigator && 'Notification' in window) {
-    Notification.requestPermission().then(perm => {
-      if(perm === 'granted') initNotifications();
-    });
-  }
-</script>
-
 </body>
 </html>
+
+  
