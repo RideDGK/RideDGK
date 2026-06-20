@@ -1,0 +1,27 @@
+{
+  "name": "RideDGK — Dera Ghazi Khan",
+  "short_name": "RideDGK",
+  "description": "Dera Ghazi Khan ki apni ride app — DGK ki pehli ride hailing service",
+  "start_url": "/RideDGK/",
+  "display": "standalone",
+  "background_color": "#0d0d1a",
+  "theme_color": "#00c853",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "https://via.placeholder.com/192x192/00c853/ffffff?text=🚗",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "https://via.placeholder.com/512x512/00c853/ffffff?text=🚗",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["travel", "transportation"],
+  "lang": "ur",
+  "dir": "ltr"
+}
