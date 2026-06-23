@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ur">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RideDGK — Download App</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;700&family=Poppins:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'Poppins',sans-serif; background:linear-gradient(160deg,#0d0d1a,#0a2a1a); min-height:100vh; color:#f0f0ff; padding:20px; }
+  .container { max-width:500px; margin:0 auto; }
+  .header { text-align:center; padding:30px 0 20px; }
+  .logo { width:80px; height:80px; background:linear-gradient(135deg,#00c853,#009624); border-radius:24px; display:flex; align-items:center; justify-content:center; font-size:40px; margin:0 auto 14px; box-shadow:0 0 40px rgba(0,200,83,0.4); }
+  .app-name { font-size:44px; font-weight:900; background:linear-gradient(90deg,#69f0ae,#00c853); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+  .tagline { font-size:14px; color:#8888aa; margin-top:6px; }
+  .urdu { font-family:'Noto Nastaliq Urdu',serif; font-size:18px; color:#69f0ae; margin-top:8px; direction:rtl; }
+  .badges { display:flex; gap:8px; justify-content:center; flex-wrap:wrap; margin:16px 0; }
+  .badge { background:rgba(0,200,83,0.1); border:1px solid rgba(0,200,83,0.3); border-radius:20px; padding:5px 14px; font-size:12px; color:#00c853; }
+  .divider { height:1px; background:linear-gradient(90deg,transparent,rgba(0,200,83,0.3),transparent); margin:20px 0; }
+  .section-title { text-align:center; font-size:16px; font-weight:700; color:#69f0ae; margin-bottom:16px; }
+  .cards { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:24px; }
+  .card { background:rgba(255,255,255,0.04); border-radius:20px; padding:20px 14px; text-align:center; border:1.5px solid rgba(0,200,83,0.2); }
+  .card.driver { border-color:rgba(255,109,0,0.3); }
+  .card-emoji { font-size:30px; margin-bottom:8px; }
+  .card-title { font-size:14px; font-weight:700; margin-bottom:4px; }
+  .card-urdu { font-family:'Noto Nastaliq Urdu',serif; font-size:12px; color:#8888aa; margin-bottom:12px; direction:rtl; }
+  .qr-box { background:#fff; border-radius:12px; padding:8px; display:inline-block; margin-bottom:10px; }
+  .qr-box canvas, .qr-box img { display:block; }
+  .card-link { font-size:10px; color:#8888aa; word-break:break-all; margin-bottom:12px; }
+  .btn { display:block; padding:10px 16px; border-radius:50px; font-size:13px; font-weight:600; text-decoration:none; text-align:center; margin-top:8px; }
+  .btn-passenger { background:linear-gradient(135deg,#00c853,#009624); color:#fff; }
+  .btn-driver { background:linear-gradient(135deg,#ff6d00,#e65100); color:#fff; }
+  .features { background:rgba(255,255,255,0.03); border-radius:20px; padding:20px; margin-bottom:24px; border:1px solid rgba(255,255,255,0.06); }
+  .features-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+  .feature { display:flex; align-items:center; gap:8px; font-size:12px; color:#ccc; }
+  .feature-icon { font-size:18px; }
+  .footer { text-align:center; padding:20px 0; }
+  .footer-url { font-size:14px; color:#00c853; font-weight:600; }
+  .footer-sub { font-size:12px; color:#8888aa; margin-top:4px; font-family:'Noto Nastaliq Urdu',serif; direction:rtl; }
+  .how-to { background:rgba(0,200,83,0.05); border:1px solid rgba(0,200,83,0.15); border-radius:16px; padding:16px; margin-bottom:20px; }
+  .how-to-title { font-size:14px; font-weight:600; color:#69f0ae; margin-bottom:10px; }
+  .step { display:flex; gap:10px; align-items:flex-start; margin-bottom:8px; font-size:12px; color:#ccc; }
+  .step-num { width:22px; height:22px; border-radius:50%; background:rgba(0,200,83,0.2); color:#00c853; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; flex-shrink:0; }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <div class="logo">🚗</div>
+    <div class="app-name">RideDGK</div>
+    <div class="tagline">Dera Ghazi Khan's First Ride-Hailing App</div>
+    <div class="urdu">ڈیرہ غازی خان کی پہلی سواری ایپ</div>
+    <div class="badges">
+      <div class="badge">✅ Bilkul Free</div>
+      <div class="badge">📍 Live Tracking</div>
+      <div class="badge">💵 Cash Payment</div>
+      <div class="badge">🚗 Car Bike Rickshaw</div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section-title">📱 App Download Karein — QR Scan Karein</div>
+
+  <div class="cards">
+    <div class="card">
+      <div class="card-emoji">👤</div>
+      <div class="card-title">Passenger App</div>
+      <div class="card-urdu">مسافر ایپ</div>
+      <div class="qr-box" id="qr-passenger"></div>
+      <div class="card-link">ridedgk.github.io/RideDGK</div>
+      <a class="btn btn-passenger" href="https://ridedgk.github.io/RideDGK">Open App →</a>
+    </div>
+    <div class="card driver">
+      <div class="card-emoji">🚗</div>
+      <div class="card-title">Driver App</div>
+      <div class="card-urdu">ڈرائیور ایپ</div>
+      <div class="qr-box" id="qr-driver"></div>
+      <div class="card-link">ridedgk.github.io/RideDGK/Driver.html</div>
+      <a class="btn btn-driver" href="https://ridedgk.github.io/RideDGK/Driver.html">Open App →</a>
+    </div>
+  </div>
+
+  <div class="how-to">
+    <div class="how-to-title">📲 App Install Kaise Karein?</div>
+    <div class="step"><div class="step-num">1</div><div>Safari mein link kholen (iPhone) ya Chrome (Android)</div></div>
+    <div class="step"><div class="step-num">2</div><div>Neeche Share button dabain ↑</div></div>
+    <div class="step"><div class="step-num">3</div><div>"Add to Home Screen" select karein</div></div>
+    <div class="step"><div class="step-num">4</div><div>App home screen pe install ho jayegi! 🎉</div></div>
+  </div>
+
+  <div class="features">
+    <div class="section-title" style="margin-bottom:14px">✨ Features — خصوصیات</div>
+    <div class="features-grid">
+      <div class="feature"><div class="feature-icon">📍</div>Live Driver Tracking</div>
+      <div class="feature"><div class="feature-icon">🚗</div>Car, Bike, Rickshaw, Chingchi</div>
+      <div class="feature"><div class="feature-icon">💵</div>Cash Payment</div>
+      <div class="feature"><div class="feature-icon">💬</div>Driver se Chat</div>
+      <div class="feature"><div class="feature-icon">⭐</div>Rating System</div>
+      <div class="feature"><div class="feature-icon">🆘</div>SOS Emergency Button</div>
+      <div class="feature"><div class="feature-icon">🎟️</div>Promo Codes — چھوٹ</div>
+      <div class="feature"><div class="feature-icon">🔔</div>Live Notifications</div>
+      <div class="feature"><div class="feature-icon">📊</div>Fare Estimate</div>
+      <div class="feature"><div class="feature-icon">🗺️</div>Real Maps — DGK</div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="footer">
+    <div class="footer-url">🌐 ridedgk.github.io/RideDGK</div>
+    <div class="footer-sub">ڈیرہ غازی خان کی پہلی سواری ایپ — بالکل مفت</div>
+  </div>
+</div>
+
+<script>
+  new QRCode(document.getElementById("qr-passenger"), {
+    text: "https://ridedgk.github.io/RideDGK",
+    width: 120, height: 120,
+    colorDark: "#000000", colorLight: "#ffffff",
+    correctLevel: QRCode.CorrectLevel.H
+  });
+  new QRCode(document.getElementById("qr-driver"), {
+    text: "https://ridedgk.github.io/RideDGK/Driver.html",
+    width: 120, height: 120,
+    colorDark: "#000000", colorLight: "#ffffff",
+    correctLevel: QRCode.CorrectLevel.H
+  });
+</script>
+</body>
+</html>
