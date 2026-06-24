@@ -822,5 +822,71 @@
   function showScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');}
   function showToast(msg,urdu,isError){const t=document.getElementById('toast');document.getElementById('toast-msg').textContent=msg;document.getElementById('toast-urdu').textContent=urdu||'';t.className='toast'+(isError?' error':'');t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000);}
 </script>
+  <script>
+  // SOUND SYSTEM
+  function playSound(type) {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    
+    if(type === 'ride') {
+      // Uber jaisi ride request sound
+      [0, 0.15, 0.3].forEach((delay, i) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.frequency.value = [880, 1100, 880][i];
+        osc.type = 'sine';
+        gain.gain.setValueAtTime(0.3, ctx.currentTime + delay);
+        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + delay + 0.12);
+        osc.start(ctx.currentTime + delay);
+        osc.stop(ctx.currentTime + delay + 0.12);
+      });
+    }
+    
+    if(type === 'accepted') {
+      // Ride accepted — happy sound
+      [523, 659, 784].forEach((freq, i) => {
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.frequency.value = freq;
+        osc.type = 'sine';
+        gain.gain.setValueAtTime(0.3, ctx.currentTime + i*0.15);
+        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + i*0.15 + 0.2);
+        osc.start(ctx.currentTime + i*0.15);
+        osc.stop(ctx.currentTime + i*0.15 + 0.2);
+      });
+    }
+
+    if(type === 'chat') {
+      // Chat message sound
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.frequency.value = 1200;
+      osc.type = 'sine';
+      gain.gain.setValueAtTime(0.2, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.1);
+      osc.start(ctx.currentTime);
+      osc.stop(ctx.currentTime + 0.1);
+    }
+  }
+
+  // Override showToast to play sounds
+  const _origShowToast = showToast;
+  function showToast(msg, urdu, isError) {
+    _origShowToast(msg, urdu, isError);
+    if(msg.includes('sawari') || msg.includes('Nayi') || msg.includes('request')) {
+      playSound('ride');
+    } else if(msg.includes('qabool') || msg.includes('accepted') || msg.includes('kamyab')) {
+      playSound('accepted');
+    } else if(msg.includes('message') || msg.includes('chat')) {
+      playSound('chat');
+    }
+  }
+</script>
+
 </body>
 </html>
