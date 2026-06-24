@@ -823,90 +823,65 @@
   function showToast(msg,urdu,isError){const t=document.getElementById('toast');document.getElementById('toast-msg').textContent=msg;document.getElementById('toast-urdu').textContent=urdu||'';t.className='toast'+(isError?' error':'');t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000);}
 </script>
 <script>
-  // SOUND SYSTEM — Web Audio API
-  let audioCtx = null;
+  // SOUND SYSTEM — MP3/WAV + Vibration
+  const rideSound = new Audio('https://ridedgk.github.io/RideDGK/Notifications%20.wav');
+  const chatSound = new Audio('https://ridedgk.github.io/RideDGK/Message%20.wav');
+  const acceptSound = new Audio('https://ridedgk.github.io/RideDGK/Notifications%20.wav');
 
-  function getAudioCtx() {
-    if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    if(audioCtx.state === 'suspended') audioCtx.resume();
-    return audioCtx;
-  }
+  rideSound.preload = 'auto';
+  chatSound.preload = 'auto';
+  acceptSound.preload = 'auto';
 
   function playSound(type) {
     try {
-      const ctx = getAudioCtx();
       if(type === 'ride') {
-        // Uber jaisi beep beep sound
-        [[800,0],[1000,0.2],[800,0.4],[1000,0.6]].forEach(([freq,delay]) => {
-          const osc = ctx.createOscillator();
-          const gain = ctx.createGain();
-          osc.connect(gain);
-          gain.connect(ctx.destination);
-          osc.type = 'square';
-          osc.frequency.value = freq;
-          gain.gain.setValueAtTime(0.15, ctx.currentTime + delay);
-          gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + delay + 0.15);
-          osc.start(ctx.currentTime + delay);
-          osc.stop(ctx.currentTime + delay + 0.15);
-        });
-      }
-      if(type === 'accepted') {
-        [523,659,784,1047].forEach((freq,i) => {
-          const osc = ctx.createOscillator();
-          const gain = ctx.createGain();
-          osc.connect(gain);
-          gain.connect(ctx.destination);
-          osc.type = 'sine';
-          osc.frequency.value = freq;
-          gain.gain.setValueAtTime(0.2, ctx.currentTime + i*0.12);
-          gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + i*0.12 + 0.15);
-          osc.start(ctx.currentTime + i*0.12);
-          osc.stop(ctx.currentTime + i*0.12 + 0.15);
-        });
+        rideSound.currentTime = 0;
+        rideSound.play().catch(e => console.log('Sound error:', e));
+        if(navigator.vibrate) navigator.vibrate([300, 100, 300, 100, 300]);
       }
       if(type === 'chat') {
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        osc.connect(gain);
-        gain.connect(ctx.destination);
-        osc.type = 'sine';
-        osc.frequency.value = 1400;
-        gain.gain.setValueAtTime(0.15, ctx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.08);
-        osc.start(ctx.currentTime);
-        osc.stop(ctx.currentTime + 0.08);
+        chatSound.currentTime = 0;
+        chatSound.play().catch(e => console.log('Sound error:', e));
+        if(navigator.vibrate) navigator.vibrate([100]);
+      }
+      if(type === 'accepted') {
+        acceptSound.currentTime = 0;
+        acceptSound.play().catch(e => console.log('Sound error:', e));
+        if(navigator.vibrate) navigator.vibrate([200, 100, 200]);
       }
     } catch(e) { console.log('Sound error:', e); }
   }
 
-  // AudioContext unlock on first tap
+  // Unlock audio on first touch
   document.addEventListener('touchstart', function() {
-    if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    if(audioCtx.state === 'suspended') audioCtx.resume();
+    rideSound.load();
+    chatSound.load();
+    acceptSound.load();
   }, {once: true});
 
-  // Listen for ride requests and play sound
+  // Toast override for sounds
   document.addEventListener('DOMContentLoaded', function() {
     const origShowToast = window.showToast;
     if(origShowToast) {
       window.showToast = function(msg, urdu, isError) {
         origShowToast(msg, urdu, isError);
-        if(msg.toLowerCase().includes('sawari') || msg.toLowerCase().includes('nayi') || msg.toLowerCase().includes('ride')) {
+        const m = msg.toLowerCase();
+        if(m.includes('sawari') || m.includes('nayi') || m.includes('ride') || m.includes('request')) {
           playSound('ride');
-        } else if(msg.toLowerCase().includes('qabool') || msg.toLowerCase().includes('kamyab') || msg.toLowerCase().includes('complete')) {
+        } else if(m.includes('qabool') || m.includes('complete') || m.includes('mukammal')) {
           playSound('accepted');
-        } else if(msg.toLowerCase().includes('message') || msg.toLowerCase().includes('chat')) {
+        } else if(m.includes('message') || m.includes('chat')) {
           playSound('chat');
         }
       };
     }
   });
 
-  // Direct ride sound trigger
   window.playRideSound = function() { playSound('ride'); };
-  window.playAcceptSound = function() { playSound('accepted'); };
   window.playChatSound = function() { playSound('chat'); };
+  window.playAcceptSound = function() { playSound('accepted'); };
 </script>
+
 
 
 </rbody>
