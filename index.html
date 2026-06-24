@@ -1,6 +1,20 @@
 <!DOCTYPE html>
 <html lang="ur" dir="ltr">
 <head>
+  <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+<script>
+  window.OneSignalDeferred = window.OneSignalDeferred || [];
+  OneSignalDeferred.push(async function(OneSignal) {
+    await OneSignal.init({
+      appId: "cc9ebe4e-e7a4-4708-bbca-3c670db5843a",
+      safari_web_id: "web.onesignal.auto.36c77d1a-9357-4d49-966b-0de749957ba2",
+      notifyButton: {
+        enable: true,
+      },
+    });
+  });
+</script>
+
   <link rel="manifest" href="/RideDGK/manifest.json">
 <meta name="apple-mobile-web-app-title" content="RideDGK">
 <link rel="apple-touch-icon" href="https://via.placeholder.com/180x180/00c853/ffffff?text=R">
