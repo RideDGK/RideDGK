@@ -822,71 +822,92 @@
   function showScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');}
   function showToast(msg,urdu,isError){const t=document.getElementById('toast');document.getElementById('toast-msg').textContent=msg;document.getElementById('toast-urdu').textContent=urdu||'';t.className='toast'+(isError?' error':'');t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000);}
 </script>
-  <script>
-  // SOUND SYSTEM
+<script>
+  // SOUND SYSTEM — Web Audio API
+  let audioCtx = null;
+
+  function getAudioCtx() {
+    if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    if(audioCtx.state === 'suspended') audioCtx.resume();
+    return audioCtx;
+  }
+
   function playSound(type) {
-    const ctx = new (window.AudioContext || window.webkitAudioContext)();
-    
-    if(type === 'ride') {
-      // Uber jaisi ride request sound
-      [0, 0.15, 0.3].forEach((delay, i) => {
+    try {
+      const ctx = getAudioCtx();
+      if(type === 'ride') {
+        // Uber jaisi beep beep sound
+        [[800,0],[1000,0.2],[800,0.4],[1000,0.6]].forEach(([freq,delay]) => {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.type = 'square';
+          osc.frequency.value = freq;
+          gain.gain.setValueAtTime(0.15, ctx.currentTime + delay);
+          gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + delay + 0.15);
+          osc.start(ctx.currentTime + delay);
+          osc.stop(ctx.currentTime + delay + 0.15);
+        });
+      }
+      if(type === 'accepted') {
+        [523,659,784,1047].forEach((freq,i) => {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.type = 'sine';
+          osc.frequency.value = freq;
+          gain.gain.setValueAtTime(0.2, ctx.currentTime + i*0.12);
+          gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + i*0.12 + 0.15);
+          osc.start(ctx.currentTime + i*0.12);
+          osc.stop(ctx.currentTime + i*0.12 + 0.15);
+        });
+      }
+      if(type === 'chat') {
         const osc = ctx.createOscillator();
         const gain = ctx.createGain();
         osc.connect(gain);
         gain.connect(ctx.destination);
-        osc.frequency.value = [880, 1100, 880][i];
         osc.type = 'sine';
-        gain.gain.setValueAtTime(0.3, ctx.currentTime + delay);
-        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + delay + 0.12);
-        osc.start(ctx.currentTime + delay);
-        osc.stop(ctx.currentTime + delay + 0.12);
-      });
-    }
-    
-    if(type === 'accepted') {
-      // Ride accepted — happy sound
-      [523, 659, 784].forEach((freq, i) => {
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        osc.connect(gain);
-        gain.connect(ctx.destination);
-        osc.frequency.value = freq;
-        osc.type = 'sine';
-        gain.gain.setValueAtTime(0.3, ctx.currentTime + i*0.15);
-        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + i*0.15 + 0.2);
-        osc.start(ctx.currentTime + i*0.15);
-        osc.stop(ctx.currentTime + i*0.15 + 0.2);
-      });
-    }
-
-    if(type === 'chat') {
-      // Chat message sound
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-      osc.connect(gain);
-      gain.connect(ctx.destination);
-      osc.frequency.value = 1200;
-      osc.type = 'sine';
-      gain.gain.setValueAtTime(0.2, ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.1);
-      osc.start(ctx.currentTime);
-      osc.stop(ctx.currentTime + 0.1);
-    }
+        osc.frequency.value = 1400;
+        gain.gain.setValueAtTime(0.15, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.08);
+        osc.start(ctx.currentTime);
+        osc.stop(ctx.currentTime + 0.08);
+      }
+    } catch(e) { console.log('Sound error:', e); }
   }
 
-  // Override showToast to play sounds
-  const _origShowToast = showToast;
-  function showToast(msg, urdu, isError) {
-    _origShowToast(msg, urdu, isError);
-    if(msg.includes('sawari') || msg.includes('Nayi') || msg.includes('request')) {
-      playSound('ride');
-    } else if(msg.includes('qabool') || msg.includes('accepted') || msg.includes('kamyab')) {
-      playSound('accepted');
-    } else if(msg.includes('message') || msg.includes('chat')) {
-      playSound('chat');
+  // AudioContext unlock on first tap
+  document.addEventListener('touchstart', function() {
+    if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    if(audioCtx.state === 'suspended') audioCtx.resume();
+  }, {once: true});
+
+  // Listen for ride requests and play sound
+  document.addEventListener('DOMContentLoaded', function() {
+    const origShowToast = window.showToast;
+    if(origShowToast) {
+      window.showToast = function(msg, urdu, isError) {
+        origShowToast(msg, urdu, isError);
+        if(msg.toLowerCase().includes('sawari') || msg.toLowerCase().includes('nayi') || msg.toLowerCase().includes('ride')) {
+          playSound('ride');
+        } else if(msg.toLowerCase().includes('qabool') || msg.toLowerCase().includes('kamyab') || msg.toLowerCase().includes('complete')) {
+          playSound('accepted');
+        } else if(msg.toLowerCase().includes('message') || msg.toLowerCase().includes('chat')) {
+          playSound('chat');
+        }
+      };
     }
-  }
+  });
+
+  // Direct ride sound trigger
+  window.playRideSound = function() { playSound('ride'); };
+  window.playAcceptSound = function() { playSound('accepted'); };
+  window.playChatSound = function() { playSound('chat'); };
 </script>
 
-</body>
+
+</rbody>
 </html>
