@@ -1,25 +1,22 @@
 <!DOCTYPE html>
 <html lang="ur" dir="ltr">
 <head>
-  <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="theme-color" content="#0d0d1a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>RideDGK — Driver</title>
+<script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
 <script>
   window.OneSignalDeferred = window.OneSignalDeferred || [];
   OneSignalDeferred.push(async function(OneSignal) {
     await OneSignal.init({
       appId: "cc9ebe4e-e7a4-4708-bbca-3c670db5843a",
       safari_web_id: "web.onesignal.auto.36c77d1a-9357-4d49-966b-0de749957ba2",
-      notifyButton: {
-        enable: true,
-      },
+      notifyButton: { enable: false },
     });
   });
 </script>
-
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<meta name="theme-color" content="#0d0d1a">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<title>RideDGK — Driver</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -44,7 +41,7 @@
   .logo-urdu { font-family:'Noto Nastaliq Urdu',serif; font-size:16px; color:var(--green-light); margin-top:4px; direction:rtl; }
   .splash-btn { position:relative; z-index:2; background:linear-gradient(135deg,var(--green),var(--green-dark)); color:#fff; border:none; border-radius:50px; padding:16px 48px; font-size:17px; font-weight:600; cursor:pointer; margin-top:20px; box-shadow:0 4px 24px rgba(0,200,83,0.4); }
   .splash-btn span { display:block; font-family:'Noto Nastaliq Urdu',serif; font-size:14px; opacity:0.85; direction:rtl; }
-  #auth,#docs-screen { background:var(--dark); }
+  #auth { background:var(--dark); }
   .auth-top { background:linear-gradient(145deg,#0a2a1a,var(--dark2)); padding:60px 28px 40px; position:relative; overflow:hidden; }
   .auth-top::after { content:''; position:absolute; bottom:-30px; left:0; right:0; height:60px; background:var(--dark); border-radius:50% 50% 0 0; }
   .auth-logo { font-size:26px; font-weight:800; color:var(--green-light); }
@@ -56,92 +53,107 @@
   .input-wrap input:focus { border-color:var(--green); }
   .input-wrap .icon { position:absolute; left:16px; top:50%; transform:translateY(-50%); font-size:20px; }
   .btn-main { width:100%; padding:16px; background:linear-gradient(135deg,var(--green),var(--green-dark)); color:#fff; border:none; border-radius:50px; font-size:16px; font-weight:600; cursor:pointer; box-shadow:var(--shadow); display:flex; align-items:center; justify-content:center; gap:10px; margin-bottom:12px; }
-  .btn-main .urdu { font-family:'Noto Nastaliq Urdu',serif; font-size:14px; direction:rtl; }
-  /* DOCS UPLOAD */
+  /* FULL SCREEN MAP HOME */
+  #home { background:var(--dark); position:relative; }
+  #driver-map { position:absolute; inset:0; z-index:1; }
+  .map-topbar { position:absolute; top:0; left:0; right:0; z-index:10; background:linear-gradient(180deg,rgba(13,13,26,0.95),transparent); padding:50px 16px 20px; display:flex; align-items:center; justify-content:space-between; }
+  .driver-status-pill { display:flex; align-items:center; gap:10px; background:rgba(13,13,26,0.9); border-radius:50px; padding:10px 16px; border:1.5px solid rgba(255,255,255,0.1); }
+  .status-dot { width:10px; height:10px; border-radius:50%; background:#666; transition:all 0.3s; }
+  .status-dot.online { background:var(--green); box-shadow:0 0 8px var(--green); animation:blink 1.5s infinite; }
+  .toggle-switch { position:relative; width:52px; height:28px; }
+  .toggle-switch input { opacity:0; width:0; height:0; }
+  .toggle-slider { position:absolute; inset:0; background:var(--dark3); border-radius:28px; cursor:pointer; transition:0.3s; border:1.5px solid rgba(255,255,255,0.1); }
+  .toggle-slider:before { content:''; position:absolute; height:20px; width:20px; left:3px; bottom:3px; background:#888; border-radius:50%; transition:0.3s; }
+  input:checked + .toggle-slider { background:rgba(0,200,83,0.3); border-color:var(--green); }
+  input:checked + .toggle-slider:before { transform:translateX(24px); background:var(--green); box-shadow:0 0 6px var(--green); }
+  .map-avatar { width:44px; height:44px; border-radius:50%; background:linear-gradient(135deg,var(--green),var(--green-dark)); display:flex; align-items:center; justify-content:center; font-size:20px; cursor:pointer; border:2px solid rgba(255,255,255,0.2); overflow:hidden; }
+  .map-avatar img { width:100%; height:100%; object-fit:cover; }
+  /* STATS BAR */
+  .stats-bar { position:absolute; top:110px; left:16px; right:16px; z-index:10; display:flex; gap:10px; }
+  .stat-pill { flex:1; background:rgba(13,13,26,0.9); border-radius:14px; padding:10px; text-align:center; border:1px solid rgba(255,255,255,0.08); }
+  .stat-pill-val { font-size:16px; font-weight:800; color:var(--green); }
+  .stat-pill-label { font-size:9px; color:var(--text-muted); margin-top:2px; }
+  /* RIDE REQUEST OVERLAY — UBER STYLE */
+  .ride-request-overlay { position:absolute; bottom:0; left:0; right:0; z-index:20; transform:translateY(100%); transition:transform 0.4s cubic-bezier(0.175,0.885,0.32,1.275); }
+  .ride-request-overlay.show { transform:translateY(0); }
+  .ride-request-sheet { background:var(--dark2); border-radius:24px 24px 0 0; padding:20px; border-top:3px solid var(--green); }
+  .rr-handle { width:40px; height:4px; background:rgba(255,255,255,0.2); border-radius:2px; margin:0 auto 16px; }
+  .rr-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; }
+  .rr-badge { background:rgba(0,200,83,0.15); border:1px solid var(--green); border-radius:20px; padding:5px 14px; font-size:12px; color:var(--green); font-weight:600; display:flex; align-items:center; gap:6px; }
+  .rr-dot { width:7px; height:7px; border-radius:50%; background:var(--green); animation:blink 0.8s infinite; }
+  .rr-fare { font-size:28px; font-weight:900; color:var(--accent); }
+  .rr-route { background:var(--dark3); border-radius:14px; padding:14px; margin-bottom:14px; }
+  .rr-point { display:flex; align-items:center; gap:12px; padding:6px 0; }
+  .rr-dot-g { width:12px; height:12px; border-radius:50%; background:var(--green); flex-shrink:0; box-shadow:0 0 6px var(--green); }
+  .rr-dot-r { width:12px; height:12px; border-radius:50%; background:var(--danger); flex-shrink:0; box-shadow:0 0 6px var(--danger); }
+  .rr-line { width:2px; height:20px; background:rgba(255,255,255,0.1); margin-left:5px; }
+  .rr-addr { font-size:14px; font-weight:500; }
+  .rr-addr-sub { font-size:11px; color:var(--text-muted); font-family:'Noto Nastaliq Urdu',serif; direction:rtl; }
+  .rr-meta { display:flex; gap:8px; margin-bottom:14px; flex-wrap:wrap; }
+  .rr-chip { background:var(--dark3); border-radius:10px; padding:6px 12px; font-size:12px; display:flex; align-items:center; gap:4px; }
+  .rr-timer { height:4px; background:var(--dark3); border-radius:2px; margin-bottom:14px; overflow:hidden; }
+  .rr-timer-bar { height:100%; background:linear-gradient(90deg,var(--green),var(--accent)); border-radius:2px; width:100%; transition:width 0.1s linear; }
+  .rr-btns { display:flex; gap:12px; }
+  .rr-accept { flex:2; padding:16px; background:linear-gradient(135deg,var(--green),var(--green-dark)); color:#fff; border:none; border-radius:50px; font-size:17px; font-weight:800; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:10px; box-shadow:0 4px 20px rgba(0,200,83,0.4); }
+  .rr-reject { flex:1; padding:16px; background:rgba(255,82,82,0.1); border:1.5px solid var(--danger); color:var(--danger); border-radius:50px; font-size:15px; font-weight:600; cursor:pointer; }
+  /* ACTIVE RIDE BOTTOM SHEET */
+  .active-ride-sheet { position:absolute; bottom:0; left:0; right:0; z-index:15; background:var(--dark2); border-radius:24px 24px 0 0; padding:16px; display:none; border-top:2px solid rgba(0,200,83,0.3); }
+  .arc-handle { width:40px; height:4px; background:rgba(255,255,255,0.15); border-radius:2px; margin:0 auto 14px; }
+  .arc-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; }
+  .arc-badge { background:var(--green); color:#000; border-radius:20px; padding:4px 14px; font-size:12px; font-weight:700; }
+  .arc-fare { font-size:20px; font-weight:800; color:var(--accent); }
+  .arc-route { background:var(--dark3); border-radius:12px; padding:12px; margin-bottom:12px; }
+  .arc-point { display:flex; align-items:center; gap:10px; padding:4px 0; font-size:13px; }
+  .arc-actions { display:flex; gap:8px; }
+  .arc-btn { flex:1; padding:12px; border:none; border-radius:14px; font-size:13px; font-weight:600; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:6px; }
+  .arc-btn.call { background:rgba(0,200,83,0.15); border:1.5px solid var(--green); color:var(--green); }
+  .arc-btn.nav { background:rgba(33,150,243,0.15); border:1.5px solid #2196f3; color:#64b5f6; }
+  .arc-btn.chat { background:rgba(255,214,0,0.1); border:1.5px solid var(--accent); color:var(--accent); }
+  .arc-btn.complete { background:linear-gradient(135deg,var(--green),var(--green-dark)); color:#fff; flex:2; }
+  /* NAVIGATION MODAL */
+  .nav-modal { position:absolute; inset:0; background:rgba(0,0,0,0.7); z-index:30; display:none; align-items:flex-end; justify-content:center; }
+  .nav-modal.show { display:flex; }
+  .nav-sheet { background:var(--dark2); border-radius:24px 24px 0 0; padding:24px; width:100%; }
+  .nav-sheet-title { font-size:17px; font-weight:700; margin-bottom:6px; }
+  .nav-sheet-sub { font-size:13px; color:var(--text-muted); margin-bottom:20px; font-family:'Noto Nastaliq Urdu',serif; direction:rtl; }
+  .nav-options { display:flex; flex-direction:column; gap:10px; }
+  .nav-option { display:flex; align-items:center; gap:14px; padding:16px; background:var(--dark3); border-radius:16px; cursor:pointer; border:1.5px solid transparent; transition:all 0.2s; }
+  .nav-option:active { border-color:var(--green); background:rgba(0,200,83,0.1); }
+  .nav-option-icon { width:48px; height:48px; border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:26px; }
+  .nav-option-name { font-size:15px; font-weight:600; }
+  .nav-option-sub { font-size:12px; color:var(--text-muted); margin-top:2px; }
+  .nav-cancel { width:100%; padding:14px; background:rgba(255,82,82,0.1); border:1.5px solid var(--danger); color:var(--danger); border-radius:50px; font-size:15px; font-weight:600; cursor:pointer; margin-top:12px; font-family:'Poppins',sans-serif; }
+  /* WAITING MSG */
+  .waiting-overlay { position:absolute; bottom:100px; left:50%; transform:translateX(-50%); background:rgba(13,13,26,0.9); border-radius:16px; padding:16px 20px; text-align:center; z-index:10; border:1px solid rgba(255,255,255,0.1); white-space:nowrap; }
+  /* DOCS SCREEN */
+  #docs-screen { background:var(--dark); }
   .docs-header { background:var(--dark2); padding:50px 20px 20px; }
-  .docs-progress { display:flex; gap:6px; margin:16px 20px; }
-  .progress-step { flex:1; height:4px; border-radius:2px; background:rgba(255,255,255,0.1); }
-  .progress-step.done { background:var(--green); }
-  .progress-step.active { background:var(--orange); }
   .docs-content { flex:1; overflow-y:auto; padding:20px; padding-bottom:100px; }
   .upload-box { background:var(--dark3); border:2px dashed rgba(255,255,255,0.15); border-radius:var(--radius); padding:24px; text-align:center; cursor:pointer; margin-bottom:16px; transition:all 0.2s; position:relative; overflow:hidden; }
   .upload-box.uploaded { border-color:var(--green); background:rgba(0,200,83,0.05); }
-  .upload-box:active { opacity:0.8; }
-  .upload-icon { font-size:36px; margin-bottom:10px; }
-  .upload-title { font-size:14px; font-weight:600; margin-bottom:4px; }
-  .upload-urdu { font-family:'Noto Nastaliq Urdu',serif; font-size:12px; color:var(--text-muted); direction:rtl; }
+  .upload-input { position:absolute; inset:0; opacity:0; cursor:pointer; }
   .upload-status { font-size:12px; color:var(--green); margin-top:8px; display:none; }
   .upload-preview { width:100%; max-height:120px; object-fit:cover; border-radius:10px; margin-top:10px; display:none; }
-  .upload-input { position:absolute; inset:0; opacity:0; cursor:pointer; }
-  #home,#chat-screen,#earnings-screen,#profile-screen { background:var(--dark); }
-  .topbar { background:var(--dark2); padding:50px 20px 16px; display:flex; align-items:center; justify-content:space-between; }
-  .greeting-name { font-size:18px; font-weight:700; }
-  .greeting-urdu { font-family:'Noto Nastaliq Urdu',serif; font-size:13px; color:var(--text-muted); direction:rtl; }
-  .avatar { width:44px; height:44px; border-radius:50%; background:linear-gradient(135deg,var(--green),var(--green-dark)); display:flex; align-items:center; justify-content:center; font-size:20px; cursor:pointer; overflow:hidden; }
-  .avatar img { width:100%; height:100%; object-fit:cover; }
-  .toggle-section { padding:14px 20px; background:var(--dark2); border-bottom:1px solid rgba(255,255,255,0.05); }
-  .toggle-row { display:flex; align-items:center; justify-content:space-between; }
-  .toggle-status { font-size:17px; font-weight:700; }
-  .toggle-urdu { font-family:'Noto Nastaliq Urdu',serif; font-size:12px; color:var(--text-muted); direction:rtl; }
-  .toggle-switch { position:relative; width:64px; height:34px; }
-  .toggle-switch input { opacity:0; width:0; height:0; }
-  .toggle-slider { position:absolute; inset:0; background:var(--dark3); border-radius:34px; cursor:pointer; transition:0.3s; border:1.5px solid rgba(255,255,255,0.1); }
-  .toggle-slider:before { content:''; position:absolute; height:24px; width:24px; left:4px; bottom:4px; background:#888; border-radius:50%; transition:0.3s; }
-  input:checked + .toggle-slider { background:rgba(0,200,83,0.2); border-color:var(--green); }
-  input:checked + .toggle-slider:before { transform:translateX(30px); background:var(--green); box-shadow:0 0 8px var(--green); }
-  .location-bar { background:var(--dark3); padding:8px 20px; display:flex; align-items:center; gap:8px; font-size:11px; color:var(--text-muted); }
-  .loc-dot { width:7px; height:7px; border-radius:50%; background:var(--green); animation:blink 1.5s infinite; flex-shrink:0; }
-  #driver-map { height:175px; width:100%; z-index:1; }
-  .content-scroll { flex:1; overflow-y:auto; padding:14px; padding-bottom:90px; }
-  .stats-row { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:16px; }
-  .stat-card { background:var(--card); border-radius:16px; padding:14px 10px; text-align:center; }
-  .stat-val { font-size:20px; font-weight:800; color:var(--green); }
-  .stat-label { font-size:10px; color:var(--text-muted); margin-top:2px; }
-  .stat-urdu { font-family:'Noto Nastaliq Urdu',serif; font-size:10px; direction:rtl; color:var(--text-muted); }
-  .ride-request { background:var(--card); border-radius:var(--radius); padding:16px; margin-bottom:14px; border:1.5px solid rgba(0,200,83,0.3); position:relative; overflow:hidden; display:none; animation:slideUp 0.4s ease; }
-  .ride-request::before { content:''; position:absolute; top:0; left:0; right:0; height:3px; background:linear-gradient(90deg,var(--green),var(--green-dark)); }
-  .request-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; }
-  .request-badge { background:rgba(0,200,83,0.15); border:1px solid var(--green); border-radius:20px; padding:4px 12px; font-size:11px; color:var(--green); font-weight:600; display:flex; align-items:center; gap:4px; }
-  .dot-live { width:6px; height:6px; border-radius:50%; background:var(--green); animation:blink 1s infinite; }
-  .request-fare { font-size:22px; font-weight:800; color:var(--accent); }
-  .route-mini-point { display:flex; align-items:center; gap:10px; padding:4px 0; font-size:13px; }
-  .rdot { width:10px; height:10px; border-radius:50%; flex-shrink:0; }
-  .rdot.s { background:var(--green); } .rdot.e { background:var(--danger); }
-  .rline { width:2px; height:14px; background:rgba(255,255,255,0.1); margin-left:4px; }
-  .request-meta { display:flex; gap:10px; margin:10px 0; flex-wrap:wrap; }
-  .meta-chip { background:var(--dark3); border-radius:10px; padding:5px 10px; font-size:11px; }
-  .request-btns { display:flex; gap:10px; }
-  .btn-accept { flex:2; padding:13px; background:linear-gradient(135deg,var(--green),var(--green-dark)); color:#fff; border:none; border-radius:50px; font-size:15px; font-weight:700; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px; }
-  .btn-reject { flex:1; padding:13px; background:rgba(255,82,82,0.1); border:1.5px solid var(--danger); color:var(--danger); border-radius:50px; font-size:14px; font-weight:600; cursor:pointer; }
-  .active-ride-card { background:linear-gradient(135deg,rgba(0,200,83,0.1),rgba(0,150,36,0.05)); border-radius:var(--radius); padding:16px; margin-bottom:14px; border:1.5px solid rgba(0,200,83,0.4); display:none; }
-  .arc-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; }
-  .arc-badge { background:var(--green); color:#000; border-radius:20px; padding:4px 12px; font-size:11px; font-weight:700; }
-  .arc-actions { display:flex; gap:8px; margin-top:12px; }
-  .arc-btn { flex:1; padding:11px; border:none; border-radius:12px; font-size:13px; font-weight:600; cursor:pointer; }
-  .arc-btn.call { background:rgba(0,200,83,0.15); border:1.5px solid var(--green); color:var(--green); }
-  .arc-btn.chat { background:rgba(255,214,0,0.1); border:1.5px solid var(--accent); color:var(--accent); }
-  .arc-btn.complete { background:linear-gradient(135deg,var(--green),var(--green-dark)); color:#fff; }
-  .earnings-card { background:linear-gradient(135deg,#0a2a1a,#16302a); border-radius:var(--radius); padding:18px; margin-bottom:14px; border:1px solid rgba(0,200,83,0.2); }
-  .earn-amount { font-size:30px; font-weight:800; color:var(--green); margin:6px 0; }
-  .earn-row { display:flex; gap:12px; margin-top:10px; }
-  .earn-item { flex:1; background:rgba(0,0,0,0.2); border-radius:12px; padding:10px; text-align:center; }
-  .earn-item-val { font-size:15px; font-weight:700; }
-  .earn-item-label { font-size:10px; color:var(--text-muted); margin-top:2px; }
-  .waiting-msg { text-align:center; padding:24px 20px; color:var(--text-muted); }
+  /* CHAT */
+  #chat-screen { background:var(--dark); }
   .chat-header { background:var(--dark2); padding:50px 20px 16px; display:flex; align-items:center; gap:14px; }
   .chat-messages { flex:1; overflow-y:auto; padding:16px; display:flex; flex-direction:column; gap:10px; padding-bottom:80px; }
   .msg { max-width:75%; padding:10px 14px; border-radius:16px; font-size:14px; line-height:1.4; }
   .msg.sent { background:var(--green-dark); color:#fff; border-radius:16px 16px 4px 16px; align-self:flex-end; }
   .msg.received { background:var(--card); border-radius:16px 16px 16px 4px; align-self:flex-start; }
   .msg-time { font-size:10px; opacity:0.6; margin-top:4px; }
-  .chat-input-wrap { position:fixed; bottom:0; left:0; right:0; background:var(--dark2); padding:12px 16px; display:flex; gap:10px; align-items:center; border-top:1px solid rgba(255,255,255,0.06); z-index:10; }
+  .chat-input-wrap { position:fixed; bottom:0; left:0; right:0; background:var(--dark2); padding:12px 16px; display:flex; gap:10px; align-items:center; z-index:10; }
   .chat-input { flex:1; background:var(--dark3); border:1.5px solid rgba(255,255,255,0.08); border-radius:24px; padding:12px 18px; color:var(--text); font-size:14px; outline:none; font-family:'Poppins',sans-serif; }
-  .chat-send { width:44px; height:44px; border-radius:50%; background:var(--green); border:none; color:#fff; font-size:20px; cursor:pointer; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
-  .bottom-nav { position:fixed; bottom:0; left:0; right:0; background:var(--dark2); border-top:1px solid rgba(255,255,255,0.06); display:flex; padding:10px 0 20px; z-index:100; }
+  .chat-send { width:44px; height:44px; border-radius:50%; background:var(--green); border:none; color:#fff; font-size:20px; cursor:pointer; display:flex; align-items:center; justify-content:center; }
+  /* EARNINGS */
+  #earnings-screen,#profile-screen { background:var(--dark); }
+  /* BOTTOM NAV */
+  .bottom-nav { position:absolute; bottom:0; left:0; right:0; background:rgba(13,13,26,0.95); border-top:1px solid rgba(255,255,255,0.06); display:flex; padding:10px 0 20px; z-index:12; }
   .nav-item { flex:1; display:flex; flex-direction:column; align-items:center; gap:4px; cursor:pointer; padding:6px 0; }
   .nav-icon { font-size:22px; }
-  .nav-label { font-size:11px; color:var(--text-muted); font-family:'Noto Nastaliq Urdu',serif; direction:rtl; }
+  .nav-label { font-size:10px; color:var(--text-muted); font-family:'Noto Nastaliq Urdu',serif; direction:rtl; }
   .nav-item.active .nav-label { color:var(--green); }
+  /* LOADER & TOAST */
   .loader-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.7); display:none; align-items:center; justify-content:center; z-index:999; }
   .loader-overlay.show { display:flex; }
   .loader { width:50px; height:50px; border:3px solid rgba(0,200,83,0.2); border-top-color:var(--green); border-radius:50%; animation:spin 0.8s linear infinite; }
@@ -149,15 +161,11 @@
   .toast.show { transform:translateX(-50%) translateY(0); }
   .toast.error { border-color:var(--danger); }
   .t-urdu { font-family:'Noto Nastaliq Urdu',serif; direction:rtl; font-size:12px; color:var(--text-muted); display:block; }
-  .doc-status-badge { display:inline-flex; align-items:center; gap:6px; padding:6px 14px; border-radius:20px; font-size:12px; font-weight:600; margin-bottom:12px; }
-  .doc-status-badge.pending { background:rgba(255,109,0,0.15); color:var(--orange); border:1px solid var(--orange); }
-  .doc-status-badge.approved { background:rgba(0,200,83,0.15); color:var(--green); border:1px solid var(--green); }
   .leaflet-container { background:#1a2a1e !important; }
   @keyframes popIn { from{opacity:0;transform:scale(0.7)} to{opacity:1;transform:scale(1)} }
   @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
   @keyframes spin { to{transform:rotate(360deg)} }
   @keyframes fadeIn { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
-  @keyframes slideUp { from{opacity:0;transform:translateY(30px)} to{opacity:1;transform:translateY(0)} }
   .fade-in { animation:fadeIn 0.4s ease both; }
 </style>
 </head>
@@ -193,264 +201,196 @@
       <div class="input-wrap"><span class="icon">📧</span><input type="email" id="login-email" placeholder="aapkaemail@gmail.com"></div>
       <div class="field-label">🔒 Password</div>
       <div class="input-wrap"><span class="icon">🔒</span><input type="password" id="login-password" placeholder="••••••••"></div>
-      <button class="btn-main" onclick="loginDriver()">Login — <span class="urdu">لاگ ان کریں</span></button>
+      <button class="btn-main" onclick="loginDriver()">Login — <span style="font-family:'Noto Nastaliq Urdu',serif;direction:rtl">لاگ ان کریں</span></button>
     </div>
     <div id="signup-form" style="display:none">
-      <div class="field-label">👤 Full Name — پورا نام</div>
+      <div class="field-label">👤 Full Name</div>
       <div class="input-wrap"><span class="icon">👤</span><input type="text" id="signup-name" placeholder="Muhammad Ali"></div>
-      <div class="field-label">📱 Phone — فون نمبر</div>
+      <div class="field-label">📱 Phone</div>
       <div class="input-wrap"><span class="icon">📱</span><input type="tel" id="signup-phone" placeholder="+92 300 1234567"></div>
-      <div class="field-label">🚗 Vehicle Type — گاڑی کی قسم</div>
-      <div class="input-wrap">
-        <span class="icon">🚗</span>
-        <select id="signup-vehicle-type" style="padding-left:50px">
-          <option value="">Select vehicle / گاڑی چنیں</option>
-          <option value="Car">🚗 Car — کار</option>
-          <option value="Bike">🏍️ Bike — بائیک</option>
-          <option value="Rickshaw">🛺 Rickshaw — رکشہ</option>
-          <option value="Chingchi">🚐 Chingchi — چنگچی</option>
-        </select>
-      </div>
-      <div class="field-label">🔢 Vehicle Number — گاڑی نمبر</div>
+      <div class="field-label">🚗 Vehicle Type</div>
+      <div class="input-wrap"><span class="icon">🚗</span><select id="signup-vehicle-type" style="padding-left:50px"><option value="">Select / چنیں</option><option value="Car">🚗 Car</option><option value="Bike">🏍️ Bike</option><option value="Rickshaw">🛺 Rickshaw</option><option value="Chingchi">🚐 Chingchi</option></select></div>
+      <div class="field-label">🔢 Vehicle Number</div>
       <div class="input-wrap"><span class="icon">🔢</span><input type="text" id="signup-vehicle" placeholder="LEA 2847"></div>
       <div class="field-label">📧 Email</div>
       <div class="input-wrap"><span class="icon">📧</span><input type="email" id="signup-email" placeholder="aapkaemail@gmail.com"></div>
       <div class="field-label">🔒 Password</div>
       <div class="input-wrap"><span class="icon">🔒</span><input type="password" id="signup-password" placeholder="••••••••"></div>
-      <button class="btn-main" onclick="signupDriver()">Next — Documents Upload <span class="urdu">آگے</span></button>
+      <button class="btn-main" onclick="signupDriver()">Register → Documents<span style="font-family:'Noto Nastaliq Urdu',serif;direction:rtl;font-size:12px">رجسٹر کریں</span></button>
     </div>
   </div>
 </div>
 
-<!-- DOCUMENTS UPLOAD SCREEN -->
+<!-- DOCUMENTS SCREEN -->
 <div class="screen" id="docs-screen">
   <div class="docs-header">
     <div style="display:flex;align-items:center;gap:12px">
       <button style="width:40px;height:40px;border-radius:12px;background:var(--dark3);border:none;color:var(--text);font-size:20px;cursor:pointer" onclick="showScreen('auth')">←</button>
-      <div>
-        <div style="font-size:18px;font-weight:700">Upload Documents</div>
-        <div style="font-family:'Noto Nastaliq Urdu',serif;font-size:13px;color:var(--text-muted);direction:rtl">دستاویزات اپلوڈ کریں</div>
-      </div>
-    </div>
-    <div style="margin-top:12px;font-size:12px;color:var(--text-muted)">Step 2 of 2 — Verification required for approval</div>
-    <div class="docs-progress">
-      <div class="progress-step done"></div>
-      <div class="progress-step active"></div>
+      <div><div style="font-size:18px;font-weight:700">Upload Documents</div><div style="font-family:'Noto Nastaliq Urdu',serif;font-size:13px;color:var(--text-muted);direction:rtl">دستاویزات اپلوڈ کریں</div></div>
     </div>
   </div>
   <div class="docs-content">
-    <div style="background:rgba(255,109,0,0.1);border:1px solid var(--orange);border-radius:14px;padding:14px;margin-bottom:20px">
-      <div style="font-size:13px;font-weight:600;color:var(--orange)">⚠️ Required Documents — ضروری دستاویزات</div>
-      <div style="font-size:12px;color:var(--text-muted);margin-top:4px">Sab documents upload karne zaroori hain approval ke liye</div>
-    </div>
-
-    <!-- SELFIE -->
-    <div style="font-size:14px;font-weight:600;margin-bottom:10px">1. Driver Selfie — ڈرائیور کی تصویر</div>
-    <div class="upload-box" id="box-selfie">
-      <input type="file" class="upload-input" accept="image/*" capture="user" onchange="uploadDoc(this,'selfie','box-selfie','status-selfie','preview-selfie')">
-      <div class="upload-icon">🤳</div>
-      <div class="upload-title">Tap to take selfie</div>
-      <div class="upload-urdu">اپنی تصویر لیں</div>
-      <div class="upload-status" id="status-selfie">✅ Uploaded!</div>
-      <img class="upload-preview" id="preview-selfie">
-    </div>
-
-    <!-- CNIC FRONT -->
-    <div style="font-size:14px;font-weight:600;margin-bottom:10px">2. CNIC Front — شناختی کارڈ (آگے)</div>
-    <div class="upload-box" id="box-cnic-front">
-      <input type="file" class="upload-input" accept="image/*" onchange="uploadDoc(this,'cnic_front','box-cnic-front','status-cnic-front','preview-cnic-front')">
-      <div class="upload-icon">🪪</div>
-      <div class="upload-title">CNIC Front Side</div>
-      <div class="upload-urdu">شناختی کارڈ — آگے والی طرف</div>
-      <div class="upload-status" id="status-cnic-front">✅ Uploaded!</div>
-      <img class="upload-preview" id="preview-cnic-front">
-    </div>
-
-    <!-- CNIC BACK -->
-    <div style="font-size:14px;font-weight:600;margin-bottom:10px">3. CNIC Back — شناختی کارڈ (پیچھے)</div>
-    <div class="upload-box" id="box-cnic-back">
-      <input type="file" class="upload-input" accept="image/*" onchange="uploadDoc(this,'cnic_back','box-cnic-back','status-cnic-back','preview-cnic-back')">
-      <div class="upload-icon">🪪</div>
-      <div class="upload-title">CNIC Back Side</div>
-      <div class="upload-urdu">شناختی کارڈ — پیچھے والی طرف</div>
-      <div class="upload-status" id="status-cnic-back">✅ Uploaded!</div>
-      <img class="upload-preview" id="preview-cnic-back">
-    </div>
-
-    <!-- DRIVING LICENSE -->
-    <div style="font-size:14px;font-weight:600;margin-bottom:10px">4. Driving License — ڈرائیونگ لائسنس</div>
-    <div class="upload-box" id="box-license">
-      <input type="file" class="upload-input" accept="image/*" onchange="uploadDoc(this,'license','box-license','status-license','preview-license')">
-      <div class="upload-icon">🪪</div>
-      <div class="upload-title">Driving License</div>
-      <div class="upload-urdu">ڈرائیونگ لائسنس کی تصویر</div>
-      <div class="upload-status" id="status-license">✅ Uploaded!</div>
-      <img class="upload-preview" id="preview-license">
-    </div>
-
-    <!-- VEHICLE REGISTRATION -->
-    <div style="font-size:14px;font-weight:600;margin-bottom:10px">5. Vehicle Registration — گاڑی کی رجسٹریشن</div>
-    <div class="upload-box" id="box-reg">
-      <input type="file" class="upload-input" accept="image/*" onchange="uploadDoc(this,'vehicle_reg','box-reg','status-reg','preview-reg')">
-      <div class="upload-icon">📄</div>
-      <div class="upload-title">Vehicle Registration Book</div>
-      <div class="upload-urdu">گاڑی کی رجسٹریشن بک</div>
-      <div class="upload-status" id="status-reg">✅ Uploaded!</div>
-      <img class="upload-preview" id="preview-reg">
-    </div>
-
-    <!-- VEHICLE PHOTOS -->
-    <div style="font-size:14px;font-weight:600;margin-bottom:10px">6. Vehicle Photo — گاڑی کی تصویر</div>
-    <div class="upload-box" id="box-vehicle-photo">
-      <input type="file" class="upload-input" accept="image/*" onchange="uploadDoc(this,'vehicle_photo','box-vehicle-photo','status-vehicle-photo','preview-vehicle-photo')">
-      <div class="upload-icon">🚗</div>
-      <div class="upload-title">Vehicle Front Photo</div>
-      <div class="upload-urdu">گاڑی کی آگے سے تصویر</div>
-      <div class="upload-status" id="status-vehicle-photo">✅ Uploaded!</div>
-      <img class="upload-preview" id="preview-vehicle-photo">
-    </div>
-
-    <div id="upload-progress" style="text-align:center;padding:10px;font-size:13px;color:var(--text-muted);display:none">
-      <div style="animation:spin 0.8s linear infinite;display:inline-block;font-size:20px">⏳</div>
-      <div style="margin-top:6px">Uploading... — اپلوڈ ہو رہا ہے</div>
-    </div>
-
-    <button class="btn-main" id="submit-docs-btn" onclick="submitDocuments()" style="margin-top:8px">
-      Submit for Approval — <span class="urdu">منظوری کے لیے جمع کریں</span>
-    </button>
+    <div style="background:rgba(255,109,0,0.1);border:1px solid var(--orange);border-radius:14px;padding:14px;margin-bottom:20px"><div style="font-size:13px;font-weight:600;color:var(--orange)">⚠️ Sab documents zaroori hain</div></div>
+    <div style="font-size:14px;font-weight:600;margin-bottom:10px">1. Driver Selfie 🤳</div>
+    <div class="upload-box" id="box-selfie"><input type="file" class="upload-input" accept="image/*" capture="user" onchange="uploadDoc(this,'selfie','box-selfie','status-selfie','preview-selfie')"><div style="font-size:36px">🤳</div><div style="font-size:14px;font-weight:600;margin-top:8px">Tap to take selfie</div><div style="font-family:'Noto Nastaliq Urdu',serif;font-size:12px;color:var(--text-muted);direction:rtl">اپنی تصویر لیں</div><div class="upload-status" id="status-selfie">✅ Uploaded!</div><img class="upload-preview" id="preview-selfie"></div>
+    <div style="font-size:14px;font-weight:600;margin-bottom:10px">2. CNIC Front 🪪</div>
+    <div class="upload-box" id="box-cnic-front"><input type="file" class="upload-input" accept="image/*" onchange="uploadDoc(this,'cnic_front','box-cnic-front','status-cnic-front','preview-cnic-front')"><div style="font-size:36px">🪪</div><div style="font-size:14px;font-weight:600;margin-top:8px">CNIC Front Side</div><div class="upload-status" id="status-cnic-front">✅ Uploaded!</div><img class="upload-preview" id="preview-cnic-front"></div>
+    <div style="font-size:14px;font-weight:600;margin-bottom:10px">3. CNIC Back 🪪</div>
+    <div class="upload-box" id="box-cnic-back"><input type="file" class="upload-input" accept="image/*" onchange="uploadDoc(this,'cnic_back','box-cnic-back','status-cnic-back','preview-cnic-back')"><div style="font-size:36px">🪪</div><div style="font-size:14px;font-weight:600;margin-top:8px">CNIC Back Side</div><div class="upload-status" id="status-cnic-back">✅ Uploaded!</div><img class="upload-preview" id="preview-cnic-back"></div>
+    <div style="font-size:14px;font-weight:600;margin-bottom:10px">4. Driving License 🪪</div>
+    <div class="upload-box" id="box-license"><input type="file" class="upload-input" accept="image/*" onchange="uploadDoc(this,'license','box-license','status-license','preview-license')"><div style="font-size:36px">🪪</div><div style="font-size:14px;font-weight:600;margin-top:8px">Driving License</div><div class="upload-status" id="status-license">✅ Uploaded!</div><img class="upload-preview" id="preview-license"></div>
+    <div style="font-size:14px;font-weight:600;margin-bottom:10px">5. Vehicle Registration 📄</div>
+    <div class="upload-box" id="box-reg"><input type="file" class="upload-input" accept="image/*" onchange="uploadDoc(this,'vehicle_reg','box-reg','status-reg','preview-reg')"><div style="font-size:36px">📄</div><div style="font-size:14px;font-weight:600;margin-top:8px">Vehicle Registration</div><div class="upload-status" id="status-reg">✅ Uploaded!</div><img class="upload-preview" id="preview-reg"></div>
+    <div style="font-size:14px;font-weight:600;margin-bottom:10px">6. Vehicle Photo 🚗</div>
+    <div class="upload-box" id="box-vehicle-photo"><input type="file" class="upload-input" accept="image/*" onchange="uploadDoc(this,'vehicle_photo','box-vehicle-photo','status-vehicle-photo','preview-vehicle-photo')"><div style="font-size:36px">🚗</div><div style="font-size:14px;font-weight:600;margin-top:8px">Vehicle Front Photo</div><div class="upload-status" id="status-vehicle-photo">✅ Uploaded!</div><img class="upload-preview" id="preview-vehicle-photo"></div>
+    <div id="upload-progress" style="text-align:center;padding:10px;font-size:13px;color:var(--text-muted);display:none"><div style="animation:spin 0.8s linear infinite;display:inline-block;font-size:20px">⏳</div><div style="margin-top:6px">Uploading...</div></div>
+    <button class="btn-main" onclick="submitDocuments()" style="margin-top:8px">Submit for Approval — <span style="font-family:'Noto Nastaliq Urdu',serif;direction:rtl">جمع کریں</span></button>
   </div>
 </div>
 
+<!-- MAIN HOME — FULL SCREEN MAP -->
 <div class="screen" id="home">
-  <div class="topbar">
-    <div>
-      <div class="greeting-name">Assalam o Alaikum, <span id="driver-name">Driver</span>! 👋</div>
-      <div class="greeting-urdu">آج کی سواریاں شروع کریں</div>
-    </div>
-    <div class="avatar" id="driver-avatar-img" onclick="showScreen('profile-screen')">👤</div>
-  </div>
-  <div class="toggle-section">
-    <div class="toggle-row">
-      <div>
-        <div class="toggle-status" id="status-text">🔴 Offline</div>
-        <div class="toggle-urdu" id="status-urdu">آف لائن — سواریاں نہیں آ رہیں</div>
-      </div>
+  <div id="driver-map"></div>
+
+  <!-- TOP BAR -->
+  <div class="map-topbar">
+    <div class="driver-status-pill">
+      <div class="status-dot" id="status-dot"></div>
+      <span id="status-text" style="font-size:13px;font-weight:600">Offline</span>
       <label class="toggle-switch">
         <input type="checkbox" id="online-toggle" onchange="toggleOnline(this)">
         <span class="toggle-slider"></span>
       </label>
     </div>
+    <div style="text-align:center">
+      <div style="font-size:11px;color:var(--text-muted)" id="location-text">📍 DGK</div>
+    </div>
+    <div class="map-avatar" id="driver-avatar-img" onclick="showScreen('profile-screen')">👤</div>
   </div>
-  <div class="location-bar">
-    <div class="loc-dot"></div>
-    <span id="location-text">📍 Location detect ho rahi hai...</span>
+
+  <!-- STATS -->
+  <div class="stats-bar">
+    <div class="stat-pill"><div class="stat-pill-val" id="today-rides">0</div><div class="stat-pill-label">Rides</div></div>
+    <div class="stat-pill"><div class="stat-pill-val" style="color:var(--accent)" id="today-earnings">Rs 0</div><div class="stat-pill-label">Earned</div></div>
+    <div class="stat-pill"><div class="stat-pill-val" id="driver-rating-val">4.9⭐</div><div class="stat-pill-label">Rating</div></div>
   </div>
-  <div id="driver-map"></div>
-  <div class="content-scroll">
-    <div id="doc-status-wrap" style="display:none">
-      <div class="doc-status-badge pending" id="doc-status-badge">⏳ Documents under review — زیر جائزہ</div>
-    </div>
-    <div class="stats-row fade-in">
-      <div class="stat-card"><div class="stat-val" id="today-rides">0</div><div class="stat-label">Rides</div><div class="stat-urdu">سواریاں</div></div>
-      <div class="stat-card"><div class="stat-val" style="color:var(--accent)" id="today-earnings">Rs 0</div><div class="stat-label">Earned</div><div class="stat-urdu">کمائی</div></div>
-      <div class="stat-card"><div class="stat-val" id="driver-rating-val">4.9 ⭐</div><div class="stat-label">Rating</div><div class="stat-urdu">ریٹنگ</div></div>
-    </div>
 
-    <div class="ride-request fade-in" id="ride-request-card">
-      <div class="request-header">
-        <div class="request-badge"><div class="dot-live"></div>New Request — نئی سواری</div>
-        <div class="request-fare" id="req-fare">Rs 306</div>
-      </div>
-      <div class="route-mini-point"><div class="rdot s"></div><div><div id="req-pickup">Circular Road</div></div></div>
-      <div class="rline" style="margin-left:4px"></div>
-      <div class="route-mini-point"><div class="rdot e"></div><div><div id="req-dropoff">DHQ Hospital</div></div></div>
-      <div class="request-meta">
-        <div class="meta-chip">🚗 <span id="req-vehicle">Car</span></div>
-        <div class="meta-chip">💵 <span id="req-payment">Cash</span></div>
-        <div class="meta-chip">👤 <span id="req-passenger">Passenger</span></div>
-      </div>
-      <div class="request-btns">
-        <button class="btn-accept" onclick="acceptRide()">✓ Accept <span class="urdu">قبول کریں</span></button>
-        <button class="btn-reject" onclick="rejectRide()">✕ Reject</button>
-      </div>
-    </div>
+  <!-- WAITING MSG -->
+  <div class="waiting-overlay" id="waiting-msg">
+    <div style="font-size:13px;font-weight:600">Go Online — آن لائن ہوں</div>
+    <div style="font-size:11px;color:var(--text-muted);margin-top:2px">Swaariyan milein gi</div>
+  </div>
 
-    <div class="active-ride-card fade-in" id="active-ride-card">
-      <div class="arc-header">
-        <div class="arc-badge">🚗 Active Ride</div>
-        <div style="font-size:18px;font-weight:800;color:var(--green)" id="arc-fare">Rs 306</div>
+  <!-- RIDE REQUEST OVERLAY — UBER STYLE -->
+  <div class="ride-request-overlay" id="ride-request-overlay">
+    <div class="ride-request-sheet">
+      <div class="rr-handle"></div>
+      <div class="rr-header">
+        <div class="rr-badge"><div class="rr-dot"></div>Nayi Sawari — نئی سواری</div>
+        <div class="rr-fare" id="rr-fare">Rs —</div>
       </div>
-      <div style="font-size:13px;margin-bottom:4px">📍 <span id="arc-pickup">—</span></div>
-      <div style="font-size:13px;color:var(--text-muted)">🏁 <span id="arc-dropoff">—</span></div>
-      <div class="arc-actions">
-        <button class="arc-btn call" onclick="showToast('Calling...','کال')">📞 Call</button>
-        <button class="arc-btn chat" onclick="openDriverChat()">💬 Chat</button>
-        <button class="arc-btn complete" onclick="completeRide()">✓ Complete</button>
+      <!-- TIMER BAR -->
+      <div class="rr-timer"><div class="rr-timer-bar" id="rr-timer-bar"></div></div>
+      <div class="rr-route">
+        <div class="rr-point"><div class="rr-dot-g"></div><div><div class="rr-addr" id="rr-pickup">—</div><div class="rr-addr-sub">پک اپ پوائنٹ</div></div></div>
+        <div class="rr-line" style="margin-left:5px"></div>
+        <div class="rr-point"><div class="rr-dot-r"></div><div><div class="rr-addr" id="rr-dropoff">—</div><div class="rr-addr-sub">ڈراپ پوائنٹ</div></div></div>
       </div>
-    </div>
-
-    <div class="waiting-msg" id="waiting-msg">
-      <div style="font-size:36px;margin-bottom:10px">😴</div>
-      <div style="font-size:14px;font-weight:600">Go Online to receive rides</div>
-      <div style="font-family:'Noto Nastaliq Urdu',serif;direction:rtl;font-size:13px;margin-top:4px">آن لائن ہوں اور سواریاں پائیں</div>
-    </div>
-
-    <div class="earnings-card fade-in">
-      <div style="font-size:13px;color:var(--text-muted)">Today's Earnings — آج کی کمائی</div>
-      <div class="earn-amount" id="earn-total">Rs 0</div>
-      <div class="earn-row">
-        <div class="earn-item"><div class="earn-item-val" id="earn-rides">0</div><div class="earn-item-label">Rides</div></div>
-        <div class="earn-item"><div class="earn-item-val" id="earn-status">Off</div><div class="earn-item-label">Status</div></div>
-        <div class="earn-item"><div class="earn-item-val" id="earn-rating">4.9⭐</div><div class="earn-item-label">Rating</div></div>
+      <div class="rr-meta">
+        <div class="rr-chip">🚗 <span id="rr-vehicle">—</span></div>
+        <div class="rr-chip">💵 <span id="rr-payment">Cash</span></div>
+        <div class="rr-chip">👤 <span id="rr-passenger">—</span></div>
+      </div>
+      <div class="rr-btns">
+        <button class="rr-accept" onclick="acceptRide()">✓ Accept — قبول کریں</button>
+        <button class="rr-reject" onclick="rejectRide()">✕ Reject</button>
       </div>
     </div>
   </div>
+
+  <!-- ACTIVE RIDE SHEET -->
+  <div class="active-ride-sheet" id="active-ride-sheet">
+    <div class="arc-handle"></div>
+    <div class="arc-header">
+      <div class="arc-badge">🚗 Sawari Jari — Active</div>
+      <div class="arc-fare" id="arc-fare">Rs —</div>
+    </div>
+    <div class="arc-route">
+      <div class="arc-point"><div style="width:10px;height:10px;border-radius:50%;background:var(--green);flex-shrink:0"></div><div style="font-size:13px;margin-left:8px" id="arc-pickup">—</div></div>
+      <div style="width:2px;height:16px;background:rgba(255,255,255,0.1);margin-left:4px"></div>
+      <div class="arc-point"><div style="width:10px;height:10px;border-radius:50%;background:var(--danger);flex-shrink:0"></div><div style="font-size:13px;margin-left:8px" id="arc-dropoff">—</div></div>
+    </div>
+    <div class="arc-actions">
+      <button class="arc-btn call" onclick="showToast('Calling...','کال')">📞</button>
+      <button class="arc-btn nav" onclick="showNavModal()">🗺️ Nav</button>
+      <button class="arc-btn chat" onclick="openDriverChat()">💬</button>
+      <button class="arc-btn complete" onclick="completeRide()">✓ Complete</button>
+    </div>
+  </div>
+
+  <!-- NAVIGATION MODAL -->
+  <div class="nav-modal" id="nav-modal">
+    <div class="nav-sheet">
+      <div class="nav-sheet-title">Navigate to Passenger 📍</div>
+      <div class="nav-sheet-sub">کونسا نقشہ استعمال کریں؟</div>
+      <div class="nav-options">
+        <div class="nav-option" onclick="openNavApp('google')">
+          <div class="nav-option-icon" style="background:rgba(66,133,244,0.2)">🗺️</div>
+          <div><div class="nav-option-name">Google Maps</div><div class="nav-option-sub">گوگل نقشہ</div></div>
+        </div>
+        <div class="nav-option" onclick="openNavApp('waze')">
+          <div class="nav-option-icon" style="background:rgba(0,200,83,0.2)">🚗</div>
+          <div><div class="nav-option-name">Waze</div><div class="nav-option-sub">ویز — ٹریفک سے بچیں</div></div>
+        </div>
+        <div class="nav-option" onclick="openNavApp('apple')">
+          <div class="nav-option-icon" style="background:rgba(255,255,255,0.1)">🍎</div>
+          <div><div class="nav-option-name">Apple Maps</div><div class="nav-option-sub">ایپل نقشہ</div></div>
+        </div>
+      </div>
+      <button class="nav-cancel" onclick="closeNavModal()">Cancel — بند کریں</button>
+    </div>
+  </div>
+
+  <!-- BOTTOM NAV -->
   <div class="bottom-nav">
-    <div class="nav-item active" onclick="showScreen('home')"><div class="nav-icon">🏠</div><div class="nav-label">ہوم</div></div>
+    <div class="nav-item active"><div class="nav-icon">🏠</div><div class="nav-label">ہوم</div></div>
     <div class="nav-item" onclick="showScreen('earnings-screen')"><div class="nav-icon">💰</div><div class="nav-label">کمائی</div></div>
     <div class="nav-item" onclick="showScreen('docs-screen')"><div class="nav-icon">📄</div><div class="nav-label">دستاویزات</div></div>
     <div class="nav-item" onclick="showScreen('profile-screen')"><div class="nav-icon">👤</div><div class="nav-label">پروفائل</div></div>
   </div>
 </div>
 
+<!-- CHAT SCREEN -->
 <div class="screen" id="chat-screen">
   <div class="chat-header">
     <button style="width:40px;height:40px;border-radius:12px;background:var(--dark3);border:none;color:var(--text);font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center" onclick="showScreen('home')">←</button>
     <div style="width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--green),var(--green-dark));display:flex;align-items:center;justify-content:center;font-size:20px">👤</div>
     <div style="flex:1"><div style="font-size:15px;font-weight:600" id="chat-passenger-name">Passenger</div><div style="font-size:11px;color:var(--green)">● Online</div></div>
   </div>
-  <div class="chat-messages" id="driver-chat-messages">
-    <div class="msg sent">Assalam o Alaikum! Main aa raha hoon 🚗<div class="msg-time">Abhi</div></div>
-  </div>
+  <div class="chat-messages" id="driver-chat-messages"><div class="msg sent">Assalam o Alaikum! Main aa raha hoon 🚗<div class="msg-time">Abhi</div></div></div>
   <div class="chat-input-wrap">
-    <input class="chat-input" id="driver-chat-input" placeholder="Message likhen..." onkeypress="if(event.key==='Enter')sendDriverMessage()">
+    <input class="chat-input" id="driver-chat-input" placeholder="Message..." onkeypress="if(event.key==='Enter')sendDriverMessage()">
     <button class="chat-send" onclick="sendDriverMessage()">➤</button>
   </div>
 </div>
 
+<!-- EARNINGS SCREEN -->
 <div class="screen" id="earnings-screen">
-  <div style="background:var(--dark2);padding:50px 20px 20px">
-    <div style="display:flex;align-items:center;gap:14px">
-      <button style="width:40px;height:40px;border-radius:12px;background:var(--dark3);border:none;color:var(--text);font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center" onclick="showScreen('home')">←</button>
-      <div><div style="font-size:20px;font-weight:700">My Earnings</div><div style="font-family:'Noto Nastaliq Urdu',serif;font-size:13px;color:var(--text-muted);direction:rtl">میری کمائی</div></div>
-    </div>
+  <div style="background:var(--dark2);padding:50px 20px 20px;display:flex;align-items:center;gap:14px">
+    <button style="width:40px;height:40px;border-radius:12px;background:var(--dark3);border:none;color:var(--text);font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center" onclick="showScreen('home')">←</button>
+    <div><div style="font-size:20px;font-weight:700">My Earnings</div><div style="font-family:'Noto Nastaliq Urdu',serif;font-size:13px;color:var(--text-muted);direction:rtl">میری کمائی</div></div>
   </div>
   <div style="overflow-y:auto;flex:1;padding:16px;padding-bottom:90px">
     <div style="background:linear-gradient(135deg,#0a2a1a,#1a3a2a);border-radius:var(--radius);padding:24px;text-align:center;border:1px solid rgba(0,200,83,0.2);margin-bottom:16px">
-      <div style="font-size:13px;color:var(--text-muted)">Total Today</div>
+      <div style="font-size:13px;color:var(--text-muted)">Today / آج</div>
       <div style="font-size:42px;font-weight:800;color:var(--green);margin:10px 0" id="big-earn">Rs 0</div>
       <div style="font-size:12px;color:var(--text-muted)" id="big-rides">0 rides</div>
     </div>
     <div id="earnings-history"><div style="text-align:center;padding:30px;color:var(--text-muted)">Abhi koi sawari nahi</div></div>
   </div>
-  <div class="bottom-nav">
-    <div class="nav-item" onclick="showScreen('home')"><div class="nav-icon">🏠</div><div class="nav-label">ہوم</div></div>
-    <div class="nav-item active"><div class="nav-icon">💰</div><div class="nav-label">کمائی</div></div>
-    <div class="nav-item" onclick="showScreen('docs-screen')"><div class="nav-icon">📄</div><div class="nav-label">دستاویزات</div></div>
-    <div class="nav-item" onclick="showScreen('profile-screen')"><div class="nav-icon">👤</div><div class="nav-label">پروفائل</div></div>
-  </div>
 </div>
 
+<!-- PROFILE SCREEN -->
 <div class="screen" id="profile-screen">
   <div style="background:linear-gradient(145deg,#0a2a1a,var(--dark2));padding:60px 20px 30px;text-align:center;position:relative">
     <button style="position:absolute;top:50px;left:20px;width:40px;height:40px;border-radius:12px;background:rgba(255,255,255,0.1);border:none;color:var(--text);font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center" onclick="showScreen('home')">←</button>
@@ -465,15 +405,9 @@
     </div>
   </div>
   <div style="padding:20px;overflow-y:auto;flex:1">
-    <div style="background:var(--card);border-radius:14px;padding:16px;margin-bottom:10px;display:flex;align-items:center;gap:14px;cursor:pointer" onclick="showScreen('docs-screen')"><div style="font-size:24px">📄</div><div><div style="font-size:14px;font-weight:500">My Documents</div><div style="font-family:'Noto Nastaliq Urdu',serif;font-size:12px;color:var(--text-muted);direction:rtl">میرے دستاویزات</div></div></div>
-    <div style="background:var(--card);border-radius:14px;padding:16px;margin-bottom:10px;display:flex;align-items:center;gap:14px;cursor:pointer" onclick="showScreen('earnings-screen')"><div style="font-size:24px">💰</div><div><div style="font-size:14px;font-weight:500">Earnings</div><div style="font-family:'Noto Nastaliq Urdu',serif;font-size:12px;color:var(--text-muted);direction:rtl">کمائی</div></div></div>
+    <div style="background:var(--card);border-radius:14px;padding:16px;margin-bottom:10px;display:flex;align-items:center;gap:14px;cursor:pointer" onclick="showScreen('docs-screen')"><div style="font-size:24px">📄</div><div><div style="font-size:14px;font-weight:500">My Documents</div></div></div>
+    <div style="background:var(--card);border-radius:14px;padding:16px;margin-bottom:10px;display:flex;align-items:center;gap:14px;cursor:pointer" onclick="showScreen('earnings-screen')"><div style="font-size:24px">💰</div><div><div style="font-size:14px;font-weight:500">Earnings</div></div></div>
     <div style="background:rgba(255,82,82,0.1);border:1px solid var(--danger);border-radius:14px;padding:16px;display:flex;align-items:center;gap:14px;cursor:pointer" onclick="logoutDriver()"><div style="font-size:24px">🚪</div><div><div style="font-size:14px;font-weight:500;color:var(--danger)">Logout</div></div></div>
-  </div>
-  <div class="bottom-nav">
-    <div class="nav-item" onclick="showScreen('home')"><div class="nav-icon">🏠</div><div class="nav-label">ہوم</div></div>
-    <div class="nav-item" onclick="showScreen('earnings-screen')"><div class="nav-icon">💰</div><div class="nav-label">کمائی</div></div>
-    <div class="nav-item" onclick="showScreen('docs-screen')"><div class="nav-icon">📄</div><div class="nav-label">دستاویزات</div></div>
-    <div class="nav-item active"><div class="nav-icon">👤</div><div class="nav-label">پروفائل</div></div>
   </div>
 </div>
 <script type="module">
@@ -492,82 +426,80 @@
 
   let currentDriver=null, driverData={};
   let totalRides=0, totalEarnings=0, locationWatcher=null;
-  let driverMap=null, driverMarker=null, passengerMarker=null;
-  let rideHistory=[], currentRideId=null;
-  let uploadedDocs={};
+  let driverMap=null, driverMarker=null, passengerMarker=null, routeToPassenger=null;
+  let rideHistory=[], currentRideId=null, uploadedDocs={};
+  let passengerLat=null, passengerLng=null;
+  let requestTimer=null;
   const DGK=[30.0576,70.6358];
 
-  // CLOUDINARY UPLOAD
-  window.uploadDoc = async function(input, docType, boxId, statusId, previewId) {
-    const file = input.files[0];
-    if(!file) return;
-    document.getElementById('upload-progress').style.display='block';
-    const box = document.getElementById(boxId);
-    try {
-      const formData = new FormData();
-      formData.append('file', file);
-      formData.append('upload_preset', CLOUDINARY_PRESET);
-      formData.append('folder', 'ridedgk_drivers');
-      const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD}/image/upload`, {method:'POST', body:formData});
-      const data = await res.json();
-      if(data.secure_url) {
-        uploadedDocs[docType] = data.secure_url;
-        document.getElementById(statusId).style.display='block';
-        const preview = document.getElementById(previewId);
-        preview.src = data.secure_url;
-        preview.style.display='block';
-        box.classList.add('uploaded');
-        showToast(docType+' uploaded!','اپلوڈ ہو گیا ✅');
-      }
-    } catch(e) {
-      showToast('Upload failed!','اپلوڈ ناکام',true);
-    }
-    document.getElementById('upload-progress').style.display='none';
-  };
+  // SOUNDS
+  const rideSound = new Audio('https://ridedgk.github.io/RideDGK/Notifications%20.wav');
+  const chatSound = new Audio('https://ridedgk.github.io/RideDGK/Message%20.wav');
+  rideSound.preload='auto'; chatSound.preload='auto';
 
-  window.submitDocuments = async function() {
-    const required = ['selfie','cnic_front','cnic_back','license','vehicle_reg','vehicle_photo'];
-    const missing = required.filter(d=>!uploadedDocs[d]);
-    if(missing.length > 0) {
-      showToast('Sab documents upload karein!','تمام دستاویزات اپلوڈ کریں',true);
-      return;
-    }
-    document.getElementById('loader').classList.add('show');
+  function playSound(type) {
     try {
-      if(currentDriver) {
-        await update(ref(db,'drivers/'+currentDriver.uid), {
-          documents: uploadedDocs,
-          documentsSubmitted: true,
-          documentsStatus: 'pending',
-          documentsSubmittedAt: Date.now()
-        });
-        showToast('Documents jama ho gaye! Approval ka wait karein','دستاویزات جمع ✅');
-        setTimeout(()=>showScreen('home'), 1500);
-      }
-    } catch(e) { showToast('Error!','غلطی',true); }
-    document.getElementById('loader').classList.remove('show');
-  };
+      if(type==='ride'){ rideSound.currentTime=0; rideSound.play().catch(()=>{}); if(navigator.vibrate) navigator.vibrate([300,100,300,100,300]); }
+      if(type==='chat'){ chatSound.currentTime=0; chatSound.play().catch(()=>{}); if(navigator.vibrate) navigator.vibrate([100]); }
+    } catch(e){}
+  }
+  document.addEventListener('touchstart',()=>{ rideSound.load(); chatSound.load(); },{once:true});
 
+  // MAP INIT
   function initMap(lat,lng) {
-    if(driverMap){if(driverMarker) driverMarker.setLatLng([lat,lng]);driverMap.setView([lat,lng],15);return;}
+    if(driverMap) return;
     setTimeout(()=>{
       try {
         driverMap=L.map('driver-map',{zoomControl:false,attributionControl:false}).setView([lat,lng],15);
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(driverMap);
-        driverMarker=L.marker([lat,lng],{icon:L.divIcon({html:'🚗',className:'',iconSize:[32,32],iconAnchor:[16,16]})}).addTo(driverMap);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19}).addTo(driverMap);
+        const carIcon=L.divIcon({html:'<div style="font-size:28px;filter:drop-shadow(0 2px 4px rgba(0,0,0,0.5))">🚗</div>',className:'',iconSize:[36,36],iconAnchor:[18,18]});
+        driverMarker=L.marker([lat,lng],{icon:carIcon}).addTo(driverMap);
       } catch(e){}
-    },400);
+    },500);
   }
 
+  function updateDriverOnMap(lat,lng) {
+    if(driverMap && driverMarker) {
+      driverMarker.setLatLng([lat,lng]);
+      driverMap.setView([lat,lng],15);
+    }
+  }
+
+  function showPassengerOnMap(pLat,pLng) {
+    if(!driverMap) return;
+    if(passengerMarker) driverMap.removeLayer(passengerMarker);
+    const passIcon=L.divIcon({html:'<div style="font-size:28px;filter:drop-shadow(0 2px 4px rgba(0,0,0,0.5))">📍</div>',className:'',iconSize:[32,32],iconAnchor:[16,32]});
+    passengerMarker=L.marker([pLat,pLng],{icon:passIcon}).addTo(driverMap).bindPopup('Passenger — مسافر');
+    if(routeToPassenger) driverMap.removeLayer(routeToPassenger);
+    const dPos=driverMarker?driverMarker.getLatLng():{lat:DGK[0],lng:DGK[1]};
+    routeToPassenger=L.polyline([[dPos.lat,dPos.lng],[pLat,pLng]],{color:'#00c853',weight:4,dashArray:'8,6',opacity:0.8}).addTo(driverMap);
+    driverMap.fitBounds([[dPos.lat,dPos.lng],[pLat,pLng]],{padding:[60,60]});
+  }
+
+  // NAVIGATION
+  window.showNavModal=function(){ document.getElementById('nav-modal').classList.add('show'); };
+  window.closeNavModal=function(){ document.getElementById('nav-modal').classList.remove('show'); };
+
+  window.openNavApp=function(type) {
+    if(!passengerLat||!passengerLng){ showToast('Passenger location nahi hai!','لوکیشن نہیں',true); return; }
+    const lat=passengerLat, lng=passengerLng;
+    let url='';
+    if(type==='google') url=`https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}&travelmode=driving`;
+    if(type==='waze') url=`https://waze.com/ul?ll=${lat},${lng}&navigate=yes`;
+    if(type==='apple') url=`http://maps.apple.com/?daddr=${lat},${lng}&dirflg=d`;
+    window.open(url,'_blank');
+    closeNavModal();
+  };
+
+  // LIVE LOCATION
   function startLiveLocation() {
     if(!navigator.geolocation) return;
     locationWatcher=navigator.geolocation.watchPosition(
       pos=>{
         const lat=pos.coords.latitude,lng=pos.coords.longitude;
-        if(driverMarker) driverMarker.setLatLng([lat,lng]);
-        if(driverMap) driverMap.setView([lat,lng],15);
+        updateDriverOnMap(lat,lng);
         if(currentDriver) update(ref(db,'drivers/'+currentDriver.uid),{lat,lng,lastUpdated:Date.now(),isOnline:true});
-        document.getElementById('location-text').textContent='📍 Live — '+lat.toFixed(4)+', '+lng.toFixed(4);
+        document.getElementById('location-text').textContent='📍 '+lat.toFixed(4)+', '+lng.toFixed(4);
       },
       ()=>{ document.getElementById('location-text').textContent='📍 Location permission den'; },
       {enableHighAccuracy:true,maximumAge:3000,timeout:10000}
@@ -579,10 +511,11 @@
     if(currentDriver) update(ref(db,'drivers/'+currentDriver.uid),{isOnline:false});
   }
 
+  // AUTH
   onAuthStateChanged(auth,async user=>{
     if(user){
       currentDriver=user;
-      document.getElementById('driver-name').textContent=user.email.split('@')[0];
+      document.getElementById('driver-name-text') && (document.getElementById('driver-name-text').textContent=user.email.split('@')[0]);
       document.getElementById('profile-driver-name').textContent=user.email.split('@')[0];
       document.getElementById('profile-driver-email').textContent=user.email;
       showScreen('home');
@@ -590,40 +523,11 @@
       if(snap.exists()){
         driverData=snap.val();
         document.getElementById('profile-vehicle-info').textContent='🚗 '+(driverData.vehicle||'Vehicle');
-        // Show selfie as avatar
         if(driverData.documents?.selfie){
           document.getElementById('driver-avatar-img').innerHTML=`<img src="${driverData.documents.selfie}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`;
           document.getElementById('profile-avatar').innerHTML=`<img src="${driverData.documents.selfie}" style="width:100%;height:100%;object-fit:cover">`;
         }
-        // Show doc status
-        if(driverData.documentsSubmitted){
-          document.getElementById('doc-status-wrap').style.display='block';
-          const badge=document.getElementById('doc-status-badge');
-          if(driverData.documentsStatus==='approved'){
-            badge.className='doc-status-badge approved';
-            badge.textContent='✅ Documents Approved!';
-          } else {
-            badge.className='doc-status-badge pending';
-            badge.textContent='⏳ Documents under review';
-          }
-        }
-        // Pre-fill uploaded docs previews
-        if(driverData.documents){
-          uploadedDocs=driverData.documents;
-          Object.entries(driverData.documents).forEach(([key,url])=>{
-            const previewMap={selfie:'preview-selfie',cnic_front:'preview-cnic-front',cnic_back:'preview-cnic-back',license:'preview-license',vehicle_reg:'preview-reg',vehicle_photo:'preview-vehicle-photo'};
-            const statusMap={selfie:'status-selfie',cnic_front:'status-cnic-front',cnic_back:'status-cnic-back',license:'status-license',vehicle_reg:'status-reg',vehicle_photo:'status-vehicle-photo'};
-            const boxMap={selfie:'box-selfie',cnic_front:'box-cnic-front',cnic_back:'box-cnic-back',license:'box-license',vehicle_reg:'box-reg',vehicle_photo:'box-vehicle-photo'};
-            if(previewMap[key]){
-              const p=document.getElementById(previewMap[key]);
-              if(p){p.src=url;p.style.display='block';}
-              const s=document.getElementById(statusMap[key]);
-              if(s) s.style.display='block';
-              const b=document.getElementById(boxMap[key]);
-              if(b) b.classList.add('uploaded');
-            }
-          });
-        }
+        if(driverData.documents){ uploadedDocs=driverData.documents; loadDocPreviews(); }
       }
       loadRatings();
       loadEarningsHistory();
@@ -636,6 +540,7 @@
     }
   });
 
+  // SIGNUP/LOGIN
   window.signupDriver=async function(){
     const name=document.getElementById('signup-name').value.trim();
     const phone=document.getElementById('signup-phone').value.trim();
@@ -643,28 +548,28 @@
     const vehicle=document.getElementById('signup-vehicle').value.trim();
     const email=document.getElementById('signup-email').value.trim();
     const password=document.getElementById('signup-password').value;
-    if(!name||!email||!password||!vehicle||!vehicleType){showToast('Sab fields bharein!','تمام خانے بھریں',true);return;}
-    if(password.length<6){showToast('Password 6+ chars!','پاس ورڈ چھوٹا',true);return;}
+    if(!name||!email||!password||!vehicle||!vehicleType){showToast('Sab fields bharein!','تمام خانے',true);return;}
+    if(password.length<6){showToast('Password 6+ chars!','',true);return;}
     document.getElementById('loader').classList.add('show');
     try{
       const c=await createUserWithEmailAndPassword(auth,email,password);
       await set(ref(db,'drivers/'+c.user.uid),{name,phone,vehicle,vehicleType,email,createdAt:Date.now(),role:'driver',isOnline:false,rating:4.9,lat:DGK[0],lng:DGK[1],totalRides:0,documentsSubmitted:false,documentsStatus:'none'});
       document.getElementById('loader').classList.remove('show');
-      showToast('Account ban gaya! Ab documents upload karein','اکاؤنٹ بن گیا ✅');
+      showToast('Account ban gaya!','✅');
       showScreen('docs-screen');
     }catch(e){
       document.getElementById('loader').classList.remove('show');
-      showToast(e.code==='auth/email-already-in-use'?'Email pehle se hai!':'Error','غلطی',true);
+      showToast(e.code==='auth/email-already-in-use'?'Email pehle se hai!':'Error','',true);
     }
   };
 
   window.loginDriver=async function(){
     const email=document.getElementById('login-email').value.trim();
     const password=document.getElementById('login-password').value;
-    if(!email||!password){showToast('Email aur password daalein!','درج کریں',true);return;}
+    if(!email||!password){showToast('Email aur password daalein!','',true);return;}
     document.getElementById('loader').classList.add('show');
-    try{await signInWithEmailAndPassword(auth,email,password);showToast('Login kamyab!','لاگ ان کامیاب ✅');}
-    catch(e){showToast('Email ya password galat!','غلط معلومات',true);}
+    try{await signInWithEmailAndPassword(auth,email,password);showToast('Login kamyab!','✅');}
+    catch(e){showToast('Email ya password galat!','غلط',true);}
     document.getElementById('loader').classList.remove('show');
   };
 
@@ -673,28 +578,30 @@
     await signOut(auth);
     driverMap=null;
     showScreen('auth');
-    showToast('Logout','لاگ آؤٹ');
   };
 
+  // TOGGLE ONLINE
   window.toggleOnline=function(el){
+    const dot=document.getElementById('status-dot');
+    const txt=document.getElementById('status-text');
     if(el.checked){
-      document.getElementById('status-text').textContent='🟢 Online';
-      document.getElementById('status-urdu').textContent='آن لائن — سواریاں آ رہی ہیں';
-      document.getElementById('earn-status').textContent='On';
-      showToast('Online! Location share ho rahi hai','آن لائن 📍');
+      dot.classList.add('online');
+      txt.textContent='Online 🟢';
+      showToast('Online! Swaariyan aa rahi hain','آن لائن 📍');
       startLiveLocation();
       listenForRides();
     } else {
-      document.getElementById('status-text').textContent='🔴 Offline';
-      document.getElementById('status-urdu').textContent='آف لائن';
-      document.getElementById('earn-status').textContent='Off';
-      document.getElementById('ride-request-card').style.display='none';
+      dot.classList.remove('online');
+      txt.textContent='Offline';
+      document.getElementById('ride-request-overlay').classList.remove('show');
       document.getElementById('waiting-msg').style.display='block';
       showToast('Offline','آف لائن');
       stopLiveLocation();
+      if(requestTimer){clearInterval(requestTimer);requestTimer=null;}
     }
   };
 
+  // LISTEN FOR RIDES
   function listenForRides(){
     onValue(ref(db,'rides'),snap=>{
       const rides=snap.val();
@@ -702,71 +609,101 @@
       Object.entries(rides).forEach(([id,ride])=>{
         if(ride.status==='searching'&&id!==currentRideId){
           currentRideId=id;
-          document.getElementById('req-pickup').textContent=ride.pickup||'DGK';
-          document.getElementById('req-dropoff').textContent=ride.dropoff||'DHQ';
-          document.getElementById('req-fare').textContent=ride.fare||'Rs 306';
-          document.getElementById('req-vehicle').textContent=ride.vehicle||'Car';
-          document.getElementById('req-payment').textContent=ride.payment||'Cash';
-          document.getElementById('req-passenger').textContent=ride.passengerEmail?.split('@')[0]||'Passenger';
-          document.getElementById('ride-request-card').style.display='block';
-          document.getElementById('waiting-msg').style.display='none';
-          showToast('Nayi sawari!','نئی سواری 🚗');
-          if(driverMap&&ride.pickupLat){
-            if(passengerMarker) driverMap.removeLayer(passengerMarker);
-            passengerMarker=L.marker([ride.pickupLat,ride.pickupLng],{icon:L.divIcon({html:'📍',className:'',iconSize:[28,28]})}).addTo(driverMap);
-          }
-          listenForPassengerChat(id);
+          showRideRequest(ride);
         }
       });
     });
   }
 
+  function showRideRequest(ride){
+    document.getElementById('rr-fare').textContent=ride.fare||'Rs —';
+    document.getElementById('rr-pickup').textContent=ride.pickup||'—';
+    document.getElementById('rr-dropoff').textContent=ride.dropoff||'—';
+    document.getElementById('rr-vehicle').textContent=ride.vehicle||'—';
+    document.getElementById('rr-payment').textContent=ride.payment||'Cash';
+    document.getElementById('rr-passenger').textContent=ride.passengerEmail?.split('@')[0]||'Passenger';
+    passengerLat=ride.pickupLat||null;
+    passengerLng=ride.pickupLng||null;
+    // Show on map
+    if(passengerLat) showPassengerOnMap(passengerLat,passengerLng);
+    // Show overlay
+    document.getElementById('ride-request-overlay').classList.add('show');
+    document.getElementById('waiting-msg').style.display='none';
+    // Play sound
+    playSound('ride');
+    // Timer — 30 seconds
+    let timeLeft=100;
+    const timerBar=document.getElementById('rr-timer-bar');
+    if(requestTimer) clearInterval(requestTimer);
+    requestTimer=setInterval(()=>{
+      timeLeft-=100/300; // 30 seconds
+      timerBar.style.width=Math.max(0,timeLeft)+'%';
+      if(timeLeft<=0){
+        clearInterval(requestTimer);
+        rejectRide();
+      }
+    },100);
+  }
+
   window.acceptRide=async function(){
     if(!currentRideId) return;
+    if(requestTimer){clearInterval(requestTimer);requestTimer=null;}
     const pos=driverMarker?driverMarker.getLatLng():{lat:DGK[0],lng:DGK[1]};
-    await update(ref(db,'rides/'+currentRideId),{status:'accepted',driverName:currentDriver.email.split('@')[0],driverVehicle:driverData.vehicle||'Mehran',driverId:currentDriver.uid,driverLat:pos.lat,driverLng:pos.lng});
-    document.getElementById('ride-request-card').style.display='none';
-    document.getElementById('arc-pickup').textContent=document.getElementById('req-pickup').textContent;
-    document.getElementById('arc-dropoff').textContent=document.getElementById('req-dropoff').textContent;
-    document.getElementById('arc-fare').textContent=document.getElementById('req-fare').textContent;
-    document.getElementById('active-ride-card').style.display='block';
-    showToast('Sawari qabool!','سواری قبول ✅');
+    await update(ref(db,'rides/'+currentRideId),{
+      status:'accepted',
+      driverName:currentDriver.email.split('@')[0],
+      driverVehicle:driverData.vehicle||'Vehicle',
+      driverId:currentDriver.uid,
+      driverLat:pos.lat,
+      driverLng:pos.lng
+    });
+    document.getElementById('ride-request-overlay').classList.remove('show');
+    document.getElementById('arc-pickup').textContent=document.getElementById('rr-pickup').textContent;
+    document.getElementById('arc-dropoff').textContent=document.getElementById('rr-dropoff').textContent;
+    document.getElementById('arc-fare').textContent=document.getElementById('rr-fare').textContent;
+    document.getElementById('active-ride-sheet').style.display='block';
+    document.getElementById('rr-timer-bar').style.width='100%';
+    showToast('Sawari qabool! Passenger tak jao','قبول ✅');
   };
 
   window.rejectRide=async function(){
     if(!currentRideId) return;
+    if(requestTimer){clearInterval(requestTimer);requestTimer=null;}
     await update(ref(db,'rides/'+currentRideId),{status:'rejected'});
     currentRideId=null;
-    document.getElementById('ride-request-card').style.display='none';
+    document.getElementById('ride-request-overlay').classList.remove('show');
     document.getElementById('waiting-msg').style.display='block';
-    showToast('Sawari rad','سواری رد');
+    document.getElementById('rr-timer-bar').style.width='100%';
+    if(passengerMarker){driverMap.removeLayer(passengerMarker);passengerMarker=null;}
+    if(routeToPassenger){driverMap.removeLayer(routeToPassenger);routeToPassenger=null;}
+    showToast('Sawari rad','رد');
   };
 
   window.completeRide=async function(){
     if(!currentRideId) return;
     await update(ref(db,'rides/'+currentRideId),{status:'completed',completedAt:Date.now()});
-    const fare=parseInt(document.getElementById('arc-fare').textContent.replace('Rs ',''))||245;
+    const fare=parseInt(document.getElementById('arc-fare').textContent.replace('Rs ',''))||0;
     totalRides++;totalEarnings+=fare;
     document.getElementById('today-rides').textContent=totalRides;
     document.getElementById('today-earnings').textContent='Rs '+totalEarnings;
-    document.getElementById('earn-rides').textContent=totalRides;
-    document.getElementById('earn-total').textContent='Rs '+totalEarnings;
     document.getElementById('big-earn').textContent='Rs '+totalEarnings;
     document.getElementById('big-rides').textContent=totalRides+' rides';
     document.getElementById('profile-total-rides').textContent=totalRides;
     document.getElementById('profile-total-earn').textContent='Rs '+totalEarnings;
     rideHistory.unshift({pickup:document.getElementById('arc-pickup').textContent,dropoff:document.getElementById('arc-dropoff').textContent,fare:'Rs '+fare,time:new Date().toLocaleTimeString()});
     updateEarningsHistory();
-    document.getElementById('active-ride-card').style.display='none';
+    document.getElementById('active-ride-sheet').style.display='none';
     document.getElementById('waiting-msg').style.display='block';
     if(passengerMarker){driverMap.removeLayer(passengerMarker);passengerMarker=null;}
-    currentRideId=null;
-    showToast('Sawari mukammal! Rs '+fare,'سواری مکمل 🎉');
+    if(routeToPassenger){driverMap.removeLayer(routeToPassenger);routeToPassenger=null;}
+    currentRideId=null;passengerLat=null;passengerLng=null;
     if(currentDriver) update(ref(db,'drivers/'+currentDriver.uid),{totalRides,totalEarnings});
+    showToast('Sawari mukammal! Rs '+fare,'مکمل 🎉');
   };
 
+  // CHAT
   window.openDriverChat=function(){
-    document.getElementById('chat-passenger-name').textContent=document.getElementById('req-passenger').textContent||'Passenger';
+    document.getElementById('chat-passenger-name').textContent=document.getElementById('rr-passenger').textContent||'Passenger';
     showScreen('chat-screen');
   };
 
@@ -790,24 +727,26 @@
         container.appendChild(div);
       });
       container.scrollTop=container.scrollHeight;
+      playSound('chat');
     });
   }
 
+  // RATINGS
   async function loadRatings(){
     if(!currentDriver) return;
     onValue(ref(db,'ratings/'+currentDriver.uid),snap=>{
       const ratings=snap.val();
       if(!ratings) return;
       const vals=Object.values(ratings).map(r=>r.rating).filter(Boolean);
-      if(vals.length>0){
+      if(vals.length){
         const avg=(vals.reduce((a,b)=>a+b,0)/vals.length).toFixed(1);
-        document.getElementById('driver-rating-val').textContent=avg+' ⭐';
-        document.getElementById('earn-rating').textContent=avg+'⭐';
+        document.getElementById('driver-rating-val').textContent=avg+'⭐';
         document.getElementById('profile-avg-rating').textContent=avg+'⭐';
       }
     });
   }
 
+  // EARNINGS
   function loadEarningsHistory(){
     const saved=localStorage.getItem('driverHistory');
     if(saved){rideHistory=JSON.parse(saved);updateEarningsHistory();}
@@ -816,8 +755,58 @@
   function updateEarningsHistory(){
     localStorage.setItem('driverHistory',JSON.stringify(rideHistory));
     const el=document.getElementById('earnings-history');
-    if(rideHistory.length===0){el.innerHTML='<div style="text-align:center;padding:30px;color:var(--text-muted)">Abhi koi sawari nahi</div>';return;}
-    el.innerHTML=rideHistory.map(r=>`<div style="display:flex;align-items:center;gap:14px;padding:14px;border-bottom:1px solid rgba(255,255,255,0.05)"><div style="width:44px;height:44px;border-radius:14px;background:var(--dark3);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0">🚗</div><div style="flex:1"><div style="font-size:13px;font-weight:500">${r.pickup||'—'} → ${r.dropoff||'—'}</div><div style="font-size:11px;color:var(--text-muted)">${r.time||'Abhi'}</div></div><div style="font-size:15px;font-weight:700;color:var(--green)">${r.fare||'—'}</div></div>`).join('');
+    if(!rideHistory.length){el.innerHTML='<div style="text-align:center;padding:30px;color:var(--text-muted)">Koi sawari nahi</div>';return;}
+    el.innerHTML=rideHistory.map(r=>`<div style="display:flex;align-items:center;gap:14px;padding:14px;border-bottom:1px solid rgba(255,255,255,0.05)"><div style="width:44px;height:44px;border-radius:14px;background:var(--dark3);display:flex;align-items:center;justify-content:center;font-size:20px">🚗</div><div style="flex:1"><div style="font-size:13px;font-weight:500">${r.pickup||'—'} → ${r.dropoff||'—'}</div><div style="font-size:11px;color:var(--text-muted)">${r.time||''}</div></div><div style="font-size:15px;font-weight:700;color:var(--green)">${r.fare||'—'}</div></div>`).join('');
+  }
+
+  // CLOUDINARY UPLOAD
+  window.uploadDoc=async function(input,docType,boxId,statusId,previewId){
+    const file=input.files[0];if(!file) return;
+    document.getElementById('upload-progress').style.display='block';
+    try{
+      const formData=new FormData();
+      formData.append('file',file);
+      formData.append('upload_preset',CLOUDINARY_PRESET);
+      formData.append('folder','ridedgk_drivers');
+      const res=await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD}/image/upload`,{method:'POST',body:formData});
+      const data=await res.json();
+      if(data.secure_url){
+        uploadedDocs[docType]=data.secure_url;
+        document.getElementById(statusId).style.display='block';
+        const p=document.getElementById(previewId);p.src=data.secure_url;p.style.display='block';
+        document.getElementById(boxId).classList.add('uploaded');
+        showToast('Uploaded!','اپلوڈ ✅');
+      }
+    }catch(e){showToast('Upload failed!','ناکام',true);}
+    document.getElementById('upload-progress').style.display='none';
+  };
+
+  window.submitDocuments=async function(){
+    const required=['selfie','cnic_front','cnic_back','license','vehicle_reg','vehicle_photo'];
+    const missing=required.filter(d=>!uploadedDocs[d]);
+    if(missing.length){showToast('Sab documents upload karein!','تمام دستاویزات',true);return;}
+    document.getElementById('loader').classList.add('show');
+    try{
+      if(currentDriver){
+        await update(ref(db,'drivers/'+currentDriver.uid),{documents:uploadedDocs,documentsSubmitted:true,documentsStatus:'pending',documentsSubmittedAt:Date.now()});
+        showToast('Documents jama! Approval ka wait karein','✅');
+        setTimeout(()=>showScreen('home'),1500);
+      }
+    }catch(e){showToast('Error!','غلطی',true);}
+    document.getElementById('loader').classList.remove('show');
+  };
+
+  function loadDocPreviews(){
+    const previewMap={selfie:'preview-selfie',cnic_front:'preview-cnic-front',cnic_back:'preview-cnic-back',license:'preview-license',vehicle_reg:'preview-reg',vehicle_photo:'preview-vehicle-photo'};
+    const statusMap={selfie:'status-selfie',cnic_front:'status-cnic-front',cnic_back:'status-cnic-back',license:'status-license',vehicle_reg:'status-reg',vehicle_photo:'status-vehicle-photo'};
+    const boxMap={selfie:'box-selfie',cnic_front:'box-cnic-front',cnic_back:'box-cnic-back',license:'box-license',vehicle_reg:'box-reg',vehicle_photo:'box-vehicle-photo'};
+    Object.entries(uploadedDocs).forEach(([key,url])=>{
+      if(previewMap[key]){
+        const p=document.getElementById(previewMap[key]);if(p){p.src=url;p.style.display='block';}
+        const s=document.getElementById(statusMap[key]);if(s) s.style.display='block';
+        const b=document.getElementById(boxMap[key]);if(b) b.classList.add('uploaded');
+      }
+    });
   }
 
   window.switchTab=function(tab){
@@ -836,67 +825,5 @@
   function showScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');}
   function showToast(msg,urdu,isError){const t=document.getElementById('toast');document.getElementById('toast-msg').textContent=msg;document.getElementById('toast-urdu').textContent=urdu||'';t.className='toast'+(isError?' error':'');t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000);}
 </script>
-<script>
-  // SOUND SYSTEM — MP3/WAV + Vibration
-  const rideSound = new Audio('https://ridedgk.github.io/RideDGK/Notifications%20.wav');
-  const chatSound = new Audio('https://ridedgk.github.io/RideDGK/Message%20.wav');
-  const acceptSound = new Audio('https://ridedgk.github.io/RideDGK/Notifications%20.wav');
-
-  rideSound.preload = 'auto';
-  chatSound.preload = 'auto';
-  acceptSound.preload = 'auto';
-
-  function playSound(type) {
-    try {
-      if(type === 'ride') {
-        rideSound.currentTime = 0;
-        rideSound.play().catch(e => console.log('Sound error:', e));
-        if(navigator.vibrate) navigator.vibrate([300, 100, 300, 100, 300]);
-      }
-      if(type === 'chat') {
-        chatSound.currentTime = 0;
-        chatSound.play().catch(e => console.log('Sound error:', e));
-        if(navigator.vibrate) navigator.vibrate([100]);
-      }
-      if(type === 'accepted') {
-        acceptSound.currentTime = 0;
-        acceptSound.play().catch(e => console.log('Sound error:', e));
-        if(navigator.vibrate) navigator.vibrate([200, 100, 200]);
-      }
-    } catch(e) { console.log('Sound error:', e); }
-  }
-
-  // Unlock audio on first touch
-  document.addEventListener('touchstart', function() {
-    rideSound.load();
-    chatSound.load();
-    acceptSound.load();
-  }, {once: true});
-
-  // Toast override for sounds
-  document.addEventListener('DOMContentLoaded', function() {
-    const origShowToast = window.showToast;
-    if(origShowToast) {
-      window.showToast = function(msg, urdu, isError) {
-        origShowToast(msg, urdu, isError);
-        const m = msg.toLowerCase();
-        if(m.includes('sawari') || m.includes('nayi') || m.includes('ride') || m.includes('request')) {
-          playSound('ride');
-        } else if(m.includes('qabool') || m.includes('complete') || m.includes('mukammal')) {
-          playSound('accepted');
-        } else if(m.includes('message') || m.includes('chat')) {
-          playSound('chat');
-        }
-      };
-    }
-  });
-
-  window.playRideSound = function() { playSound('ride'); };
-  window.playChatSound = function() { playSound('chat'); };
-  window.playAcceptSound = function() { playSound('accepted'); };
-</script>
-
-
-
-</rbody>
+</body>
 </html>
